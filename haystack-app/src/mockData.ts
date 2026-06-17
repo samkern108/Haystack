@@ -8,13 +8,13 @@ export const creators: Creator[] = [
       {
         id: "1",
         title: "The fake shot that saved WALL-E",
-        thumbnail: "https://i.ytimg.com/an_webp/APoEQ1cc0lU/mqdefault_6s.webp?du=3000&sqp=CNHPx9EG&rs=AOn4CLAQcMxzsNTmHzcsCj9wAnIGsy9xWg",
+        thumbnail: "https://i.ytimg.com/vi/APoEQ1cc0lU/hqdefault.jpg?sqp=-oaymwEnCNACELwBSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLBk869MyDDRVzFXRHTh-y-ArhMDsg",
         youtubeId: "APoEQ1cc0lU",
       },
       {
         id: "2",
         title: "This is the best scene in Notting Hill",
-        thumbnail: "https://i.ytimg.com/an_webp/tCi5k1XCj-E/mqdefault_6s.webp?du=3000&sqp=CJPkx9EG&rs=AOn4CLBtaJTidHML8JRxrYciut87mqsUPg",
+        thumbnail: "https://i.ytimg.com/vi/tCi5k1XCj-E/hqdefault.jpg?sqp=-oaymwEnCNACELwBSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLDsettOJhr9Wtegwaom6iCKkkPPsg",
         youtubeId: "tCi5k1XCj-E",
       },
     ],
@@ -26,7 +26,7 @@ export const creators: Creator[] = [
       {
         id: "1",
         title: "Final Fantasy 4 and Disability",
-        thumbnail: "https://i.ytimg.com/an_webp/MeNYH8pTT0I/mqdefault_6s.webp?du=3000&sqp=CJDsx9EG&rs=AOn4CLBEZK0Kx7sOXxVw6_f97-ixaJLLSA",
+        thumbnail: "https://i.ytimg.com/vi/MeNYH8pTT0I/hqdefault.jpg?sqp=-oaymwEnCNACELwBSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLBzaFkI_ZFj6XKaZWw9g-8GI8FX0w",
         youtubeId: "MeNYH8pTT0I",
       },
     ],
