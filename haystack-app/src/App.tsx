@@ -1,17 +1,25 @@
 import './App.css'
 
-import { creators } from "./mockData";
-import { CreatorRow } from "./components/CreatorRow";
+import { useState } from "react";
+import type { Video } from "./types";
+import { VideoPage } from './components/VideoPage';
+import { VideoGrid } from './components/VideoGrid';
 
 export default function App() {
+  const [selectedVideo, setSelectedVideo] = useState<Video | null>(null);
+
+    if (selectedVideo) {
+    return (
+      <VideoPage
+        video={selectedVideo}
+        onBack={() => setSelectedVideo(null)}
+      />
+    );
+  }
+
   return (
-    <main>
-      {creators.map((creator) => (
-        <CreatorRow
-          key={creator.id}
-          creator={creator}
-        />
-      ))}
-    </main>
+    <VideoGrid
+      onVideoClick={setSelectedVideo}
+    />
   );
 }

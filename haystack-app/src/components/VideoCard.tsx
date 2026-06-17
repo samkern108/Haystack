@@ -3,18 +3,23 @@ import './CreatorRow.css'
 
 interface VideoCardProps {
   video: Video;
+  onClick: () => void;
 }
 
-export function VideoCard({ video }: VideoCardProps) {
+export function VideoCard({
+  video,
+  onClick,
+}: VideoCardProps) {
   return (
-    <a
-      href={video.url}
-      target="_blank"
-      rel="noreferrer"
+    <button
       className="video-card"
+      onClick={onClick}
     >
-      <img src={video.thumbnail} alt={video.title} />
+      <img
+        src={video.thumbnail}
+        alt={video.title}
+      />
       <p>{video.title}</p>
-    </a>
+    </button>
   );
 }
