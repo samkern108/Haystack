@@ -8,18 +8,13 @@ import { VideoGrid } from './components/VideoGrid';
 export default function App() {
   const [selectedVideo, setSelectedVideo] = useState<Video | null>(null);
 
-    if (selectedVideo) {
-    return (
-      <VideoPage
-        video={selectedVideo}
-        onBack={() => setSelectedVideo(null)}
-      />
-    );
-  }
-
   return (
-    <VideoGrid
-      onVideoClick={setSelectedVideo}
-    />
+    <div>
+      <div className="app-header"><h1>Haystack</h1></div>
+      { selectedVideo ? 
+        <VideoPage video={selectedVideo!} onBack={() => setSelectedVideo(null)} />
+      : 
+        <VideoGrid onVideoClick={setSelectedVideo} /> }
+    </div>
   );
 }
