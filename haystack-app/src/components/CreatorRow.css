@@ -4,15 +4,22 @@ main {
 
 .creator-info {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 1rem;
   width: 200px;
   flex: 0 0 200px;
+  padding: 12px;
+}
+
+.creator-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
 }
 
 .creator-row {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 1rem;
   overflow-x: auto;
   padding-bottom: 1rem;
@@ -33,11 +40,15 @@ main {
 .video-card {
   flex: 0 0 300px;
   text-decoration: none;
-  color: inherit;
+  color: #d0d0d0;
+  border: none;
+  background: none;
+  font-size: 14px;
 }
 
 .video-card img {
   width: 100%;
   display: block;
   border-radius: 8px;
+  padding-bottom: 6px;
 }

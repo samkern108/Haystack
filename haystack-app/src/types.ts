@@ -8,5 +8,6 @@ export interface Video {
 export interface Creator {
   id: string;
   name: string;
+  avatarURL: string;
   videos: Video[];
 }

@@ -14,6 +14,7 @@ export function CreatorRow({
   return (
     <section className="creator-row">
       <div className="creator-info">
+        <img className="creator-avatar" src={creator.avatarURL} alt={creator.name} />
         <h2>{creator.name}</h2>
       </div>
 
