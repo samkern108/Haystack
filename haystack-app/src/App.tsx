@@ -5,6 +5,7 @@ import { VideoPage } from './components/VideoPage';
 import { VideoGrid } from './components/VideoGrid';
 import { AboutUsPage } from './components/AboutUsPage';
 import { NavBar } from './components/NavBar';
+import { AppRoutes } from './routes';
 
 export default function App() {
   return (
@@ -12,9 +13,9 @@ export default function App() {
       <NavBar></NavBar>
 
       <Routes>
-        <Route path="/" element={<VideoGrid />} />
-        <Route path="/video/:id" element={<VideoPage />} />
-        <Route path="/about" element={<AboutUsPage />} />
+        <Route path={AppRoutes.HOME} element={<VideoGrid />} />
+        <Route path={AppRoutes.VIDEO} element={<VideoPage />} />
+        <Route path={AppRoutes.ABOUT} element={<AboutUsPage />} />
       </Routes>
     </div>
   );

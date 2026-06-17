@@ -4,7 +4,7 @@ export function VideoPage() {
   const { id } = useParams();
 
   return (
-    <div>
+    <div id="video-page">
       <iframe
         width="100%"
         height="600"
