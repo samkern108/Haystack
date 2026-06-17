@@ -1,16 +1,12 @@
-import type { Creator, Video } from "../types";
+import type { Creator } from "../types";
 import { VideoCard } from "./VideoCard";
 import './CreatorRow.css'
 
 interface CreatorRowProps {
   creator: Creator;
-  onVideoClick: (video: Video) => void;
 }
 
-export function CreatorRow({
-  creator,
-  onVideoClick,
-}: CreatorRowProps) {
+export function CreatorRow({ creator }: CreatorRowProps) {
   return (
     <section className="creator-row">
       <div className="creator-info">
@@ -21,9 +17,8 @@ export function CreatorRow({
       <div className="video-strip">
         {creator.videos.map((video) => (
           <VideoCard
-            key={video.id}
+            key={video.youtubeId}
             video={video}
-            onClick={() => { onVideoClick(video); }}
           />
         ))}
       </div>

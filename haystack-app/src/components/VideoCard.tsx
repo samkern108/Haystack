@@ -1,24 +1,20 @@
 import type { Video } from "../types";
+import { useNavigate } from "react-router-dom";
 import './CreatorRow.css'
 
 interface VideoCardProps {
   video: Video;
-  onClick: () => void;
 }
 
-export function VideoCard({
-  video,
-  onClick,
-}: VideoCardProps) {
+export function VideoCard({ video } : VideoCardProps) {
+  const navigate = useNavigate();
+
   return (
     <button
       className="video-card"
-      onClick={onClick}
+      onClick={() => navigate(`/video/${video.youtubeId}`)}
     >
-      <img
-        src={video.thumbnail}
-        alt={video.title}
-      />
+      <img src={video.thumbnail} />
       <p>{video.title}</p>
     </button>
   );

@@ -1,25 +1,14 @@
-import type { Video } from "../types";
+import { useParams } from "react-router-dom";
 
-interface VideoPageProps {
-  video: Video;
-  onBack: () => void;
-}
+export function VideoPage() {
+  const { id } = useParams();
 
-export function VideoPage({
-  video,
-  onBack,
-}: VideoPageProps) {
   return (
     <div>
-      <button onClick={onBack}>
-        BACK
-      </button>
-
       <iframe
         width="100%"
         height="600"
-        src={`https://www.youtube-nocookie.com/embed/${video.youtubeId}`}
-        title={video.title}
+        src={`https://www.youtube-nocookie.com/embed/${id}`}
         allowFullScreen
       />
     </div>
