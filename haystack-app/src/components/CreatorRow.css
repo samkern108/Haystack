@@ -1,0 +1,43 @@
+main {
+  padding: 2rem;
+}
+
+.creator-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  width: 200px;
+  flex: 0 0 200px;
+}
+
+.creator-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  overflow-x: auto;
+  padding-bottom: 1rem;
+}
+
+.video-strip {
+  flex: 1;
+
+  display: flex;
+  gap: 1rem;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  white-space: nowrap;
+}
+
+.video-card {
+  flex: 0 0 300px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.video-card img {
+  width: 100%;
+  display: block;
+  border-radius: 8px;
+}
