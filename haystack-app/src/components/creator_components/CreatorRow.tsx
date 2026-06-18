@@ -1,6 +1,8 @@
-import type { Creator } from "../types";
-import { VideoCard } from "./VideoCard";
+import type { Creator } from "../../types";
+import { VideoCard } from "../video_components/VideoCard";
 import './CreatorRow.css'
+import '../video_components/VideoCard.css'
+import { CreatorInfo } from "./CreatorInfo";
 
 interface CreatorRowProps {
   creator: Creator;
@@ -9,10 +11,7 @@ interface CreatorRowProps {
 export function CreatorRow({ creator }: CreatorRowProps) {
   return (
     <section className="creator-row">
-      <div className="creator-info">
-        <img className="creator-avatar" src={creator.avatarURL} alt={creator.name} />
-        <h2>{creator.name}</h2>
-      </div>
+      <CreatorInfo creator={creator} />
 
       <div className="video-strip">
         {creator.videos.map((video) => (

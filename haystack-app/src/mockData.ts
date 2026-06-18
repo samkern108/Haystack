@@ -2,7 +2,7 @@ import type { Creator } from "./types";
 
 export const creators: Creator[] = [
   {
-    id: "kikikrazed",
+    youtubeId: "Kikikrazed",
     name: "Kikikrazed",
     avatarURL: "https://yt3.googleusercontent.com/sasx1iTZchZlzobI02xl-nOqO6jiEhdnTH6yA9bi0jm7-2WQYYvqlP4PFxNh7yi_ToYXARXM=s160-c-k-c0x00ffffff-no-rj",
     videos: [
@@ -19,7 +19,7 @@ export const creators: Creator[] = [
     ],
   },
   {
-    id: "questingrefuge",
+    youtubeId: "QuestingRefuge",
     name: "Questing Refuge",
     avatarURL: "https://yt3.googleusercontent.com/ytc/AIdro_nMxL8r9S3s3xPv8EDlgQnaqgYy9-WLSRVhYDe8hpi4xMY=s160-c-k-c0x00ffffff-no-rj",
     videos: [

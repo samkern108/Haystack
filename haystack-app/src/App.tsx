@@ -1,8 +1,9 @@
 import './App.css'
+import "./theme.css";
 
 import { Routes, Route } from "react-router-dom";
-import { VideoPage } from './components/VideoPage';
-import { VideoGrid } from './components/VideoGrid';
+import { VideoPage } from './components/video_components/VideoPage';
+import { VideoGrid } from './components/video_components/VideoGrid';
 import { AboutUsPage } from './components/AboutUsPage';
 import { NavBar } from './components/NavBar';
 import { AppRoutes } from './routes';
