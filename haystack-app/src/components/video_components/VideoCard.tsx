@@ -1,8 +1,9 @@
 import type { Video } from "../../types";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import '../creator_components/CreatorRow.css'
 import "./VideoCard.css"
+import VideoLabelsPopup from "./VideoLabelsPopup";
 
 interface VideoCardProps {
   video: Video;
@@ -50,11 +51,10 @@ export function VideoCard({ video } : VideoCardProps) {
     </div>
 
      {showPopover && (
-        <div className="video-card-popover"
-        onClick={() => navigate(`/video/${video.youtubeId}`)}
-        >
-        <img src={video.thumbnail} />
-        <p>{video.title}</p>
+        <div className="video-card-popover">
+          <VideoLabelsPopup />
+          <img src={video.thumbnail} onClick={() => navigate(`/video/${video.youtubeId}`)} />
+          <p>{video.title}</p>
         </div>
       )}
     </div>

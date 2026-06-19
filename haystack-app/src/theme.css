@@ -12,8 +12,17 @@
 
   --color-border: #2d2d2d;
 
-  --color-success: #22c55e;
-  --color-danger: #ef4444;
+  --color-love: #c46180;
+  --color-love-light: #ed9eb7;
+  --color-love-dark: #8b3a56;
+
+  --color-x: #ef4444;
+  --color-x-light: #fca5a5;
+  --color-x-dark: #b91c1c;
+
+  --color-star: #facc15; 
+  --color-star-light: #fde68a;
+  --color-star-dark: #b45309;
 }
 
 [data-theme="dark"] {
@@ -27,7 +36,4 @@
   --color-text-muted: #a1a1aa;
 
   --color-border: #2d2d2d;
-
-  --color-success: #22c55e;
-  --color-danger: #ef4444;
 }
