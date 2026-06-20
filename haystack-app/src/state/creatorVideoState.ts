@@ -1,8 +1,9 @@
-export type Reaction = "love" | "star" | "x" | null;
+export type Reaction = "love" | "star" | "x";
+export type ReactionOrNone = Reaction | null | undefined;
 
 export interface VideoState {
   watchPercentage?: number;
-  reaction?: Reaction;
+  reaction?: ReactionOrNone;
   comment?: string;
 }
 

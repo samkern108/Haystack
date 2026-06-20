@@ -1,15 +1,19 @@
+/* =========================
+   VIDEO CARD LAYOUT
+========================= */
+
 .video-card {
   flex: 0 0 300px;
-  text-decoration: none;
-  color: var(#ffffff);
-  border: none;
-  background: none;
-  font-size: 14px;
+  width: 300px;
+  height: 200px;
+
   position: relative;
   overflow: visible;
 
-  width: 300px;
-  height: 200px;
+  text-decoration: none;
+  border: none;
+  background: none;
+  font-size: 14px;
 }
 
 .video-card img {
@@ -19,31 +23,33 @@
   padding-bottom: 6px;
 }
 
+.video-strip {
+  flex: 1;
+  display: flex;
+  gap: 1rem;
+  overflow-x: visible;
+  overflow-y: visible;
+}
+
 .video-card-popover {
   position: absolute;
-  top:-13px;
+  top: -13px;
   left: -13px;
+
+  width: 100%;
+  height: 100%;
 
   display: flex;
   flex-direction: column;
 
-  min-width: 160px;
   padding: 12px;
 
-  height: 100%;
-  width: 100%;
-
   background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
 
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 
   z-index: 10;
-}
 
-/* Popover animation */
-.video-card-popover {
   opacity: 0;
   animation: popover-in 150ms forwards;
 }
@@ -54,86 +60,117 @@
   }
 }
 
-.video-strip {
-  flex: 1;
-
-  display: flex;
-  gap: 1rem;
-
-  overflow-x: visible;
-  overflow-y: visible;
-
-  white-space: nowrap;
-}
-
-
-
 .label-buttons-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-
-.label-buttons-overlay {
   position: absolute;
   top: 8px;
   right: 8px;
+
   display: flex;
   gap: 8px;
-  pointer-events: all;
+  align-items: center;
+
+  min-width: 160px;
+
+  transform-origin: right center;
+  justify-content: flex-end;
+
+  pointer-events: auto;
+}
+
+.label-buttons-container::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  bottom: -10px;
+  left: -10px;
 }
 
 .label-button {
   width: 40px;
-  border-radius: 50%;
   height: 40px;
-  border: 1px solid rgba(0,0,0,0.12);
+
+  border: none;
+  border-radius: 50%;
   background: var(--color-surface);
-  display: inline-flex;
+
+  display: flex;
   align-items: center;
   justify-content: center;
+
   cursor: pointer;
   padding: 0;
+
+  opacity: 1;
+  transform: translateX(0) scale(1);
+  transition: transform 200ms ease, opacity 200ms ease;
+  will-change: transform, opacity;
+}
+
+.label-button svg {
+  width: 65%;
+  height: 65%;
+}
+
+.collapsed .label-button {
+  opacity: 0;
+  transform: translateX(20px) scale(0.6);
+  pointer-events: none;
+  background: transparent;
+}
+
+/* Sooooo I can't fix this yet lol 
+the animation is clumsy & I don't want inactive icons to
+affect the layout. So we're setting height and width to 0 for now.
+I'll fix it later.
+*/
+.collapsed .label-button:not(.active) {
+  opacity: 0;
+  width: 0px;
+  height: 0px;
+  transform: translateX(20px) scale(0.6);
+  pointer-events: none;
+}
+
+.collapsed .label-button.active {
+  opacity: 1;
+  pointer-events: auto;
+  display: flex;
+  margin-left: auto;
+  transform: translateX(0) scale(1);
+}
+
+.expanded .label-button {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+  pointer-events: auto;
 }
 
 .label-button.star {
   color: var(--color-star);
-  border-color: var(--color-star);
+  background-color: var(--color-star-light);
 }
 
 .label-button.x {
   color: var(--color-x);
-  border-color: var(--color-x);
+  background-color: var(--color-star-x);
 }
 
 .label-button.love {
   color: var(--color-love);
-  border-color: var(--color-love);
+  background-color: var(--color-star-love);
 }
 
-.label-button.star.active {
-  background: var(--color-star);
-  border-color: var(--color-star);
-  color: var(--color-star-light);
-}
-
-.label-button.x.active {
-  background: var(--color-x);
-  border-color: var(--color-x);
-  color: var(--color-x-light);
-}
-
-.label-button.love.active {
-  background: var(--color-love);
-  border-color: var(--color-love);
-  color: var(--color-love-light);
+.label-button.active {
+  background: none;
 }
 
 .label-icon-wrapper {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
 }
+
+.expanded .label-button:nth-child(1) { transition-delay: 0ms; }
+.expanded .label-button:nth-child(2) { transition-delay: 30ms; }
+.expanded .label-button:nth-child(3) { transition-delay: 60ms; }

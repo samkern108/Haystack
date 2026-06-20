@@ -5,6 +5,7 @@ import '../creator_components/CreatorRow.css'
 import "./VideoCard.css"
 import VideoLabelsPopup from "./VideoLabelsPopup";
 import type { State, Action } from "../../state/creatorVideoState";
+import VideoLabelDisplay from "./VideoLabelDisplay";
 
 interface VideoCardProps {
   video: Video;
@@ -52,6 +53,8 @@ export function VideoCard( props : VideoCardProps) {
       <img src={props.video.thumbnail} />
       <p>{props.video.title}</p>
     </div>
+
+    <VideoLabelDisplay video={props.video} state={props.state} />
 
      {showPopover && (
         <div className="video-card-popover">
