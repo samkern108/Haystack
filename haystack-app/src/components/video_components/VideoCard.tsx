@@ -4,12 +4,15 @@ import { useRef, useState } from "react";
 import '../creator_components/CreatorRow.css'
 import "./VideoCard.css"
 import VideoLabelsPopup from "./VideoLabelsPopup";
+import type { State, Action } from "../../state/creatorVideoState";
 
 interface VideoCardProps {
   video: Video;
+  state: State;
+  dispatch: React.ActionDispatch<[action: Action]>;
 }
 
-export function VideoCard({ video } : VideoCardProps) {
+export function VideoCard( props : VideoCardProps) {
   const navigate = useNavigate();
 
     const [showPopover, setShowPopover] = useState(false);
@@ -46,15 +49,15 @@ export function VideoCard({ video } : VideoCardProps) {
       onMouseLeave={handleMouseLeave}
     >
     <div>
-      <img src={video.thumbnail} />
-      <p>{video.title}</p>
+      <img src={props.video.thumbnail} />
+      <p>{props.video.title}</p>
     </div>
 
      {showPopover && (
         <div className="video-card-popover">
-          <VideoLabelsPopup />
-          <img src={video.thumbnail} onClick={() => navigate(`/video/${video.youtubeId}`)} />
-          <p>{video.title}</p>
+          <VideoLabelsPopup video={props.video} state={props.state} dispatch={props.dispatch} />
+          <img src={props.video.thumbnail} onClick={() => navigate(`/video/${props.video.videoId_yt}`)} />
+          <p>{props.video.title}</p>
         </div>
       )}
     </div>

@@ -1,11 +1,12 @@
 export interface Video {
   title: string;
   thumbnail: string;
-  youtubeId: string;
+  videoId_yt: string;
+  video_creatorId_yt: string;
 }
 
 export interface Creator {
-  youtubeId: string;
+  creatorId_yt: string;
   name: string;
   avatarURL: string;
 

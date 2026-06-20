@@ -7,14 +7,27 @@ import { VideoGrid } from './components/video_components/VideoGrid';
 import { AboutUsPage } from './components/AboutUsPage';
 import { NavBar } from './components/NavBar';
 import { AppRoutes } from './routes';
+import { useEffect, useReducer } from 'react';
+import {reducer, initialState} from './state/creatorVideoState';
+import { loadState, saveState } from './storage/storage';
 
 export default function App() {
+  const [state, dispatch] = useReducer(
+    reducer,
+    undefined,
+    () => loadState() ?? initialState
+  );
+
+  useEffect(() => {
+    saveState(state);
+  }, [state]);
+
   return (
     <div>
       <NavBar></NavBar>
 
       <Routes>
-        <Route path={AppRoutes.HOME} element={<VideoGrid />} />
+        <Route path={AppRoutes.HOME} element={<VideoGrid state={state} dispatch={dispatch} />} />
         <Route path={AppRoutes.VIDEO} element={<VideoPage />} />
         <Route path={AppRoutes.ABOUT} element={<AboutUsPage />} />
       </Routes>

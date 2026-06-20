@@ -56,7 +56,7 @@ export function CreatorInfo({ creator }: CreatorInfoProps) {
       {showPopover && (
         <div className="creator-popover">
           <a
-            href={`https://www.youtube.com/${creator.youtubeId}`}
+            href={`https://www.youtube.com/${creator.creatorId_yt}`}
             target="_blank"
             rel="noreferrer"
         >
