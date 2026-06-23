@@ -22,4 +22,4 @@ export interface Playlist {
 }
 
 // SAM – Should this be a type?
-export type defaultPlaylists = 'watch-later' | 'loved' | 'starred';
+export type defaultPlaylists = 'watch-later';
