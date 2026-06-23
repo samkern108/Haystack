@@ -1,6 +1,6 @@
 import "./VideoCard.css";
-import { tagIcon, videoLabels } from "./videolabels";
-import type { Action, Reaction, State } from "../../state/creatorVideoState";
+import { tagIcon, VIDEOLABELS, type VideoLabel } from "./videolabels";
+import type { Action, State } from "../../state/creatorVideoState";
 import type { Video } from "../../types";
 import { useState } from "react";
 
@@ -15,23 +15,23 @@ export default function VideoLabelsPopup(props: VideoLabelsPopupProps) {
     props.state.creators?.[props.video.video_creatorId_yt]
       ?.videos?.[props.video.videoId_yt];
 
-  const activeReaction = videoState?.reaction ?? null;
+  const activeReaction = videoState?.videoLabel ?? null;
 
   const [expanded, setExpanded] = useState(false);
 
   const toggle = (id: string) => {
     props.dispatch({
-      type: "SET_REACTION",
+      type: "SET_VIDEO_LABEL",
       creatorId: props.video.video_creatorId_yt,
       videoId: props.video.videoId_yt,
-      reaction: id as Reaction,
+      videoLabel: id as VideoLabel,
     });
   };
 
   const DisplayVideoLabels = () => {
     return (
         <>
-            {videoLabels.map((b) => {
+            {VIDEOLABELS.map((b) => {
                 const isActive = activeReaction === b.id;
                 const className = `label-button ${b.id} ${ isActive ? "active" : "" }`;
 

@@ -1,10 +1,15 @@
-import React from "react";
+import React, { type ReactElement } from "react";
 
-export type VideoLabelDef = {
-  id: string;
+export type DefaultVideoLabel = "love" | "star" | "x";
+export type VideoLabel = DefaultVideoLabel | "tag"
+export type VideoLabelOrNone = VideoLabel | null | undefined;
+
+export interface VideoLabelDef {
+  id: VideoLabel;
   label: string;
   icon: React.ReactNode;
-};
+  associatedPlaylistId?: string;
+}
 
 export const tagIcon =
   <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" transform="matrix(-1, 0, 0, 1, 0, 0)">
@@ -43,20 +48,29 @@ export const xIcon =
       />
     </svg>
 
-export const videoLabels: VideoLabelDef[] = [
+export const VIDEOLABELS: VideoLabelDef[] = [
   {
     id: "love",
     label: "Love",
-    icon: loveIcon,
+    associatedPlaylistId: "favorites",
+    icon: loveIcon
   },
   {
     id: "star",
     label: "Star",
+    associatedPlaylistId: "watch-later",
     icon: starIcon
   },
   {
     id: "x",
     label: "X",
     icon: xIcon
-  }
+  },
 ];
+
+export const videoIcons: Record<VideoLabel, ReactElement> = {
+  love: loveIcon,
+  star: starIcon,
+  x: xIcon,
+  tag: tagIcon
+}

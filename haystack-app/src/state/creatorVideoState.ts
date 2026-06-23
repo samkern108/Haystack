@@ -1,9 +1,12 @@
-export type Reaction = "love" | "star" | "x";
-export type ReactionOrNone = Reaction | null | undefined;
+import type { VideoLabel, VideoLabelOrNone } from "../components/video_components/videolabels";
+
+/* -----------------------------
+   STATE
+------------------------------ */
 
 export interface VideoState {
   watchPercentage?: number;
-  reaction?: ReactionOrNone;
+  videoLabel?: VideoLabelOrNone;
   comment?: string;
 }
 
@@ -14,8 +17,13 @@ export interface CreatorState {
   videos?: Record<string, VideoState>;
 }
 
+export interface PlaylistState {
+  videos: string[];
+}
+
 export interface State {
   creators: Record<string, CreatorState>;
+  playlists: Record<string, PlaylistState>;
 }
 
 /* -----------------------------
@@ -28,11 +36,17 @@ export type Action =
       creatorId: string;
       field: "followed" | "favorite" | "doNotShow";
     }
+  |
+    {
+      type: "TOGGLE_VIDEO_IN_PLAYLIST";
+      playlistId: string;
+      videoId: string;
+    }
   | {
-      type: "SET_REACTION";
+      type: "SET_VIDEO_LABEL";
       creatorId: string;
       videoId: string;
-      reaction: Exclude<Reaction, null>;
+      videoLabel: Exclude<VideoLabel, null>;
     }
   | {
       type: "SET_WATCH_PERCENTAGE";
@@ -52,22 +66,23 @@ export type Action =
 ------------------------------ */
 
 export const initialState: State = {
-  creators: {}
+  creators: {},
+  playlists: {}
 };
 
 /* -----------------------------
    SAFE READ HELPERS
 ------------------------------ */
 
+export function getPlaylist(state: State, playlistId: string): PlaylistState {
+  return state.playlists?.[playlistId] ?? {};
+}
+
 export function getCreator(state: State, creatorId: string): CreatorState {
   return state.creators?.[creatorId] ?? {};
 }
 
-export function getVideo(
-  state: State,
-  creatorId: string,
-  videoId: string
-): VideoState {
+export function getVideo(state: State, creatorId: string, videoId: string): VideoState {
   return state.creators?.[creatorId]?.videos?.[videoId] ?? {};
 }
 
@@ -96,17 +111,40 @@ export function reducer(state: State, action: Action): State {
       };
     }
 
+    /* ---- PLAYLIST ---- */
+    case "TOGGLE_VIDEO_IN_PLAYLIST": {
+      const { playlistId, videoId } = action;
+
+      const playlist = getPlaylist(state, playlistId);
+      const videos = playlist.videos ?? [];
+
+      const nextVideos = videos.includes(videoId)
+        ? videos.filter(id => id !== videoId)
+        : [...videos, videoId];
+
+      return {
+        ...state,
+        playlists: {
+          ...state.playlists,
+          [playlistId]: {
+            ...playlist,
+            videos: nextVideos,
+          },
+        },
+      };
+    }
+
     /* ---- REACTION ---- */
 
-    case "SET_REACTION": {
-      const { creatorId, videoId, reaction } = action;
+    case "SET_VIDEO_LABEL": {
+      const { creatorId, videoId, videoLabel } = action;
 
       const creator = getCreator(state, creatorId);
       const videos = creator.videos ?? {};
       const video = videos[videoId] ?? {};
 
-      const current = video.reaction ?? null;
-      const next = current === reaction ? null : reaction;
+      const current = video.videoLabel ?? null;
+      const next = current === videoLabel ? null : videoLabel;
 
       return {
         ...state,
@@ -118,7 +156,7 @@ export function reducer(state: State, action: Action): State {
               ...videos,
               [videoId]: {
                 ...video,
-                reaction: next
+                videoLabel: next
               }
             }
           }

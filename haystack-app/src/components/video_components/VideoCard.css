@@ -62,8 +62,8 @@
 
 .label-buttons-container {
   position: absolute;
-  top: 8px;
-  right: 8px;
+  top: 2px;
+  right: 2px;
 
   display: flex;
   gap: 8px;
