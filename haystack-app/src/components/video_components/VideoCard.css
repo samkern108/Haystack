@@ -153,22 +153,16 @@ I'll fix it later.
 
 .label-button.x {
   color: var(--color-x);
-  background-color: var(--color-star-x);
+  background-color: var(--color-x-light);
 }
 
 .label-button.love {
   color: var(--color-love);
-  background-color: var(--color-star-love);
+  background-color: var(--color-love-light);
 }
 
-.label-button.active {
+.label-button.display {
   background: none;
-}
-
-.label-icon-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .expanded .label-button:nth-child(1) { transition-delay: 0ms; }

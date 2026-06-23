@@ -1,5 +1,5 @@
 import "./VideoCard.css";
-import { videoLabelButtons } from "./videolabelbuttons";
+import { tagIcon, videoLabels } from "./videolabels";
 import type { Action, Reaction, State } from "../../state/creatorVideoState";
 import type { Video } from "../../types";
 import { useState } from "react";
@@ -28,29 +28,48 @@ export default function VideoLabelsPopup(props: VideoLabelsPopupProps) {
     });
   };
 
-  return (
-    <div
-      className={`label-buttons-container ${
-        expanded ? "expanded" : "collapsed"
-      }`}
-      onMouseEnter={() => setExpanded(true)}
-      onMouseLeave={() => setExpanded(false)}
-    >
-      {videoLabelButtons.map((b) => {
-        const isActive = activeReaction === b.id;
+  const DisplayVideoLabels = () => {
+    return (
+        <>
+            {videoLabels.map((b) => {
+                const isActive = activeReaction === b.id;
+                const className = `label-button ${b.id} ${ isActive ? "active" : "" }`;
 
-        return (
-          <button
-            key={b.id}
-            className={`label-button ${b.id} ${
-              isActive ? "active" : ""
-            }`}
-            onClick={() => toggle(b.id)}
-          >
-            {b.icon}
-          </button>
-        );
-      })}
-    </div>
+                return (
+                <button
+                    key={b.id}
+                    className={className}
+                    onClick={() => toggle(b.id)}
+                >
+                    {b.icon}
+                </button>
+                );
+            })}
+        </>
+      )
+    }
+
+  const DisplayTagIcon = () => {
+    return (
+        <div className={`label-button active`} >
+            {tagIcon}
+        </div>
+        )
+    }
+
+  return (
+        <div
+        className={`label-buttons-container ${
+            expanded ? "expanded" : "collapsed"
+        }`}
+        onMouseEnter={() => setExpanded(true)}
+        onMouseLeave={() => setExpanded(false)}
+        >
+            {
+            (!activeReaction && !expanded) ?
+                DisplayTagIcon() :
+                DisplayVideoLabels()
+            }
+        </div>
   );
 }
