@@ -49,6 +49,9 @@ export default function VideoLabelsPopup(props: VideoLabelsPopupProps) {
       )
     }
 
+  // BUG – the reason animation doesn't work for this state is that
+  // the other labels are not rendered, and when they are suddenly
+  // added to the DOM on mouseover, animation will not trigger.
   const DisplayTagIcon = () => {
     return (
         <div className={`label-button active`} >

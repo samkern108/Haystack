@@ -119,10 +119,12 @@
   background: transparent;
 }
 
-/* Sooooo I can't fix this yet lol 
-the animation is clumsy & I don't want inactive icons to
-affect the layout. So we're setting height and width to 0 for now.
-I'll fix it later.
+/* BUG – width:0 and height:0 are a quickfix that break
+   the animation of the active label. I set these to 0
+   to make the active label hug the righthand side of the
+   container while collapsed. But this causes it to JUMP
+   into position on MouseOver when the previously 0'd elements
+   are suddenly given nonzero height and width.
 */
 .collapsed .label-button:not(.active) {
   opacity: 0;
@@ -144,6 +146,10 @@ I'll fix it later.
   opacity: 1;
   transform: translateX(0) scale(1);
   pointer-events: auto;
+}
+
+.expanded .label-button:not(.active) {
+  background: none;
 }
 
 .label-button.star {
