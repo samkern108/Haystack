@@ -1,25 +1,25 @@
-import type { Creator } from "../../types";
 import { VideoCard } from "../video_components/VideoCard";
 import './CreatorRow.css'
 import '../video_components/VideoCard.css'
-import { CreatorInfo } from "./CreatorInfo";
-import type { State, Action } from "../../state/creatorVideoState";
+import type { State, Action, PlaylistState } from "../../state/creatorVideoState";
 import { getVideosByIds } from "../video_components/videohelpers";
 
-interface CreatorRowProps {
-  creator: Creator;
+interface PlaylistRowProps {
+  playlist: PlaylistState;
   state: State;
   dispatch: React.ActionDispatch<[action: Action]>;
 }
 
-export function CreatorRow( props : CreatorRowProps) {
+export function PlaylistRow( props : PlaylistRowProps) {
+
+  const playlistVideos = getVideosByIds(props.playlist.videoIds);
+
   return (
     <section className="creator-row">
-      <CreatorInfo creator={props.creator} />
-
       <div className="video-strip">
-        {getVideosByIds(props.creator.videoIds).map((video) => (
+        {playlistVideos.map((video) => (
           <VideoCard
+            key={video.videoId_yt}
             video={video}
             state={props.state}
             dispatch={props.dispatch}

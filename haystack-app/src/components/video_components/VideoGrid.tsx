@@ -1,5 +1,5 @@
 import type { Action, State } from "../../state/creatorVideoState";
-import { creators } from "../../mockData";
+import { MockData_AllCreators } from "../../mockData";
 import { CreatorRow } from "../creator_components/CreatorRow";
 
 interface VideoGridProps {
@@ -11,7 +11,7 @@ interface VideoGridProps {
 export function VideoGrid(props: VideoGridProps) {
   return (
     <>
-      {creators.map((creator) => (
+      {MockData_AllCreators.map((creator) => (
         <CreatorRow
           key={creator.creatorId_yt}
           creator={creator}

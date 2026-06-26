@@ -11,6 +11,7 @@ export function NavBar() {
         <input placeholder="Search..." />
         <button onClick={() => navigate('/')}> Home </button>
         <button onClick={() => navigate('/about')}> About Us </button>
+        <button onClick={() => navigate('playlists')}> Playlists </button>
       </div>
     </div>
     );

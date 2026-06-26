@@ -18,7 +18,10 @@ export interface CreatorState {
 }
 
 export interface PlaylistState {
-  videos: string[];
+  id: string;
+  name: string;
+  description?: string;
+  videoIds: string[];
 }
 
 export interface State {
@@ -35,6 +38,12 @@ export type Action =
       type: "TOGGLE_CREATOR_FLAG";
       creatorId: string;
       field: "followed" | "favorite" | "doNotShow";
+    }
+  |
+    {
+      type: "CREATE_NEW_PLAYLIST";
+      playlistId: string;
+      playlistName: string;
     }
   |
     {
@@ -65,9 +74,29 @@ export type Action =
    INITIAL STATE
 ------------------------------ */
 
+function createInitialPlaylists(): Record<string, PlaylistState> {
+  const initialPlaylists = {} as Record<string, PlaylistState>;
+  initialPlaylists['favorites'] = {
+    id: 'favorites',
+    name: 'Favorites',
+    videoIds: []
+  };
+  initialPlaylists['watch-later'] = {
+    id: 'watch-later',
+    name: 'Watch Later',
+    videoIds: []
+  };
+  initialPlaylists['x'] = {
+    id: 'x',
+    name: 'x',
+    videoIds: []
+  };
+  return initialPlaylists;
+}
+
 export const initialState: State = {
   creators: {},
-  playlists: {}
+  playlists: createInitialPlaylists(),
 };
 
 /* -----------------------------
@@ -92,7 +121,6 @@ export function getVideo(state: State, creatorId: string, videoId: string): Vide
 
 export function reducer(state: State, action: Action): State {
   switch (action.type) {
-    /* ---- CREATOR FLAGS ---- */
 
     case "TOGGLE_CREATOR_FLAG": {
       const { creatorId, field } = action;
@@ -111,12 +139,30 @@ export function reducer(state: State, action: Action): State {
       };
     }
 
-    /* ---- PLAYLIST ---- */
+    case "CREATE_NEW_PLAYLIST": {
+      const { playlistId, playlistName } = action;
+      const playlist = 
+      { id: playlistId, 
+        name: playlistName,
+        description: "",
+        videoIds: [],
+        systemDefault: false,
+
+      } as PlaylistState;
+      return {
+        ...state,
+        playlists: {
+          ...state.playlists,
+          [playlistId]: playlist,
+        },
+      };
+    }
+
     case "TOGGLE_VIDEO_IN_PLAYLIST": {
       const { playlistId, videoId } = action;
 
       const playlist = getPlaylist(state, playlistId);
-      const videos = playlist.videos ?? [];
+      const videos = playlist.videoIds ?? [];
 
       const nextVideos = videos.includes(videoId)
         ? videos.filter(id => id !== videoId)
@@ -128,13 +174,11 @@ export function reducer(state: State, action: Action): State {
           ...state.playlists,
           [playlistId]: {
             ...playlist,
-            videos: nextVideos,
+            videoIds: nextVideos,
           },
         },
       };
     }
-
-    /* ---- REACTION ---- */
 
     case "SET_VIDEO_LABEL": {
       const { creatorId, videoId, videoLabel } = action;
@@ -164,8 +208,6 @@ export function reducer(state: State, action: Action): State {
       };
     }
 
-    /* ---- WATCH PERCENTAGE ---- */
-
     case "SET_WATCH_PERCENTAGE": {
       const { creatorId, videoId, value } = action;
 
@@ -190,8 +232,6 @@ export function reducer(state: State, action: Action): State {
         }
       };
     }
-
-    /* ---- COMMENT ---- */
 
     case "SET_COMMENT": {
       const { creatorId, videoId, comment } = action;
