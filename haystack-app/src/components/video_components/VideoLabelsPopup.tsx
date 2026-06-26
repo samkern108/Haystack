@@ -34,7 +34,7 @@ export default function VideoLabelsPopup(props: VideoLabelsPopupProps) {
             {DEFAULTVIDEOLABELS.map((b) => {
                 const isActive = activeReaction === b.id;
                 const className = `label-button ${b.id} ${ isActive ? "active" : "" }`;
-
+                console.log('active ' + isActive);
                 return (
                 <button
                     key={b.id}

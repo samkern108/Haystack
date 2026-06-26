@@ -196,10 +196,13 @@ export function reducer(state: State, action: Action): State {
 
       const current = video.videoLabel ?? null;
 
+      // FIX: Hey sam, this produced a really frustrating bug because you
+      // were using videoLabelDef.label instead of .id
+      // Can we make these types/objects little safer?
       const next =
-        current === videoLabelDef.label
+        current === videoLabelDef.id
           ? null
-          : videoLabelDef.label;
+          : videoLabelDef.id;
 
       if (videoLabelDef.associatedPlaylistId) {
         state = toggleVideoInPlaylist(
