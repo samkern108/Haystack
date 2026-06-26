@@ -1,5 +1,4 @@
 import type { VideoLabel, VideoLabelDef, VideoLabelOrNone } from "../components/video_components/videolabels";
-import type { Video } from "../types";
 
 /* -----------------------------
    STATE

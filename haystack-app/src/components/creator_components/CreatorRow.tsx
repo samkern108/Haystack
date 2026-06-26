@@ -20,6 +20,7 @@ export function CreatorRow( props : CreatorRowProps) {
       <div className="video-strip">
         {getVideosByIds(props.creator.videoIds).map((video) => (
           <VideoCard
+            key={video.videoId_yt}
             video={video}
             state={props.state}
             dispatch={props.dispatch}

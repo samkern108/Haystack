@@ -1,6 +1,5 @@
 import { VideoCard } from "../video_components/VideoCard";
 import './PlaylistRow.css'
-import '../video_components/VideoCard.css'
 import type { State, Action, PlaylistState } from "../../state/creatorVideoState";
 import { getVideosByIds } from "../video_components/videohelpers";
 
@@ -16,6 +15,7 @@ export function PlaylistRow( props : PlaylistRowProps) {
 
   return (
     <section className="playlist-row">
+      <h2>{ props.playlist.name }</h2>
       <div className="video-strip">
         {playlistVideos.map((video) => (
           <VideoCard

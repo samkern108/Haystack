@@ -21,6 +21,7 @@ export function PlaylistsPage(props: PlaylistsPageProps) {
 
     {Object.values(props.state.playlists).map((playlist) => (
       <PlaylistRow
+        key={playlist.id}
         state={props.state}
         playlist={playlist}
         dispatch={props.dispatch}

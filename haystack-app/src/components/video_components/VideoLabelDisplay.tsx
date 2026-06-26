@@ -1,4 +1,5 @@
 import "./VideoCard.css";
+import "./VideoLabels.css";
 import { DEFAULTVIDEOLABELS } from "./videolabels";
 import type { State } from "../../state/creatorVideoState";
 import type { Video } from "../../types";

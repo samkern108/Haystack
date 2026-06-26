@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useRef, useState } from "react";
 import '../creator_components/CreatorRow.css'
 import "./VideoCard.css"
+import "./VideoLabels.css"
 import VideoLabelsPopup from "./VideoLabelsPopup";
 import type { State, Action } from "../../state/creatorVideoState";
 import VideoLabelDisplay from "./VideoLabelDisplay";
@@ -40,7 +41,7 @@ export function VideoCard( props : VideoCardProps) {
   
       mouseLeaveTimerRef.current = window.setTimeout(() => {
         setShowPopover(false);
-      }, 20000000);
+      }, popupWaitTime);
     };
     
   return (
