@@ -1,0 +1,11 @@
+main {
+  padding: 2rem;
+}
+
+.playlist-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  overflow-x: visible;
+  padding-bottom: 1rem;
+}

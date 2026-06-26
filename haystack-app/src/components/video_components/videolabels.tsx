@@ -48,12 +48,12 @@ export const xIcon =
       />
     </svg>
 
-export const VIDEOLABELS: VideoLabelDef[] = [
+export const DEFAULTVIDEOLABELS: VideoLabelDef[] = [
   {
     id: "love",
     label: "Love",
     associatedPlaylistId: "favorites",
-    icon: loveIcon
+    icon: loveIcon // TODO – Should prolly make this iconId.
   },
   {
     id: "star",
@@ -64,6 +64,7 @@ export const VIDEOLABELS: VideoLabelDef[] = [
   {
     id: "x",
     label: "X",
+    associatedPlaylistId: "x",
     icon: xIcon
   },
 ];

@@ -40,7 +40,7 @@ export function VideoCard( props : VideoCardProps) {
   
       mouseLeaveTimerRef.current = window.setTimeout(() => {
         setShowPopover(false);
-      }, popupWaitTime);
+      }, 20000000);
     };
     
   return (

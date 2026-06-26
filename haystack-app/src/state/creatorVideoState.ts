@@ -1,4 +1,5 @@
-import type { VideoLabel, VideoLabelOrNone } from "../components/video_components/videolabels";
+import type { VideoLabel, VideoLabelDef, VideoLabelOrNone } from "../components/video_components/videolabels";
+import type { Video } from "../types";
 
 /* -----------------------------
    STATE
@@ -55,7 +56,7 @@ export type Action =
       type: "SET_VIDEO_LABEL";
       creatorId: string;
       videoId: string;
-      videoLabel: Exclude<VideoLabel, null>;
+      videoLabelDef: VideoLabelDef;
     }
   | {
       type: "SET_WATCH_PERCENTAGE";
@@ -116,6 +117,30 @@ export function getVideo(state: State, creatorId: string, videoId: string): Vide
 }
 
 /* -----------------------------
+   REDUCER HELPERS
+------------------------------ */
+
+function toggleVideoInPlaylist(state: State, playlistId: string, videoId: string): State {
+  const playlist = getPlaylist(state, playlistId);
+  const videos = playlist.videoIds ?? [];
+
+  const nextVideos = videos.includes(videoId)
+    ? videos.filter(id => id !== videoId)
+    : [...videos, videoId];
+
+  return {
+    ...state,
+    playlists: {
+      ...state.playlists,
+      [playlistId]: {
+        ...playlist,
+        videoIds: nextVideos,
+      },
+    },
+  };
+}
+
+/* -----------------------------
    REDUCER
 ------------------------------ */
 
@@ -160,35 +185,30 @@ export function reducer(state: State, action: Action): State {
 
     case "TOGGLE_VIDEO_IN_PLAYLIST": {
       const { playlistId, videoId } = action;
-
-      const playlist = getPlaylist(state, playlistId);
-      const videos = playlist.videoIds ?? [];
-
-      const nextVideos = videos.includes(videoId)
-        ? videos.filter(id => id !== videoId)
-        : [...videos, videoId];
-
-      return {
-        ...state,
-        playlists: {
-          ...state.playlists,
-          [playlistId]: {
-            ...playlist,
-            videoIds: nextVideos,
-          },
-        },
-      };
+      return toggleVideoInPlaylist(state, playlistId, videoId);
     }
 
     case "SET_VIDEO_LABEL": {
-      const { creatorId, videoId, videoLabel } = action;
+      const { creatorId, videoId, videoLabelDef } = action;
 
       const creator = getCreator(state, creatorId);
       const videos = creator.videos ?? {};
       const video = videos[videoId] ?? {};
 
       const current = video.videoLabel ?? null;
-      const next = current === videoLabel ? null : videoLabel;
+
+      const next =
+        current === videoLabelDef.label
+          ? null
+          : videoLabelDef.label;
+
+      if (videoLabelDef.associatedPlaylistId) {
+        state = toggleVideoInPlaylist(
+          state,
+          videoLabelDef.associatedPlaylistId,
+          videoId
+        );
+      }
 
       return {
         ...state,
@@ -200,7 +220,7 @@ export function reducer(state: State, action: Action): State {
               ...videos,
               [videoId]: {
                 ...video,
-                videoLabel: next
+                videoLabel: next as VideoLabel
               }
             }
           }
