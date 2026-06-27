@@ -1,4 +1,5 @@
 import { Innertube } from "youtubei.js/web";
+import { PROXY_SERVER_URL } from "../config/server.ts";
 
 /* Using 
  *   https://github.com/LuanRT/googlevideo/blob/main/examples/sabr-shaka-example/src/main.ts and
@@ -28,9 +29,10 @@ export async function getInnertube() {
   });
 }
 
-// This will need to proxy the request to our backend
-async function fetchHandler(request: Request, init?: RequestInit) {
-  //
+async function fetchHandler(request: RequestInfo | URL, init?: RequestInit) {
+  console.log(request)
+  console.log(init)
+  const innertube_path = request.href.replace(/https?:\/\/(www.)?youtube.com\//, '')
 
-  return fetch(request, init)
+  return fetch(PROXY_SERVER_URL + innertube_path, init)
 }
