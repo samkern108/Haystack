@@ -12,7 +12,12 @@ export interface VideoLabel {
   lightColor: string;
   darkColor: string;
   associatedPlaylistId?: string;
+  description: string;
 }
+
+// The system playlists:
+// Heart + Star both feed into Favorites
+// 
 
 export const SYSTEMVIDEOLABELS: VideoLabel[] = [
   {
@@ -21,7 +26,8 @@ export const SYSTEMVIDEOLABELS: VideoLabel[] = [
     associatedPlaylistId: "favorites",
     lightColor: "#df7e9c",
     darkColor: "#c95a80",
-    icon: Icons.loveIcon // TODO – Should prolly make this iconId.
+    icon: Icons.loveIcon, // TODO – Should prolly make this iconId.
+    description: "Favorite (public)"
   },
   {
     id: "star",
@@ -29,7 +35,8 @@ export const SYSTEMVIDEOLABELS: VideoLabel[] = [
     associatedPlaylistId: "watch-later",
     lightColor: "#fde68a",
     darkColor: "#facc15",
-    icon: Icons.starIcon
+    icon: Icons.starIcon,
+    description: "Favorite (private)"
   },
   {
     id: "x",
@@ -37,7 +44,8 @@ export const SYSTEMVIDEOLABELS: VideoLabel[] = [
     associatedPlaylistId: "x",
     lightColor: "#fca5a5",
     darkColor: "#ef4444",
-    icon: Icons.xIcon
+    icon: Icons.xIcon,
+    description: "Do not recommend"
   },
 ];
 

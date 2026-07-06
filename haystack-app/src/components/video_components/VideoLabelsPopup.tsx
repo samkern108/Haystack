@@ -5,6 +5,8 @@ import type { Action, State } from "../../state/creatorVideoState";
 import type { Video } from "../../types";
 import { useState } from "react";
 import { findVideoLabelById } from "./videolabels";
+import { useDelayedHover } from "../helpers/hoverlogic";
+import { VideoLabelButton } from "./VideoLabelButton";
 
 interface VideoLabelsPopupProps {
   video: Video;
@@ -39,13 +41,27 @@ export default function VideoLabelsPopup(props: VideoLabelsPopupProps) {
                 const videoLabel = findVideoLabelById(b.id);
                 
                 return (
-                <button
+
+                    <VideoLabelButton 
+                      label={b.id} 
+                      active={false} 
+                      onClick={() => toggle(b)}>
+                    </VideoLabelButton>
+                    
+                /*<button
                     key={b.id}
                     className={className}
                     onClick={() => toggle(b)}
                     style={{ color: videoLabel?.darkColor , backgroundColor: isActive ? videoLabel?.lightColor : "transparent" }}>
                     {b.icon}
-                </button>
+
+                    {hover.hovered && (
+                    <div className="tooltip">
+                        {"I am a tooltip!"}
+                    </div>
+                )}
+                </button>*/
+
                 );
             })}
         </>
