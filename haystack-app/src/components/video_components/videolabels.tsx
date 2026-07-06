@@ -1,77 +1,48 @@
 import React, { type ReactElement } from "react";
+import *  as Icons from "./videolabelsvg";
 
-export type DefaultVideoLabel = "love" | "star" | "x";
-export type VideoLabel = DefaultVideoLabel | "tag"
-export type VideoLabelOrNone = VideoLabel | null | undefined;
+export type SystemVideoLabelId = "love" | "star" | "x";
+export type VideoLabelId = SystemVideoLabelId; // TODO - This should be SystemVideoLabel | UserVideoLabel, but we don't have user video labels yet.
+export type VideoLabelIdOrNone = VideoLabelId | null | undefined;
 
-export interface VideoLabelDef {
-  id: VideoLabel;
+export interface VideoLabel {
+  id: VideoLabelId;
   label: string;
   icon: React.ReactNode;
+  color: string;
   associatedPlaylistId?: string;
 }
 
-export const tagIcon =
-  <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" transform="matrix(-1, 0, 0, 1, 0, 0)">
-    <path fillRule="evenodd" clipRule="evenodd" d="M2.678 11.422a2.5 2.5 0 0 0 0 3.536l6.364 6.364a2.5 2.5 0 0 0 3.536 0l7.69-7.69A2.5 2.5 0 0 0 21 11.864V4.5A1.5 1.5 0 0 0 19.5 3h-7.365a2.5 2.5 0 0 0-1.768.732l-7.69 7.69zM14.988 7C13.878 7 13 7.832 13 8.988c0 1.157.878 2.012 1.988 2.012C16.121 11 17 10.145 17 8.988 17 7.832 16.12 7 14.988 7z">
-    </path>
-  </svg>
-
-export const loveIcon = 
-    <svg className="love"
-      viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-        <path d="M2 9.1371C2 14 6.01943 16.5914 8.96173 18.9109C10 19.7294 11 20.5 12 20.5C13 20.5 14 19.7294 15.0383 18.9109C17.9806 16.5914 22 14 22 9.1371C22 4.27416 16.4998 0.825464 12 5.50063C7.50016 0.825464 2 4.27416 2 9.1371Z" >
-        </path> 
-    </svg>
-
-export const starIcon =
-    <svg className="star"
-      viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-      <path
-        d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.7-6.2 3.7 1.6-7-5.4-4.7 7.1-.6L12 2z"
-        stroke="currentColor"
-        strokeWidth="1.6"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  
-export const xIcon =
-    <svg className="x"
-      viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-      <path
-        d="M6 6l12 12M18 6L6 18"
-        stroke="currentColor"
-        strokeWidth="3"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-
-export const DEFAULTVIDEOLABELS: VideoLabelDef[] = [
+export const SYSTEMVIDEOLABELS: VideoLabel[] = [
   {
     id: "love",
     label: "Love",
     associatedPlaylistId: "favorites",
-    icon: loveIcon // TODO – Should prolly make this iconId.
+    color: "#000000",
+    icon: Icons.loveIcon // TODO – Should prolly make this iconId.
   },
   {
     id: "star",
     label: "Star",
     associatedPlaylistId: "watch-later",
-    icon: starIcon
+    color: "#000000",
+    icon: Icons.starIcon
   },
   {
     id: "x",
     label: "X",
     associatedPlaylistId: "x",
-    icon: xIcon
+    color: "#000000",
+    icon: Icons.xIcon
   },
 ];
 
-export const videoIcons: Record<VideoLabel, ReactElement> = {
-  love: loveIcon,
-  star: starIcon,
-  x: xIcon,
-  tag: tagIcon
+export const findVideoLabelDefById = (id: VideoLabelId): VideoLabel | undefined => {
+  return SYSTEMVIDEOLABELS.find((b) => b.id === id);
+}
+
+export const videoIcons: Record<VideoLabelId, ReactElement> = {
+  love: Icons.loveIcon,
+  star: Icons.starIcon,
+  x: Icons.xIcon,
 }

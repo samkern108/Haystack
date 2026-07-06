@@ -1,4 +1,4 @@
-import type { VideoLabel, VideoLabelDef, VideoLabelOrNone } from "../components/video_components/videolabels";
+import type { VideoLabelId, VideoLabel, VideoLabelIdOrNone } from "../components/video_components/videolabels";
 
 /* -----------------------------
    STATE
@@ -6,7 +6,7 @@ import type { VideoLabel, VideoLabelDef, VideoLabelOrNone } from "../components/
 
 export interface VideoState {
   watchPercentage?: number;
-  videoLabel?: VideoLabelOrNone;
+  videoLabelId?: VideoLabelIdOrNone;
   comment?: string;
 }
 
@@ -20,6 +20,7 @@ export interface CreatorState {
 export interface PlaylistState {
   id: string;
   name: string;
+  videoLabelId: VideoLabelId;
   description?: string;
   videoIds: string[];
 }
@@ -55,7 +56,7 @@ export type Action =
       type: "SET_VIDEO_LABEL";
       creatorId: string;
       videoId: string;
-      videoLabelDef: VideoLabelDef;
+      videoLabel: VideoLabel;
     }
   | {
       type: "SET_WATCH_PERCENTAGE";
@@ -79,16 +80,19 @@ function createInitialPlaylists(): Record<string, PlaylistState> {
   initialPlaylists['favorites'] = {
     id: 'favorites',
     name: 'Favorites',
+    videoLabelId: "love",
     videoIds: []
   };
   initialPlaylists['watch-later'] = {
     id: 'watch-later',
     name: 'Watch Later',
+    videoLabelId: "star",
     videoIds: []
   };
   initialPlaylists['x'] = {
     id: 'x',
     name: 'x',
+    videoLabelId: "x",
     videoIds: []
   };
   return initialPlaylists;
@@ -169,6 +173,7 @@ export function reducer(state: State, action: Action): State {
       { id: playlistId, 
         name: playlistName,
         description: "",
+        videoLabelId: "x",
         videoIds: [],
         systemDefault: false,
 
@@ -188,26 +193,26 @@ export function reducer(state: State, action: Action): State {
     }
 
     case "SET_VIDEO_LABEL": {
-      const { creatorId, videoId, videoLabelDef } = action;
+      const { creatorId, videoId, videoLabel } = action;
 
       const creator = getCreator(state, creatorId);
       const videos = creator.videos ?? {};
       const video = videos[videoId] ?? {};
 
-      const current = video.videoLabel ?? null;
+      const current = video.videoLabelId ?? null;
 
       // FIX: Hey sam, this produced a really frustrating bug because you
       // were using videoLabelDef.label instead of .id
       // Can we make these types/objects little safer?
       const next =
-        current === videoLabelDef.id
+        current === videoLabel.id
           ? null
-          : videoLabelDef.id;
+          : videoLabel.id;
 
-      if (videoLabelDef.associatedPlaylistId) {
+      if (videoLabel.associatedPlaylistId) {
         state = toggleVideoInPlaylist(
           state,
-          videoLabelDef.associatedPlaylistId,
+          videoLabel.associatedPlaylistId,
           videoId
         );
       }
@@ -222,7 +227,7 @@ export function reducer(state: State, action: Action): State {
               ...videos,
               [videoId]: {
                 ...video,
-                videoLabel: next as VideoLabel
+                videoLabelId: next as VideoLabelId
               }
             }
           }

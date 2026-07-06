@@ -2,6 +2,7 @@ import { VideoCard } from "../video_components/VideoCard";
 import './PlaylistRow.css'
 import type { State, Action, PlaylistState } from "../../state/creatorVideoState";
 import { getVideosByIds } from "../video_components/videohelpers";
+import { SYSTEMVIDEOLABELS } from "../video_components/videolabels";
 
 interface PlaylistRowProps {
   playlist: PlaylistState;
@@ -12,10 +13,16 @@ interface PlaylistRowProps {
 export function PlaylistRow( props : PlaylistRowProps) {
 
   const playlistVideos = getVideosByIds(props.playlist.videoIds);
+  const videoLabel = SYSTEMVIDEOLABELS.find((b) => b.id === props.playlist.videoLabelId);
+  console.log(props.playlist.videoLabelId, videoLabel);
 
   return (
     <section className="playlist-row">
-      <h2>{ props.playlist.name }</h2>
+      <div>
+        { videoLabel?.icon }
+        <h2>{ props.playlist.name }</h2>
+      </div>
+      
       <div className="video-strip">
         {playlistVideos.map((video) => (
           <VideoCard

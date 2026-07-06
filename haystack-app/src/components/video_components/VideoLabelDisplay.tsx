@@ -1,6 +1,6 @@
 import "./VideoCard.css";
 import "./VideoLabels.css";
-import { DEFAULTVIDEOLABELS } from "./videolabels";
+import { SYSTEMVIDEOLABELS } from "./videolabels";
 import type { State } from "../../state/creatorVideoState";
 import type { Video } from "../../types";
 
@@ -13,8 +13,8 @@ export default function VideoLabelsPopup(props: VideoLabelsPopupProps) {
   const videoState = props.state.creators?.[props.video.creatorId_yt]
     ?.videos?.[props.video.videoId_yt];
 
-  const activeReaction = videoState?.videoLabel ?? null;
-  const activeButton = DEFAULTVIDEOLABELS.find((b) => b.id === activeReaction);
+  const activeReaction = videoState?.videoLabelId ?? null;
+  const activeButton = SYSTEMVIDEOLABELS.find((b) => b.id === activeReaction);
 
   return activeReaction && activeButton &&
     <div className="label-buttons-container display">
