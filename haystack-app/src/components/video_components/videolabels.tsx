@@ -9,7 +9,8 @@ export interface VideoLabel {
   id: VideoLabelId;
   label: string;
   icon: React.ReactNode;
-  color: string;
+  lightColor: string;
+  darkColor: string;
   associatedPlaylistId?: string;
 }
 
@@ -18,26 +19,29 @@ export const SYSTEMVIDEOLABELS: VideoLabel[] = [
     id: "love",
     label: "Love",
     associatedPlaylistId: "favorites",
-    color: "#000000",
+    lightColor: "#df7e9c",
+    darkColor: "#c95a80",
     icon: Icons.loveIcon // TODO – Should prolly make this iconId.
   },
   {
     id: "star",
     label: "Star",
     associatedPlaylistId: "watch-later",
-    color: "#000000",
+    lightColor: "#fde68a",
+    darkColor: "#facc15",
     icon: Icons.starIcon
   },
   {
     id: "x",
     label: "X",
     associatedPlaylistId: "x",
-    color: "#000000",
+    lightColor: "#fca5a5",
+    darkColor: "#ef4444",
     icon: Icons.xIcon
   },
 ];
 
-export const findVideoLabelDefById = (id: VideoLabelId): VideoLabel | undefined => {
+export const findVideoLabelById = (id: VideoLabelId): VideoLabel | undefined => {
   return SYSTEMVIDEOLABELS.find((b) => b.id === id);
 }
 

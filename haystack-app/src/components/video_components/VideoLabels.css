@@ -90,21 +90,6 @@
   background: none;
 }
 
-.label-button.star {
-  color: var(--color-star);
-  background-color: var(--color-star-light);
-}
-
-.label-button.x {
-  color: var(--color-x);
-  background-color: var(--color-x-light);
-}
-
-.label-button.love {
-  color: var(--color-love);
-  background-color: var(--color-love-light);
-}
-
 .label-button.display {
   background: none;
 }
