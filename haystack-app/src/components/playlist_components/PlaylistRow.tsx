@@ -18,8 +18,11 @@ export function PlaylistRow( props : PlaylistRowProps) {
 
   return (
     <section className="playlist-row">
-      <div>
-        { videoLabel?.icon }
+      <div className="playlist-info">
+        <div className={`playlist-label-button`}
+          style={{ color: videoLabel?.darkColor }}>
+          { videoLabel?.icon }
+        </div>
         <h2>{ props.playlist.name }</h2>
       </div>
       
