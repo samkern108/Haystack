@@ -30,9 +30,48 @@ export async function getInnertube() {
 }
 
 async function fetchHandler(request: RequestInfo | URL, init?: RequestInit) {
+  console.log("Fetch...")
   console.log(request)
   console.log(init)
-  const innertube_path = request.href.replace(/https?:\/\/(www.)?youtube.com\//, '')
 
-  return fetch(PROXY_SERVER_URL + innertube_path, init)
+  const innertube_path = innertubePath(request)
+
+  console.log("Innertube path: " + innertube_path)
+
+  // some of the headers we need to send through the proxy get stripped out if we try to send them as headers (because they aren't allowed to be set programmatically).
+  // thus, we pass them in the body instead. This necessitates that all requests are POST and send the actual HTTP method that the proxy should use.
+  // I suppose we could encode them in the URL search string if we want to take advantage of caching for GET requests in the future.
+  return fetch(
+    PROXY_SERVER_URL + innertube_path,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: wrapRequestParameters(init)
+    }
+  )
+}
+
+function innertubePath(request: URL | String) {
+  if(request instanceof URL) {
+    console.log("Handling request with URL...")
+    return request.href.replace(/https?:\/\/(www.)?youtube.com\//, '')
+  }
+  else if(typeof(request) === "string") {
+    console.log("Handling request with String...")
+    return request.replace(/https?:\/\/(www.)?youtube.com\//, '')
+  }
+  else {
+    console.log("WARNING! Cannot handle request of type " + typeof(request))
+  }
+}
+
+function wrapRequestParameters(init: RequestInit) {
+  if(typeof(init) === "undefined") {
+    return JSON.stringify({})
+  }
+  else {
+    return JSON.stringify(init)
+  }
 }
