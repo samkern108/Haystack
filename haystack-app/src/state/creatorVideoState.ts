@@ -20,6 +20,7 @@ export interface CreatorState {
 export interface PlaylistState {
   id: string;
   name: string;
+  exclusive?: boolean;
   videoLabelId: VideoLabelId;
   description?: string;
   videoIds: string[];
@@ -45,12 +46,6 @@ export type Action =
       type: "CREATE_NEW_PLAYLIST";
       playlistId: string;
       playlistName: string;
-    }
-  |
-    {
-      type: "TOGGLE_VIDEO_IN_PLAYLIST";
-      playlistId: string;
-      videoId: string;
     }
   | {
       type: "SET_VIDEO_LABEL";
@@ -81,18 +76,21 @@ function createInitialPlaylists(): Record<string, PlaylistState> {
     id: 'love',
     name: 'Favorites (Private)',
     videoLabelId: "love",
+    exclusive: true,
     videoIds: []
   };
   initialPlaylists['star'] = {
     id: 'star',
     name: 'Favorites (public)',
     videoLabelId: "star",
+    exclusive: true,
     videoIds: []
   };
   initialPlaylists['x'] = {
     id: 'x',
     name: 'x',
     videoLabelId: "x",
+    exclusive: true,
     videoIds: []
   };
   return initialPlaylists;
@@ -123,23 +121,46 @@ export function getVideo(state: State, creatorId: string, videoId: string): Vide
    REDUCER HELPERS
 ------------------------------ */
 
-function toggleVideoInPlaylist(state: State, playlistId: string, videoId: string): State {
+function toggleVideoInPlaylist(
+  state: State,
+  playlistId: string,
+  videoId: string
+): State {
   const playlist = getPlaylist(state, playlistId);
-  const videos = playlist.videoIds ?? [];
 
-  const nextVideos = videos.includes(videoId)
-    ? videos.filter(id => id !== videoId)
-    : [...videos, videoId];
+  let playlists = { ...state.playlists };
+
+  // If this is an exclusive playlist, remove the video from all other exclusive playlists.
+  if (playlist.exclusive) {
+    Object.entries(playlists).forEach(([otherPlaylistId, otherPlaylist]) => {
+      if (
+        otherPlaylistId !== playlistId &&
+        otherPlaylist.exclusive &&
+        otherPlaylist.videoIds.includes(videoId)
+      ) {
+        
+        playlists[otherPlaylistId] = {
+          ...otherPlaylist,
+          videoIds: otherPlaylist.videoIds.filter(id => id !== videoId),
+        };
+      }
+    });
+  }
+
+  const currentVideos = playlists[playlistId].videoIds;
+
+  const nextVideos = currentVideos.includes(videoId)
+    ? currentVideos.filter(id => id !== videoId)
+    : [...currentVideos, videoId];
+
+  playlists[playlistId] = {
+    ...playlists[playlistId],
+    videoIds: nextVideos,
+  };
 
   return {
     ...state,
-    playlists: {
-      ...state.playlists,
-      [playlistId]: {
-        ...playlist,
-        videoIds: nextVideos,
-      },
-    },
+    playlists,
   };
 }
 
@@ -185,11 +206,6 @@ export function reducer(state: State, action: Action): State {
           [playlistId]: playlist,
         },
       };
-    }
-
-    case "TOGGLE_VIDEO_IN_PLAYLIST": {
-      const { playlistId, videoId } = action;
-      return toggleVideoInPlaylist(state, playlistId, videoId);
     }
 
     case "SET_VIDEO_LABEL": {

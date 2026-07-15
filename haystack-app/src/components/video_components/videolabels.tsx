@@ -15,10 +15,6 @@ export interface VideoLabel {
   description: string;
 }
 
-// The system playlists:
-// Heart + Star both feed into Favorites
-// 
-
 export const SYSTEMVIDEOLABELS: VideoLabel[] = [
   {
     id: "love",
