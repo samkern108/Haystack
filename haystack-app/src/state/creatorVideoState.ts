@@ -77,15 +77,15 @@ export type Action =
 
 function createInitialPlaylists(): Record<string, PlaylistState> {
   const initialPlaylists = {} as Record<string, PlaylistState>;
-  initialPlaylists['favorites'] = {
-    id: 'favorites',
-    name: 'Favorites',
+  initialPlaylists['love'] = {
+    id: 'love',
+    name: 'Favorites (Private)',
     videoLabelId: "love",
     videoIds: []
   };
-  initialPlaylists['watch-later'] = {
-    id: 'watch-later',
-    name: 'Watch Later',
+  initialPlaylists['star'] = {
+    id: 'star',
+    name: 'Favorites (public)',
     videoLabelId: "star",
     videoIds: []
   };

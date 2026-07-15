@@ -16,8 +16,6 @@ export function VideoLabelButton({
 
   const videoLabel = findVideoLabelById(label);
 
-  console.log('display: ' , videoLabel?.label , ' : ' , active);
-
   return (
     <button
       className={`label-button ${active ? "active" : ""}`}

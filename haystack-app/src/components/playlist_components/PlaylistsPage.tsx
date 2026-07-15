@@ -1,5 +1,6 @@
 import type { Action, State } from "../../state/creatorVideoState";
 import { PlaylistRow } from "./PlaylistRow";
+import { PlaylistRow_Favorites } from "./PlaylistRow_Favorites";
 
 interface PlaylistsPageProps {
   state: State;
@@ -19,6 +20,17 @@ export function PlaylistsPage(props: PlaylistsPageProps) {
     <div>
       <button onClick={() => createNewPlaylist(props.dispatch)}>New Playlist</button>
 
+
+      <PlaylistRow_Favorites
+        key={'all_favorites'}
+        state={props.state}
+        dispatch={props.dispatch}
+      />
+    </div>
+  );
+}
+
+/*
     {Object.values(props.state.playlists).map((playlist) => (
       <PlaylistRow
         key={playlist.id}
@@ -27,6 +39,4 @@ export function PlaylistsPage(props: PlaylistsPageProps) {
         dispatch={props.dispatch}
       />
     ))}
-    </div>
-  );
-}
+*/

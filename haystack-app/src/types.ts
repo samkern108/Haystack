@@ -19,6 +19,3 @@ export interface Playlist {
   videoIds: string[];
   icon: VideoLabel;
 }
-
-// SAM – Should this be a type?
-export type defaultPlaylists = 'watch-later';

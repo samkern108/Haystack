@@ -23,20 +23,20 @@ export const SYSTEMVIDEOLABELS: VideoLabel[] = [
   {
     id: "love",
     label: "Love",
-    associatedPlaylistId: "favorites",
+    associatedPlaylistId: "love",
     lightColor: "#df7e9c",
     darkColor: "#c95a80",
     icon: Icons.loveIcon, // TODO – Should prolly make this iconId.
-    description: "Favorite (visible to friends)"
+    description: "Favorite (private to you)"
   },
   {
     id: "star",
     label: "Star",
-    associatedPlaylistId: "watch-later",
+    associatedPlaylistId: "star",
     lightColor: "#fde68a",
     darkColor: "#facc15",
     icon: Icons.starIcon,
-    description: "Favorite (private to you)"
+    description: "Favorite (visible to friends)"
   },
   {
     id: "x",
