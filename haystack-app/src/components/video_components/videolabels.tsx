@@ -27,7 +27,7 @@ export const SYSTEMVIDEOLABELS: VideoLabel[] = [
     lightColor: "#df7e9c",
     darkColor: "#c95a80",
     icon: Icons.loveIcon, // TODO – Should prolly make this iconId.
-    description: "Favorite (public)"
+    description: "Favorite (visible to friends)"
   },
   {
     id: "star",
@@ -36,7 +36,7 @@ export const SYSTEMVIDEOLABELS: VideoLabel[] = [
     lightColor: "#fde68a",
     darkColor: "#facc15",
     icon: Icons.starIcon,
-    description: "Favorite (private)"
+    description: "Favorite (private to you)"
   },
   {
     id: "x",

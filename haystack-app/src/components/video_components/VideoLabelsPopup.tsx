@@ -4,8 +4,6 @@ import { SYSTEMVIDEOLABELS, type VideoLabel } from "./videolabels";
 import type { Action, State } from "../../state/creatorVideoState";
 import type { Video } from "../../types";
 import { useState } from "react";
-import { findVideoLabelById } from "./videolabels";
-import { useDelayedHover } from "../helpers/hoverlogic";
 import { VideoLabelButton } from "./VideoLabelButton";
 
 interface VideoLabelsPopupProps {
@@ -37,31 +35,14 @@ export default function VideoLabelsPopup(props: VideoLabelsPopupProps) {
         <>
             {SYSTEMVIDEOLABELS.map((b) => {
                 const isActive = activeVideoLabelId === b.id;
-                const className = `label-button ${ isActive ? "active" : "" }`;
-                const videoLabel = findVideoLabelById(b.id);
                 
                 return (
-
                     <VideoLabelButton 
+                      key={b.id}
                       label={b.id} 
-                      active={false} 
+                      active={isActive} 
                       onClick={() => toggle(b)}>
                     </VideoLabelButton>
-                    
-                /*<button
-                    key={b.id}
-                    className={className}
-                    onClick={() => toggle(b)}
-                    style={{ color: videoLabel?.darkColor , backgroundColor: isActive ? videoLabel?.lightColor : "transparent" }}>
-                    {b.icon}
-
-                    {hover.hovered && (
-                    <div className="tooltip">
-                        {"I am a tooltip!"}
-                    </div>
-                )}
-                </button>*/
-
                 );
             })}
         </>
@@ -72,6 +53,7 @@ export default function VideoLabelsPopup(props: VideoLabelsPopupProps) {
   // the other labels are not rendered, and when they are suddenly
   // added to the DOM on mouseover, animation will not trigger.
   const DisplayTagIcon = () => {
+    console.log('display tag');
     return (
         <div className={`label-button active`} >
             { tagIcon }
