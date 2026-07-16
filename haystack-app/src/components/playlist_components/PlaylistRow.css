@@ -1,0 +1,48 @@
+main {
+  padding: 2rem;
+}
+
+.playlist-info {
+  display: block;
+  align-items: center;
+  justify-items: center;
+  width: 140px;
+  flex: 0 0 140px;
+  padding: 12px;
+}
+
+.playlist-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  overflow-x: visible;
+  padding-bottom: 1rem;
+}
+
+.playlist-label-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 48px;
+  height: 48px;
+
+  border-radius: 50%;
+}
+
+.playlist-label-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.playlist-label-button {
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: color 150ms ease;
+}
+
+.playlist-label-button.active {
+  color: inherit;
+}

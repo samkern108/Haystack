@@ -1,9 +1,12 @@
-export type Reaction = "love" | "star" | "x";
-export type ReactionOrNone = Reaction | null | undefined;
+import type { VideoLabelId, VideoLabel, VideoLabelIdOrNone } from "../components/video_components/videolabels";
+
+/* -----------------------------
+   STATE
+------------------------------ */
 
 export interface VideoState {
   watchPercentage?: number;
-  reaction?: ReactionOrNone;
+  videoLabelId?: VideoLabelIdOrNone;
   comment?: string;
 }
 
@@ -14,8 +17,18 @@ export interface CreatorState {
   videos?: Record<string, VideoState>;
 }
 
+export interface PlaylistState {
+  id: string;
+  name: string;
+  exclusive?: boolean;
+  videoLabelId: VideoLabelId;
+  description?: string;
+  videoIds: string[];
+}
+
 export interface State {
   creators: Record<string, CreatorState>;
+  playlists: Record<string, PlaylistState>;
 }
 
 /* -----------------------------
@@ -28,11 +41,17 @@ export type Action =
       creatorId: string;
       field: "followed" | "favorite" | "doNotShow";
     }
+  |
+    {
+      type: "CREATE_NEW_PLAYLIST";
+      playlistId: string;
+      playlistName: string;
+    }
   | {
-      type: "SET_REACTION";
+      type: "SET_VIDEO_LABEL";
       creatorId: string;
       videoId: string;
-      reaction: Exclude<Reaction, null>;
+      videoLabel: VideoLabel;
     }
   | {
       type: "SET_WATCH_PERCENTAGE";
@@ -51,24 +70,98 @@ export type Action =
    INITIAL STATE
 ------------------------------ */
 
+function createInitialPlaylists(): Record<string, PlaylistState> {
+  const initialPlaylists = {} as Record<string, PlaylistState>;
+  initialPlaylists['love'] = {
+    id: 'love',
+    name: 'Favorites (Private)',
+    videoLabelId: "love",
+    exclusive: true,
+    videoIds: []
+  };
+  initialPlaylists['star'] = {
+    id: 'star',
+    name: 'Favorites (public)',
+    videoLabelId: "star",
+    exclusive: true,
+    videoIds: []
+  };
+  initialPlaylists['x'] = {
+    id: 'x',
+    name: 'x',
+    videoLabelId: "x",
+    exclusive: true,
+    videoIds: []
+  };
+  return initialPlaylists;
+}
+
 export const initialState: State = {
-  creators: {}
+  creators: {},
+  playlists: createInitialPlaylists(),
 };
 
 /* -----------------------------
    SAFE READ HELPERS
 ------------------------------ */
 
+export function getPlaylist(state: State, playlistId: string): PlaylistState {
+  return state.playlists?.[playlistId] ?? {};
+}
+
 export function getCreator(state: State, creatorId: string): CreatorState {
   return state.creators?.[creatorId] ?? {};
 }
 
-export function getVideo(
-  state: State,
-  creatorId: string,
-  videoId: string
-): VideoState {
+export function getVideo(state: State, creatorId: string, videoId: string): VideoState {
   return state.creators?.[creatorId]?.videos?.[videoId] ?? {};
+}
+
+/* -----------------------------
+   REDUCER HELPERS
+------------------------------ */
+
+function toggleVideoInPlaylist(
+  state: State,
+  playlistId: string,
+  videoId: string
+): State {
+  const playlist = getPlaylist(state, playlistId);
+
+  let playlists = { ...state.playlists };
+
+  // If this is an exclusive playlist, remove the video from all other exclusive playlists.
+  if (playlist.exclusive) {
+    Object.entries(playlists).forEach(([otherPlaylistId, otherPlaylist]) => {
+      if (
+        otherPlaylistId !== playlistId &&
+        otherPlaylist.exclusive &&
+        otherPlaylist.videoIds.includes(videoId)
+      ) {
+        
+        playlists[otherPlaylistId] = {
+          ...otherPlaylist,
+          videoIds: otherPlaylist.videoIds.filter(id => id !== videoId),
+        };
+      }
+    });
+  }
+
+  const currentVideos = playlists[playlistId].videoIds;
+
+  const nextVideos = currentVideos.includes(videoId)
+    ? currentVideos.filter(id => id !== videoId)
+    : [...currentVideos, videoId];
+
+  playlists[playlistId] = {
+    ...playlists[playlistId],
+    videoIds: nextVideos,
+  };
+
+  return {
+    ...state,
+    playlists,
+  };
 }
 
 /* -----------------------------
@@ -77,7 +170,6 @@ export function getVideo(
 
 export function reducer(state: State, action: Action): State {
   switch (action.type) {
-    /* ---- CREATOR FLAGS ---- */
 
     case "TOGGLE_CREATOR_FLAG": {
       const { creatorId, field } = action;
@@ -96,17 +188,50 @@ export function reducer(state: State, action: Action): State {
       };
     }
 
-    /* ---- REACTION ---- */
+    case "CREATE_NEW_PLAYLIST": {
+      const { playlistId, playlistName } = action;
+      const playlist = 
+      { id: playlistId, 
+        name: playlistName,
+        description: "",
+        videoLabelId: "x",
+        videoIds: [],
+        systemDefault: false,
 
-    case "SET_REACTION": {
-      const { creatorId, videoId, reaction } = action;
+      } as PlaylistState;
+      return {
+        ...state,
+        playlists: {
+          ...state.playlists,
+          [playlistId]: playlist,
+        },
+      };
+    }
+
+    case "SET_VIDEO_LABEL": {
+      const { creatorId, videoId, videoLabel } = action;
 
       const creator = getCreator(state, creatorId);
       const videos = creator.videos ?? {};
       const video = videos[videoId] ?? {};
 
-      const current = video.reaction ?? null;
-      const next = current === reaction ? null : reaction;
+      const current = video.videoLabelId ?? null;
+
+      // FIX: Hey sam, this produced a really frustrating bug because you
+      // were using videoLabelDef.label instead of .id
+      // Can we make these types/objects little safer?
+      const next =
+        current === videoLabel.id
+          ? null
+          : videoLabel.id;
+
+      if (videoLabel.associatedPlaylistId) {
+        state = toggleVideoInPlaylist(
+          state,
+          videoLabel.associatedPlaylistId,
+          videoId
+        );
+      }
 
       return {
         ...state,
@@ -118,15 +243,13 @@ export function reducer(state: State, action: Action): State {
               ...videos,
               [videoId]: {
                 ...video,
-                reaction: next
+                videoLabelId: next as VideoLabelId
               }
             }
           }
         }
       };
     }
-
-    /* ---- WATCH PERCENTAGE ---- */
 
     case "SET_WATCH_PERCENTAGE": {
       const { creatorId, videoId, value } = action;
@@ -152,8 +275,6 @@ export function reducer(state: State, action: Action): State {
         }
       };
     }
-
-    /* ---- COMMENT ---- */
 
     case "SET_COMMENT": {
       const { creatorId, videoId, comment } = action;

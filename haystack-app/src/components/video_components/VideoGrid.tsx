@@ -1,5 +1,5 @@
 import type { Action, State } from "../../state/creatorVideoState";
-import { creators } from "../../mockData";
+import { MockData_AllCreators } from "../../mockData";
 import { CreatorRow } from "../creator_components/CreatorRow";
 import { TestButton } from "../TestButton";
 
@@ -13,7 +13,8 @@ export function VideoGrid(props: VideoGridProps) {
   return (
     <>
       <TestButton />
-      {creators.map((creator) => (
+      
+      {MockData_AllCreators.map((creator) => (
         <CreatorRow
           key={creator.creatorId_yt}
           creator={creator}
@@ -24,3 +25,5 @@ export function VideoGrid(props: VideoGridProps) {
     </>
   );
 }
+
+/* {creators.map((creator) => (*/

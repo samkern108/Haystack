@@ -1,8 +1,10 @@
 import "./VideoCard.css";
-import { tagIcon, videoLabels } from "./videolabels";
-import type { Action, Reaction, State } from "../../state/creatorVideoState";
+import { tagIcon } from "./videolabelsvg";
+import { SYSTEMVIDEOLABELS, type VideoLabel } from "./videolabels";
+import type { Action, State } from "../../state/creatorVideoState";
 import type { Video } from "../../types";
 import { useState } from "react";
+import { VideoLabelButton } from "./VideoLabelButton";
 
 interface VideoLabelsPopupProps {
   video: Video;
@@ -12,37 +14,35 @@ interface VideoLabelsPopupProps {
 
 export default function VideoLabelsPopup(props: VideoLabelsPopupProps) {
   const videoState =
-    props.state.creators?.[props.video.video_creatorId_yt]
+    props.state.creators?.[props.video.creatorId_yt]
       ?.videos?.[props.video.videoId_yt];
 
-  const activeReaction = videoState?.reaction ?? null;
+  const activeVideoLabelId = videoState?.videoLabelId ?? null;
 
   const [expanded, setExpanded] = useState(false);
 
-  const toggle = (id: string) => {
+  const toggle = (videoLabel: VideoLabel) => {
     props.dispatch({
-      type: "SET_REACTION",
-      creatorId: props.video.video_creatorId_yt,
+      type: "SET_VIDEO_LABEL",
+      creatorId: props.video.creatorId_yt,
       videoId: props.video.videoId_yt,
-      reaction: id as Reaction,
+      videoLabel: videoLabel,
     });
   };
 
   const DisplayVideoLabels = () => {
     return (
         <>
-            {videoLabels.map((b) => {
-                const isActive = activeReaction === b.id;
-                const className = `label-button ${b.id} ${ isActive ? "active" : "" }`;
-
+            {SYSTEMVIDEOLABELS.map((b) => {
+                const isActive = activeVideoLabelId === b.id;
+                
                 return (
-                <button
-                    key={b.id}
-                    className={className}
-                    onClick={() => toggle(b.id)}
-                >
-                    {b.icon}
-                </button>
+                    <VideoLabelButton 
+                      key={b.id}
+                      label={b.id} 
+                      active={isActive} 
+                      onClick={() => toggle(b)}>
+                    </VideoLabelButton>
                 );
             })}
         </>
@@ -55,7 +55,7 @@ export default function VideoLabelsPopup(props: VideoLabelsPopupProps) {
   const DisplayTagIcon = () => {
     return (
         <div className={`label-button active`} >
-            {tagIcon}
+            { tagIcon }
         </div>
         )
     }
@@ -69,7 +69,7 @@ export default function VideoLabelsPopup(props: VideoLabelsPopupProps) {
         onMouseLeave={() => setExpanded(false)}
         >
             {
-            (!activeReaction && !expanded) ?
+            (!activeVideoLabelId && !expanded) ?
                 DisplayTagIcon() :
                 DisplayVideoLabels()
             }

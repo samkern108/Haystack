@@ -4,6 +4,7 @@ import './CreatorRow.css'
 import '../video_components/VideoCard.css'
 import { CreatorInfo } from "./CreatorInfo";
 import type { State, Action } from "../../state/creatorVideoState";
+import { getVideosByIds } from "../video_components/videohelpers";
 
 interface CreatorRowProps {
   creator: Creator;
@@ -17,7 +18,7 @@ export function CreatorRow( props : CreatorRowProps) {
       <CreatorInfo creator={props.creator} />
 
       <div className="video-strip">
-        {props.creator.videos.map((video) => (
+        {getVideosByIds(props.creator.videoIds).map((video) => (
           <VideoCard
             key={video.videoId_yt}
             video={video}
