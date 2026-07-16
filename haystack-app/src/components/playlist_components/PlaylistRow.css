@@ -36,3 +36,13 @@ main {
   gap: 0.5rem;
   align-items: center;
 }
+
+.playlist-label-button {
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: color 150ms ease;
+}
+
+.playlist-label-button.active {
+  color: inherit;
+}

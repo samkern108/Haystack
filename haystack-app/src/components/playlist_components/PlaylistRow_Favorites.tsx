@@ -28,7 +28,7 @@ export function PlaylistRow_Favorites(props: PlaylistRow_FavoritesProps) {
         return "Favorites (Private Only)";
 
       default:
-        return "Favorites";
+        return "Favorites (All)";
     }
   }, [filter]);
 
@@ -62,7 +62,11 @@ export function PlaylistRow_Favorites(props: PlaylistRow_FavoritesProps) {
           className={`playlist-label-button ${
             filter === "star" ? "active" : ""
           }`}
-          style={{ color: videoLabel_Star?.darkColor }}
+          style={
+            (filter === "star" || filter === 'all' )
+              ? { color: videoLabel_Star?.darkColor }
+              : undefined
+          }
           onClick={() => setFilter(filter === "star" ? "all" : "star")}
         >
           {videoLabel_Star?.icon}
@@ -72,7 +76,11 @@ export function PlaylistRow_Favorites(props: PlaylistRow_FavoritesProps) {
           className={`playlist-label-button ${
             filter === "love" ? "active" : ""
           }`}
-          style={{ color: videoLabel_Heart?.darkColor }}
+          style={
+            (filter === "love" || filter === 'all' )
+              ? { color: videoLabel_Heart?.darkColor }
+              : undefined
+          }
           onClick={() => setFilter(filter === "love" ? "all" : "love")}
         >
           {videoLabel_Heart?.icon}
