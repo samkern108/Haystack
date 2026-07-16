@@ -53,7 +53,6 @@ export default function VideoLabelsPopup(props: VideoLabelsPopupProps) {
   // the other labels are not rendered, and when they are suddenly
   // added to the DOM on mouseover, animation will not trigger.
   const DisplayTagIcon = () => {
-    console.log('display tag');
     return (
         <div className={`label-button active`} >
             { tagIcon }

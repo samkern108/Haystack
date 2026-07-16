@@ -29,3 +29,10 @@ main {
 
   border-radius: 50%;
 }
+
+.playlist-label-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  align-items: center;
+}
