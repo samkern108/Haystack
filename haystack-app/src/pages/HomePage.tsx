@@ -11,8 +11,6 @@ interface HomePageProps {
 export function HomePage(props: HomePageProps) {
   return (
     <>
-      <TestButton />
-      
       {MockData_AllCreators.map((creator) => (
         <CreatorRow
           key={creator.creatorId_yt}
@@ -21,6 +19,8 @@ export function HomePage(props: HomePageProps) {
           dispatch={props.dispatch}
         />
       ))}
+
+      <TestButton />
     </>
   );
 }

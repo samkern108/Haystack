@@ -1,15 +1,16 @@
-.label-wrapper {
-  position: relative;
+.tooltip-trigger {
+  position: absolute;
+  inset: 0;
 }
 
 .tooltip-container {
   position: absolute;
 
-  left: calc(100% + 6px);
+  left: calc(100% + 16px);
   top: 50%;
   transform: translateY(-50%);
 
-  padding: 8px;
+  padding: 4px;
 
   background: white;
   color: black;
@@ -19,7 +20,7 @@
   box-shadow: 0 6px 18px rgba(0,0,0,.25);
 
   font-size: 14px;
-  line-height: 1.5;
+  line-height: 1.2;
   
   min-width: 100px;
   max-width: 200px;
@@ -27,4 +28,14 @@
   z-index: 1000;
 
   pointer-events: none;
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 150ms ease;
+}
+
+.tooltip-trigger:hover .tooltip-container {
+  opacity: 1;
+  visibility: visible;
 }

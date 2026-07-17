@@ -1,6 +1,6 @@
 import type { Video } from "../../state/types";
 import { useNavigate } from "react-router-dom";
-import VideoLabelsPopup from "../labels/LabelsPopup";
+import LabelSelector from "../labels/LabelSelector";
 import type { State, Action } from "../../state/state";
 import VideoLabelDisplay from "../labels/LabelDisplay";
 import '../creators/CreatorRow.css'
@@ -33,7 +33,7 @@ export function VideoCard( props : VideoCardProps) {
 
      {hover.hovered && (
         <div className="video-card-popover">
-          <VideoLabelsPopup video={props.video} state={props.state} dispatch={props.dispatch} />
+          <LabelSelector video={props.video} state={props.state} dispatch={props.dispatch} />
           <img src={props.video.thumbnail} onClick={() => navigate(`/video/${props.video.videoId_yt}`)} />
           <strong>{props.video.title}</strong>
         </div>

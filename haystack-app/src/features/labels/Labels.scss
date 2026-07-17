@@ -57,6 +57,7 @@
 
 
 // Styling for the labels on the side of the video card
+// Based on https://freefrontend.com/css-paper-effects/
 
 fieldset {
 	--gap: 9px;
@@ -87,11 +88,19 @@ fieldset {
 		position: absolute;
 		top: 50%;
 		left: 50%;
-		transform: translate(-50%, -50%);
 		width: 20px;
 		height: 20px;
 
-		filter: drop-shadow(1px 1px 0 rgba(0, 0, 0, 0.15));
+		transition-property: transform;
+		transition-duration: 0.2s;
+		transition-timing-function: cubic-bezier(1, 1, 0.5, 1.3333);
+		transform-origin: center;
+		transform: translate(-50%, -50%) scaleX(1);
+
+		color:white;
+		opacity: 55%;
+
+		filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, .2));
 	}
 
 	label {
@@ -99,23 +108,32 @@ fieldset {
 		display: block;
 		width: 30px;
 		height: 30px;
-		background: var(--bg-color);
-		margin: var(--gap) 0;
-		border-top-left-radius: 2px;
-		border-top-right-radius: 2px;
-		border-bottom-left-radius: 2px;
 		font-size: 0;
-		box-shadow: -2px 1px 3px rgba(0 0 0 / 0.2);
 		cursor: pointer;
-		transform: translate(0, 0) scaleX(1);
-		transform-origin: left center;
-		filter: brightness(90%);
-		transition-property: transform filter;
-		transition-duration: 0.2s;
-		transition-timing-function: cubic-bezier(1, 1, 0.5, 1.3333);
 
-		&:hover {
+		&:hover:before {
 			transform: translate(0, 0) scaleX(1.25);
+			filter: brightness(100%);
+		}
+
+		&:before {
+			content: "";
+			margin: var(--gap) 0;
+			border-top-left-radius: 2px;
+			border-top-right-radius: 2px;
+			border-bottom-left-radius: 2px;
+			position: relative;
+			display: block;
+			width: 30px;
+			height: 30px;
+			background: var(--bg-color);
+			transform: translate(0, 0) scaleX(1);
+			transform-origin: left center;
+			filter: brightness(90%);
+			transition-property: transform filter;
+			transition-duration: 0.2s;
+			transition-timing-function: cubic-bezier(1, 1, 0.5, 1.3333);
+			box-shadow: -2px 1px 3px rgba(0 0 0 / 0.2);
 		}
 
 		&:after {
@@ -133,41 +151,45 @@ fieldset {
 			transition-property: border-right filter;
 			transition-duration: 0.2s;
 			transition-timing-function: cubic-bezier(1, 1, 0.5, 1.3333);
+
+			transform: translate(0, 0) scaleX(1);
+			transform-origin: left;
 		}
 
 		&:hover:after {
+			transform: translate(5px, 0) scaleX(1.25);
 			border-right: 12px solid transparent;
 		}
+	}
+
+	input:checked + label .label-icon,
+	label:hover .label-icon {
+		transform: translate(-35%, -50%) scale(1.25);
 	}
 
 	input:checked + label,
 	input:focus + label {
-		transform: translate(0, 0) scaleX(1.25);
-		filter: brightness(100%);
+		&:before {
+			transform: translate(0, 0) scaleX(1.25);
+			filter: brightness(100%);
+		}
 
 		&:after {
 			border-right: 12px solid transparent;
+			transform: translate(5px, 0) scaleX(1.25);
 			filter: brightness(50%);
 		}
 	}
 
-	label:nth-of-type(1) {
-		--bg-color: #e48580;
+	label.love {
+		--bg-color: var(--color-love);
 	}
 
-	label:nth-of-type(2) {
-		--bg-color: #f9ff7f;
+	label.star {
+		--bg-color: var(--color-star);
 	}
 
-	label:nth-of-type(3) {
-		--bg-color: #ff6262;
-	}
-
-	label:nth-of-type(4) {
-		--bg-color: #feffbe;
-	}
-
-	label:nth-of-type(5) {
-		--bg-color: #f9d7ac;
+	label.x {
+		--bg-color: var(--color-x);
 	}
 }
