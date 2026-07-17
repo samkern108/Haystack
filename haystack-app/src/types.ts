@@ -1,4 +1,4 @@
-import type { VideoLabel } from "./components/video_components/videolabels";
+import type { VideoLabel } from "./components/video/videolabels";
 
 export interface Video {
   title: string;

@@ -1,4 +1,4 @@
-import { useDelayedHover } from "../helpers/hoverlogic";
+import { useDelayedHover } from "../../utils/hoverlogic";
 import { findVideoLabelById, type SystemVideoLabelId } from "./videolabels";
 
 interface VideoLabelButtonProps {

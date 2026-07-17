@@ -1,0 +1,70 @@
+.lined-paper.small {
+  font-size: 0.8rem;
+  line-height: 1.6;
+}
+
+.lined-paper.medium {
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.lined-paper.large {
+  font-size: 1.2rem;
+  line-height: 2;
+}
+
+.lined-paper::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 16px;
+  width: 2px;
+  background: #7aa8d8;
+  opacity: 30%;
+}
+
+.lined-paper::after {
+  content: "";
+
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 13px;
+
+  height: 2px;
+  background: #d98c8c;
+  opacity: 30%;
+}
+
+.lined-paper {
+  --font-size: 1rem;
+  --line-height: 1.6;
+
+  font-size: var(--font-size);
+  line-height: var(--line-height);
+
+  margin: 0;
+  padding: .8rem 1.2rem;
+
+  position: relative;
+
+  box-shadow: -4px 4px 4px rgba(0, 0, 0, 0.1);
+
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      #fff 0,
+      #fff calc(1lh - 1px),
+      #d3d3d3 calc(1lh - 1px),
+      #d3d3d3 1lh
+    );
+
+  background-position-y: 0.8rem;
+  background-size: 100% 1lh;
+}
+
+.lined-paper li {
+	margin-left: 1em;
+	line-height: inherit;
+}

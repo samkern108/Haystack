@@ -1,14 +1,15 @@
-/* theme.css */
-
 :root {
-  --color-background: #121212;
-  --color-surface: #1e1e1e;
+  --color-background: #F7F4EE;
+  --color-surface: #FFFFFF;
+  --color-primary: #1E2A2A;
+  --color-secondary: #40513B;
+  --color-accent: #D97745;
+  --color-gold: #E8C547;
+  --color-text: #202020;
+  --color-muted: #6B6B63;
 
-  --color-primary: #4f46e5;
-  --color-primary-hover: #4338ca;
-
-  --color-text: #ffffff;
-  --color-text-muted: #a1a1aa;
+  --color-radius: 18px;
+  --color-shadow: 0 8px 30px rgba(30, 42, 42, 0.08);
 
   --color-border: #2d2d2d;
 

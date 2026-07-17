@@ -1,4 +1,5 @@
 import { useParams } from "react-router-dom";
+import './VideoPage.css'
 
 export function VideoPage() {
   const { id } = useParams();

@@ -1,15 +1,14 @@
-import type { Action, State } from "../../state/creatorVideoState";
-import { MockData_AllCreators } from "../../mockData";
-import { CreatorRow } from "../creator_components/CreatorRow";
-import { TestButton } from "../TestButton";
+import type { Action, State } from "../state/creatorVideoState";
+import { MockData_AllCreators } from "../storage/mockData";
+import { CreatorRow } from "../components/creator/CreatorRow";
+import { TestButton } from "../components/ui/TestButton";
 
-interface VideoGridProps {
+interface HomePageProps {
   state: State;
   dispatch: React.ActionDispatch<[action: Action]>;
 }
 
-
-export function VideoGrid(props: VideoGridProps) {
+export function HomePage(props: HomePageProps) {
   return (
     <>
       <TestButton />
@@ -25,5 +24,3 @@ export function VideoGrid(props: VideoGridProps) {
     </>
   );
 }
-
-/* {creators.map((creator) => (*/

@@ -1,6 +1,6 @@
-import type { Action, State } from "../../state/creatorVideoState";
-import { PlaylistRow } from "./PlaylistRow";
-import { PlaylistRow_Favorites } from "./PlaylistRow_Favorites";
+import type { Action, State } from "../state/creatorVideoState";
+import { PlaylistRow } from "../components/playlist/PlaylistRow";
+import { PlaylistRow_Favorites } from "../components/playlist/PlaylistRow_Favorites";
 
 interface PlaylistsPageProps {
   state: State;

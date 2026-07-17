@@ -1,4 +1,4 @@
-import { getInnertube } from "../lib/innertube";
+import { getInnertube } from "../../services/innertube";
 
 export function TestButton() {
   async function testInnertube() {

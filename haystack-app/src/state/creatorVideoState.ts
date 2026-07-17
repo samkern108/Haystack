@@ -1,4 +1,4 @@
-import type { VideoLabelId, VideoLabel, VideoLabelIdOrNone } from "../components/video_components/videolabels";
+import type { VideoLabelId, VideoLabel, VideoLabelIdOrNone } from "../components/video/videolabels";
 
 /* -----------------------------
    STATE

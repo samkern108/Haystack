@@ -1,8 +1,8 @@
-import { VideoCard } from "../video_components/VideoCard";
+import { VideoCard } from "../video/VideoCard";
 import './PlaylistRow.css'
 import type { State, Action } from "../../state/creatorVideoState";
-import { getVideosByIds } from "../video_components/videohelpers";
-import { SYSTEMVIDEOLABELS } from "../video_components/videolabels";
+import { getVideosByIds } from "../../utils/videohelpers";
+import { SYSTEMVIDEOLABELS } from "../video/videolabels";
 import { useMemo, useState } from "react";
 
 interface PlaylistRow_FavoritesProps {

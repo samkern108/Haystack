@@ -1,10 +1,10 @@
 import type { Creator } from "../../types";
-import { VideoCard } from "../video_components/VideoCard";
+import { VideoCard } from "../video/VideoCard";
 import './CreatorRow.css'
-import '../video_components/VideoCard.css'
+import '../video/VideoCard.css'
 import { CreatorInfo } from "./CreatorInfo";
 import type { State, Action } from "../../state/creatorVideoState";
-import { getVideosByIds } from "../video_components/videohelpers";
+import { getVideosByIds } from "../../utils/videohelpers";
 
 interface CreatorRowProps {
   creator: Creator;

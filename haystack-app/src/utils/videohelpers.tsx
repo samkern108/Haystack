@@ -1,5 +1,5 @@
-import type { Video } from "../../types";
-import { MockData_AllVideos } from "../../mockData";
+import type { Video } from "../types";
+import { MockData_AllVideos } from "../storage/mockData";
 
 export function getVideoById(videoId: string): Video {
   return MockData_AllVideos[videoId];
