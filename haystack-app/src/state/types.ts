@@ -1,5 +1,3 @@
-import type { VideoLabel } from "./components/video/videolabels";
-
 export interface Video {
   title: string;
   thumbnail: string;
@@ -12,10 +10,4 @@ export interface Creator {
   name: string;
   avatarURL: string;
   videoIds: string[];
-}
-
-export interface Playlist {
-  name: string;
-  videoIds: string[];
-  icon: VideoLabel;
 }

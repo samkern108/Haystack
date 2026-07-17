@@ -8,9 +8,9 @@ import { VideoPage } from '../pages/VideoPage';
 import { HomePage } from '../pages/HomePage';
 import { AboutUsPage } from '../pages/AboutUsPage';
 import { PlaylistsPage } from '../pages/PlaylistsPage';
-import { NavBar } from '../components/nav/NavBar';
+import { NavBar } from '../features/nav/NavBar';
 import { AppRoutes } from './routes';
-import {reducer, initialState} from '../state/creatorVideoState';
+import {reducer, initialState} from '../state/state';
 import { loadState, saveState } from '../storage/storage';
 
 export default function App() {

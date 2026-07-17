@@ -1,12 +1,12 @@
-import type { Video } from "../../types";
+import type { Video } from "../../state/types";
 import { useNavigate } from "react-router-dom";
 import { useRef, useState } from "react";
-import '../creator/CreatorRow.css'
+import VideoLabelsPopup from "../labels/LabelsPopup";
+import type { State, Action } from "../../state/state";
+import VideoLabelDisplay from "../labels/LabelDisplay";
+import '../creators/CreatorRow.css'
 import "./VideoCard.css"
-import "./VideoLabels.css"
-import VideoLabelsPopup from "./VideoLabelsPopup";
-import type { State, Action } from "../../state/creatorVideoState";
-import VideoLabelDisplay from "./VideoLabelDisplay";
+import "../labels/Labels.css"
 
 interface VideoCardProps {
   video: Video;

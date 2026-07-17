@@ -1,5 +1,4 @@
-import React, { type ReactElement } from "react";
-import *  as Icons from "./videolabelsvg";
+import *  as Icons from "./icons";
 
 export type SystemVideoLabelId = "love" | "star" | "x";
 export type VideoLabelId = SystemVideoLabelId; // TODO - This should be SystemVideoLabel | UserVideoLabel, but we don't have user video labels yet.
@@ -15,13 +14,13 @@ export interface VideoLabel {
   description: string;
 }
 
-export const SYSTEMVIDEOLABELS: VideoLabel[] = [
+export const SYSTEM_VIDEO_LABELS: VideoLabel[] = [
   {
     id: "love",
     label: "Love",
     associatedPlaylistId: "love",
-    lightColor: "#df7e9c",
-    darkColor: "#c95a80",
+    lightColor: "var(--color-love-light)",
+    darkColor: "var(--color-love)",
     icon: Icons.loveIcon, // TODO – Should prolly make this iconId.
     description: "Favorite (private to you)"
   },
@@ -29,8 +28,8 @@ export const SYSTEMVIDEOLABELS: VideoLabel[] = [
     id: "star",
     label: "Star",
     associatedPlaylistId: "star",
-    lightColor: "#fde68a",
-    darkColor: "#facc15",
+    lightColor: "var(--color-star-light)",
+    darkColor: "var(--color-star)",
     icon: Icons.starIcon,
     description: "Favorite (visible to friends)"
   },
@@ -38,19 +37,13 @@ export const SYSTEMVIDEOLABELS: VideoLabel[] = [
     id: "x",
     label: "X",
     associatedPlaylistId: "x",
-    lightColor: "#fca5a5",
-    darkColor: "#ef4444",
+    lightColor: "var(--color-x-light)",
+    darkColor: "var(--color-x)",
     icon: Icons.xIcon,
     description: "Do not recommend"
   },
 ];
 
 export const findVideoLabelById = (id: VideoLabelId): VideoLabel | undefined => {
-  return SYSTEMVIDEOLABELS.find((b) => b.id === id);
-}
-
-export const videoIcons: Record<VideoLabelId, ReactElement> = {
-  love: Icons.loveIcon,
-  star: Icons.starIcon,
-  x: Icons.xIcon,
+  return SYSTEM_VIDEO_LABELS.find((b) => b.id === id);
 }

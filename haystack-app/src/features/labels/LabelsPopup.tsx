@@ -1,10 +1,10 @@
-import "./VideoCard.css";
-import { tagIcon } from "./videolabelsvg";
-import { SYSTEMVIDEOLABELS, type VideoLabel } from "./videolabels";
-import type { Action, State } from "../../state/creatorVideoState";
-import type { Video } from "../../types";
 import { useState } from "react";
-import { VideoLabelButton } from "./VideoLabelButton";
+import { tagIcon } from "./icons";
+import { SYSTEM_VIDEO_LABELS, type VideoLabel } from "./labels";
+import type { Action, State } from "../../state/state";
+import type { Video } from "../../state/types";
+import { VideoLabelButton } from "./LabelButton";
+import "../videos/VideoCard.css";
 
 interface VideoLabelsPopupProps {
   video: Video;
@@ -33,7 +33,7 @@ export default function VideoLabelsPopup(props: VideoLabelsPopupProps) {
   const DisplayVideoLabels = () => {
     return (
         <>
-            {SYSTEMVIDEOLABELS.map((b) => {
+            {SYSTEM_VIDEO_LABELS.map((b) => {
                 const isActive = activeVideoLabelId === b.id;
                 
                 return (

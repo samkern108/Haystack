@@ -47,15 +47,14 @@
   padding: .5rem;
 }
 
-button {
+.nav-bar button {
     background: #fffdf9;
-    border: 1px solid #ddd6c8;
     border-radius: 6px;
     padding: .6rem 1rem;
     transition: .15s;
 }
 
-button:hover {
+.nav-bar button:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0,0,0,.08);
 }

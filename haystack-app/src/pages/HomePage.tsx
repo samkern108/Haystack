@@ -1,7 +1,7 @@
-import type { Action, State } from "../state/creatorVideoState";
+import type { Action, State } from "../state/state";
 import { MockData_AllCreators } from "../storage/mockData";
-import { CreatorRow } from "../components/creator/CreatorRow";
-import { TestButton } from "../components/ui/TestButton";
+import { CreatorRow } from "../features/creators/CreatorRow";
+import { TestButton } from "../features/ui/TestButton";
 
 interface HomePageProps {
   state: State;

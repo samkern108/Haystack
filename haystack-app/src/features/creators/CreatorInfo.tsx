@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import type { Creator } from "../../types";
+import type { Creator } from "../../state/types";
 
 interface CreatorInfoProps {
   creator: Creator;

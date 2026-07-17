@@ -1,4 +1,4 @@
-import type { Creator, Video } from "../types";
+import type { Creator, Video } from "../state/types";
 
 export const MockData_AllVideos: Record<string, Video> = {
     "MeNYH8pTT0I": {

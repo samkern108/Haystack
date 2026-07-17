@@ -1,9 +1,9 @@
-import { VideoCard } from "../video/VideoCard";
-import './PlaylistRow.css'
-import type { State, Action } from "../../state/creatorVideoState";
-import { getVideosByIds } from "../../utils/videohelpers";
-import { SYSTEMVIDEOLABELS } from "../video/videolabels";
 import { useMemo, useState } from "react";
+import { VideoCard } from "../videos/VideoCard";
+import type { State, Action } from "../../state/state";
+import { getVideosByIds } from "../../utils/videohelpers";
+import { SYSTEM_VIDEO_LABELS } from "../labels/labels";
+import './PlaylistRow.css'
 
 interface PlaylistRow_FavoritesProps {
   state: State;
@@ -45,11 +45,11 @@ export function PlaylistRow_Favorites(props: PlaylistRow_FavoritesProps) {
     }
   }, [filter, playlistVideos_Star, playlistVideos_Heart]);
 
-  const videoLabel_Star = SYSTEMVIDEOLABELS.find(
+  const videoLabel_Star = SYSTEM_VIDEO_LABELS.find(
     (b) => b.id === playlistState_Star.videoLabelId
   );
 
-  const videoLabel_Heart = SYSTEMVIDEOLABELS.find(
+  const videoLabel_Heart = SYSTEM_VIDEO_LABELS.find(
     (b) => b.id === playlistState_Heart.videoLabelId
   );
 

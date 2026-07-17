@@ -1,4 +1,4 @@
-import type { State } from "../state/creatorVideoState";
+import type { State } from "../state/state";
 
 const STORAGE_KEY = "creator-video-state";
 

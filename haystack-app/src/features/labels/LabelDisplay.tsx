@@ -1,20 +1,20 @@
-import "./VideoCard.css";
-import "./VideoLabels.css";
-import { SYSTEMVIDEOLABELS } from "./videolabels";
-import type { State } from "../../state/creatorVideoState";
-import type { Video } from "../../types";
+import "../videos/VideoCard.css";
+import "./Labels.css";
+import { SYSTEM_VIDEO_LABELS } from "./labels";
+import type { State } from "../../state/state";
+import type { Video } from "../../state/types";
 
-interface VideoLabelsPopupProps {
+interface VideoLabelsDisplayProps {
   video: Video;
   state: State;
 }
 
-export default function VideoLabelsPopup(props: VideoLabelsPopupProps) {
+export default function VideoLabelsDisplay(props: VideoLabelsDisplayProps) {
   const videoState = props.state.creators?.[props.video.creatorId_yt]
     ?.videos?.[props.video.videoId_yt];
 
   const videoLabelId = videoState?.videoLabelId ?? null;
-  const videoLabel = SYSTEMVIDEOLABELS.find((b) => b.id === videoLabelId);
+  const videoLabel = SYSTEM_VIDEO_LABELS.find((b) => b.id === videoLabelId);
 
   return videoLabelId && videoLabel &&
     <div className="label-buttons-container display">
