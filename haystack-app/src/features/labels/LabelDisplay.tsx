@@ -1,5 +1,6 @@
 import "../videos/VideoCard.css";
-import "./Labels.css";
+import "./Labels.scss";
+import "./OLD_Labels.css";
 import { SYSTEM_VIDEO_LABELS } from "./labels";
 import type { State } from "../../state/state";
 import type { Video } from "../../state/types";

@@ -1,13 +1,9 @@
 .tooltip-container {
   position: relative;
   display: inline-flex;
-}
 
-.tooltip {
-  position: absolute;
-  top: calc(100% + 8px);
-  left: 50%;
-  transform: translateX(-50%);
+  top: 0px;
+  left: 0px;
 
   width: 250px;
   padding: 12px;

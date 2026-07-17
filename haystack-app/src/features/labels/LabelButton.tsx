@@ -1,4 +1,5 @@
 import { useDelayedHover } from "../../utils/hoverlogic";
+import { Tooltip } from "../ui/Tooltip";
 import { findVideoLabelById, type SystemVideoLabelId } from "./labels";
 
 interface VideoLabelButtonProps {
@@ -31,11 +32,7 @@ export function VideoLabelButton({
     >
       {videoLabel?.icon}
 
-      {hover.hovered && (
-        <div className="tooltip">
-          <p>{videoLabel?.description}</p>
-        </div>
-      )}
+      {hover.hovered && ( <Tooltip text={''+videoLabel?.description} /> )}
     </button>
   );
 }

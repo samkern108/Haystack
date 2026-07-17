@@ -61,18 +61,13 @@ export default function VideoLabelsPopup(props: VideoLabelsPopupProps) {
     }
 
   return (
-        <div
-        className={`label-buttons-container ${
-            expanded ? "expanded" : "collapsed"
-        }`}
+        <div className={`label-buttons-container ${expanded ? "expanded" : "collapsed"}`}
         onMouseEnter={() => setExpanded(true)}
         onMouseLeave={() => setExpanded(false)}
         >
-            {
-            (!activeVideoLabelId && !expanded) ?
+            {(!activeVideoLabelId && !expanded) ?
                 DisplayTagIcon() :
-                DisplayVideoLabels()
-            }
+                DisplayVideoLabels()}
         </div>
   );
 }

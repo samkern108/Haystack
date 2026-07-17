@@ -1,12 +1,12 @@
 import type { Video } from "../../state/types";
 import { useNavigate } from "react-router-dom";
-import { useRef, useState } from "react";
 import VideoLabelsPopup from "../labels/LabelsPopup";
 import type { State, Action } from "../../state/state";
 import VideoLabelDisplay from "../labels/LabelDisplay";
 import '../creators/CreatorRow.css'
 import "./VideoCard.css"
-import "../labels/Labels.css"
+import "../labels/Labels.scss"
+import { useDelayedHover } from "../../utils/hoverlogic";
 
 interface VideoCardProps {
   video: Video;
@@ -16,39 +16,13 @@ interface VideoCardProps {
 
 export function VideoCard( props : VideoCardProps) {
   const navigate = useNavigate();
-
-    const [showPopover, setShowPopover] = useState(false);
-    const mouseOverTimerRef = useRef<number | null>(null);
-    const mouseLeaveTimerRef = useRef<number | null>(null);
-    const popupWaitTime = 50;
-  
-    const handleMouseEnter = () => {
-      mouseOverTimerRef.current = window.setTimeout(() => {
-        setShowPopover(true);
-      }, popupWaitTime);
-  
-      // This is to prevent the popover from showing if the user quickly hovers in and out of the creator info
-      if (mouseLeaveTimerRef.current) {
-        clearTimeout(mouseLeaveTimerRef.current);
-      }
-    };
-  
-    const handleMouseLeave = () => {
-      // This is to prevent the popover from showing if the user quickly hovers in and out of the creator info
-      if (mouseOverTimerRef.current) {
-        clearTimeout(mouseOverTimerRef.current);
-      }
-  
-      mouseLeaveTimerRef.current = window.setTimeout(() => {
-        setShowPopover(false);
-      }, popupWaitTime);
-    };
+  const hover = useDelayedHover(50);
     
   return (
     <div
       className="video-card"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      onPointerEnter={hover.onPointerEnter}
+      onPointerLeave={hover.onPointerLeave}
     >
     <div>
       <img src={props.video.thumbnail} />
@@ -57,11 +31,11 @@ export function VideoCard( props : VideoCardProps) {
 
     <VideoLabelDisplay video={props.video} state={props.state} />
 
-     {showPopover && (
+     {hover.hovered && (
         <div className="video-card-popover">
           <VideoLabelsPopup video={props.video} state={props.state} dispatch={props.dispatch} />
           <img src={props.video.thumbnail} onClick={() => navigate(`/video/${props.video.videoId_yt}`)} />
-          <p>{props.video.title}</p>
+          <strong>{props.video.title}</strong>
         </div>
       )}
     </div>

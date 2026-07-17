@@ -1,5 +1,5 @@
 import "./AboutUsPage.css";
-import "../features/styles/LinedPaper.scss";
+import "../features/ui/styles/LinedPaper.scss";
 
 
 export function AboutUsPage() {
