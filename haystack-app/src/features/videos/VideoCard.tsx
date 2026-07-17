@@ -16,7 +16,7 @@ interface VideoCardProps {
 
 export function VideoCard( props : VideoCardProps) {
   const navigate = useNavigate();
-  const hover = useDelayedHover(50);
+  const hover = useDelayedHover(50, 150);
     
   return (
     <div

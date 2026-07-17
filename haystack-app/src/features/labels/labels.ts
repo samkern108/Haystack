@@ -5,8 +5,7 @@ export type VideoLabelIdOrNone = VideoLabelId | null | undefined;
 export interface VideoLabel {
   id: VideoLabelId;
   label: string;
-  lightColor: string;
-  darkColor: string;
+  color: string;
   associatedPlaylistId?: string;
   description: string;
 }
@@ -16,24 +15,21 @@ export const SYSTEM_VIDEO_LABELS: VideoLabel[] = [
     id: "love",
     label: "Love",
     associatedPlaylistId: "love",
-    lightColor: "var(--color-love-light)",
-    darkColor: "var(--color-love)",
+    color: "var(--color-love)",
     description: "Favorite (private to you)"
   },
   {
     id: "star",
     label: "Star",
     associatedPlaylistId: "star",
-    lightColor: "var(--color-star-light)",
-    darkColor: "var(--color-star)",
+    color: "var(--color-star)",
     description: "Favorite (visible to friends)"
   },
   {
     id: "x",
     label: "X",
     associatedPlaylistId: "x",
-    lightColor: "var(--color-x-light)",
-    darkColor: "var(--color-x)",
+    color: "var(--color-x)",
     description: "Do not recommend"
   },
 ];

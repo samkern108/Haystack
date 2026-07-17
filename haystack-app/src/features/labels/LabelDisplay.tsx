@@ -20,7 +20,7 @@ export default function VideoLabelsDisplay(props: VideoLabelsDisplayProps) {
   return videoLabelId && videoLabel &&
     <div className="label-buttons-container display">
         <div className={`label-button active display`}
-        style={{ color: videoLabel.darkColor }}>
+        style={{ backgroundColor: videoLabel.color }}>
             { getVideoLabelIcon(videoLabel.id) }
         </div>
     </div>

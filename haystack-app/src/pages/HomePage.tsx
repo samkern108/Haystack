@@ -10,7 +10,7 @@ interface HomePageProps {
 
 export function HomePage(props: HomePageProps) {
   return (
-    <>
+    <div style={{marginTop: 24}}>
       {MockData_AllCreators.map((creator) => (
         <CreatorRow
           key={creator.creatorId_yt}
@@ -21,6 +21,6 @@ export function HomePage(props: HomePageProps) {
       ))}
 
       <TestButton />
-    </>
+    </div>
   );
 }

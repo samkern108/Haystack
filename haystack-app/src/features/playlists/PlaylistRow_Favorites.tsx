@@ -65,7 +65,7 @@ export function PlaylistRow_Favorites(props: PlaylistRow_FavoritesProps) {
           }`}
           style={
             (filter === "star" || filter === 'all' )
-              ? { color: videoLabel_Star?.darkColor }
+              ? { color: videoLabel_Star?.color }
               : undefined
           }
           onClick={() => setFilter(filter === "star" ? "all" : "star")}
@@ -79,7 +79,7 @@ export function PlaylistRow_Favorites(props: PlaylistRow_FavoritesProps) {
           }`}
           style={
             (filter === "love" || filter === 'all' )
-              ? { color: videoLabel_Heart?.darkColor }
+              ? { color: videoLabel_Heart?.color }
               : undefined
           }
           onClick={() => setFilter(filter === "love" ? "all" : "love")}

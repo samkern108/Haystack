@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-export function useDelayedHover(delay = 1000) {
+export function useDelayedHover(delay = 1000, exitDelay = delay) {
   const [hovered, setHovered] = useState(false);
   const timer = useRef<number | null>(null);
 
@@ -11,12 +11,9 @@ export function useDelayedHover(delay = 1000) {
   }
 
   function onPointerLeave() {
-    if (timer.current !== null) {
-      clearTimeout(timer.current);
-      timer.current = null;
-    }
-
-    setHovered(false);
+    timer.current = window.setTimeout(() => {
+      setHovered(false);
+    }, exitDelay);
   }
 
   useEffect(() => {
