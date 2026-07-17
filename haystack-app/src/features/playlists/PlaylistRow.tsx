@@ -21,7 +21,7 @@ export function PlaylistRow( props : PlaylistRowProps) {
       <div className="playlist-info">
         <div className={`playlist-label-button`}
           style={{ color: videoLabel?.darkColor }}>
-          { videoLabel?.icon }
+          { videoLabel?.label }
         </div>
         <h2>{ props.playlist.name }</h2>
       </div>

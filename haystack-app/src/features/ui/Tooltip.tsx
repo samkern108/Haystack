@@ -6,7 +6,7 @@ export function Tooltip({ text }: TooltipProps) {
 
   return (
     <div className="tooltip-container">
-        {text}
+       {text}
     </div>
   );
 }

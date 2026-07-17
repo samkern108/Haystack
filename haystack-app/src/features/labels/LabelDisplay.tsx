@@ -1,9 +1,9 @@
 import "../videos/VideoCard.css";
 import "./Labels.scss";
-import "./OLD_Labels.css";
 import { SYSTEM_VIDEO_LABELS } from "./labels";
 import type { State } from "../../state/state";
 import type { Video } from "../../state/types";
+import { getVideoLabelIcon } from "./icons";
 
 interface VideoLabelsDisplayProps {
   video: Video;
@@ -21,7 +21,7 @@ export default function VideoLabelsDisplay(props: VideoLabelsDisplayProps) {
     <div className="label-buttons-container display">
         <div className={`label-button active display`}
         style={{ color: videoLabel.darkColor }}>
-            {videoLabel.icon}
+            { getVideoLabelIcon(videoLabel.id) }
         </div>
     </div>
 }

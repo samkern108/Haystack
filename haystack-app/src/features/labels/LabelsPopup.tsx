@@ -1,10 +1,11 @@
-import { useState } from "react";
-import { tagIcon } from "./icons";
 import { SYSTEM_VIDEO_LABELS, type VideoLabel } from "./labels";
 import type { Action, State } from "../../state/state";
 import type { Video } from "../../state/types";
-import { VideoLabelButton } from "./LabelButton";
+import { LoveIcon, StarIcon, XIcon } from "./icons";
+import { Tooltip } from "../ui/Tooltip";
+import { useDelayedHover } from "../../utils/hoverlogic";
 import "../videos/VideoCard.css";
+import "../ui/Tooltip.css"
 
 interface VideoLabelsPopupProps {
   video: Video;
@@ -19,7 +20,7 @@ export default function VideoLabelsPopup(props: VideoLabelsPopupProps) {
 
   const activeVideoLabelId = videoState?.videoLabelId ?? null;
 
-  const [expanded, setExpanded] = useState(false);
+  const hover = useDelayedHover(600);
 
   const toggle = (videoLabel: VideoLabel) => {
     props.dispatch({
@@ -30,44 +31,35 @@ export default function VideoLabelsPopup(props: VideoLabelsPopupProps) {
     });
   };
 
-  const DisplayVideoLabels = () => {
-    return (
-        <>
-            {SYSTEM_VIDEO_LABELS.map((b) => {
-                const isActive = activeVideoLabelId === b.id;
-                
-                return (
-                    <VideoLabelButton 
-                      key={b.id}
-                      label={b.id} 
-                      active={isActive} 
-                      onClick={() => toggle(b)}>
-                    </VideoLabelButton>
-                );
-            })}
-        </>
-      )
-    }
 
-  // BUG – the reason animation doesn't work for this state is that
-  // the other labels are not rendered, and when they are suddenly
-  // added to the DOM on mouseover, animation will not trigger.
-  const DisplayTagIcon = () => {
-    return (
-        <div className={`label-button active`} >
-            { tagIcon }
-        </div>
-        )
-    }
+  function handleColorChange(event: React.ChangeEvent<HTMLFieldSetElement>) {
+    const selectedColor = event.target.id;
+    const selectedLabel = SYSTEM_VIDEO_LABELS.find( (label) => label.id === selectedColor);
+
+    if (selectedLabel) { toggle(selectedLabel); }
+  }
 
   return (
-        <div className={`label-buttons-container ${expanded ? "expanded" : "collapsed"}`}
-        onMouseEnter={() => setExpanded(true)}
-        onMouseLeave={() => setExpanded(false)}
-        >
-            {(!activeVideoLabelId && !expanded) ?
-                DisplayTagIcon() :
-                DisplayVideoLabels()}
-        </div>
+    <div className={`label-buttons-container`}>
+      <fieldset className="card__color-picker" onChange={handleColorChange}>
+        <input type="radio" id="love" name="color" value="love" defaultChecked={activeVideoLabelId === "love"}/>
+        <label htmlFor="love" className="tooltip-wrapper" onPointerEnter={hover.onPointerEnter} onPointerLeave={hover.onPointerLeave}>  Love
+          <LoveIcon className="label-icon" style={{ color: "var(--color-love)" }} />
+          <Tooltip text="heart tooltip explainer" />
+        </label>
+
+        <input type="radio" id="star" name="color" value="star" defaultChecked={activeVideoLabelId === "star"}/>
+        <label htmlFor="star" onPointerEnter={hover.onPointerEnter} onPointerLeave={hover.onPointerLeave}> Star
+          <StarIcon className="label-icon" style={{ color: "var(--color-star)" }} />
+          <Tooltip text="star tooltip explainer" />
+        </label>
+
+        <input type="radio" id="x" name="color" value="x" defaultChecked={activeVideoLabelId === "x"}/>
+        <label htmlFor="x" onPointerEnter={hover.onPointerEnter} onPointerLeave={hover.onPointerLeave}>X
+          <XIcon className="label-icon" style={{ color: "var(--color-x)" }} />
+          <Tooltip text="x tooltip explainer" />
+        </label>
+      </fieldset>
+    </div>
   );
 }

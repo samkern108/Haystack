@@ -30,7 +30,7 @@ export function VideoLabelButton({
           : "transparent",
       }}
     >
-      {videoLabel?.icon}
+      {videoLabel?.label}
 
       {hover.hovered && ( <Tooltip text={''+videoLabel?.description} /> )}
     </button>

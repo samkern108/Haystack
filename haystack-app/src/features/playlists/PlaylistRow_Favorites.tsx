@@ -4,6 +4,7 @@ import type { State, Action } from "../../state/state";
 import { getVideosByIds } from "../../utils/videohelpers";
 import { SYSTEM_VIDEO_LABELS } from "../labels/labels";
 import './PlaylistRow.css'
+import { LoveIcon, StarIcon } from "../labels/icons";
 
 interface PlaylistRow_FavoritesProps {
   state: State;
@@ -69,7 +70,7 @@ export function PlaylistRow_Favorites(props: PlaylistRow_FavoritesProps) {
           }
           onClick={() => setFilter(filter === "star" ? "all" : "star")}
         >
-          {videoLabel_Star?.icon}
+          <StarIcon />
         </div>
 
         <div
@@ -83,7 +84,7 @@ export function PlaylistRow_Favorites(props: PlaylistRow_FavoritesProps) {
           }
           onClick={() => setFilter(filter === "love" ? "all" : "love")}
         >
-          {videoLabel_Heart?.icon}
+          <LoveIcon />
         </div>
       </div>
 
