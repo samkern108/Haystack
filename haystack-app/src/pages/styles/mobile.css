@@ -1,0 +1,19 @@
+/* TODO (sam): get this implemented */
+
+/* Mobile */
+
+@media (max-width: 600px) {
+
+  .form-page {
+    padding: 48px 16px;
+  }
+
+  .qa-item {
+    padding: 28px 24px;
+  }
+
+  .qa-item h2 {
+    font-size: 1.25rem;
+  }
+
+}

@@ -1,5 +1,5 @@
-import '../styles/root.css'
-import '../styles/colors.css'
+import '../pages/styles/root.css'
+import '../pages/styles/colors.css'
 
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'

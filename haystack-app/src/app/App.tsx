@@ -1,10 +1,11 @@
-import "../styles/root.css";
-import "../styles/colors.css";
+import "../pages/styles/root.css";
+import "../pages/styles/colors.css";
 
 import { useEffect, useReducer } from 'react';
 import { Routes, Route } from "react-router-dom";
 
 import { VideoPage } from '../pages/VideoPage';
+import { SubmitACreatorPage } from '../pages/SubmitACreatorPage'
 import { HomePage } from '../pages/HomePage';
 import { AboutUsPage } from '../pages/AboutUsPage';
 import { PlaylistsPage } from '../pages/PlaylistsPage';
@@ -33,6 +34,7 @@ export default function App() {
         <Route path={AppRoutes.VIDEO} element={<VideoPage />} />
         <Route path={AppRoutes.ABOUT} element={<AboutUsPage />} />
         <Route path={AppRoutes.PLAYLISTS} element={<PlaylistsPage state={state} dispatch={dispatch} />} />
+        <Route path={AppRoutes.SUBMIT_A_CREATOR} element={<SubmitACreatorPage state={state} dispatch={dispatch} />} />
       </Routes>
     </div>
   );

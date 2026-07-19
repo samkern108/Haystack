@@ -37,6 +37,7 @@ export default function LabelSelector(props: LabelSelectorProps) {
   }
 
   // TODO(Sam): Replace the hardcoded tooltip text.
+  // TODO(Sam): Replace this with buttons instead of radio buttons because, oops, we need to be able to deselect.
 
   return (
     <div className={`label-buttons-container`}>

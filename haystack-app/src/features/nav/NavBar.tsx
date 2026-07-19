@@ -1,20 +1,30 @@
-import { useNavigate } from "react-router-dom";
-
-import './NavBar.css'
+import { NavLink } from "react-router-dom";
+import './NavBar.css';
 
 export function NavBar() {
-  const navigate = useNavigate();
-
   return (
     <div className="nav-bar">
       <h1>Haystack</h1>
-      
+
       <div className="buttons-bar">
         <input placeholder="Search..." />
-        <button onClick={() => navigate('/')}> Home </button>
-        <button onClick={() => navigate('/about')}> About Us </button>
-        <button onClick={() => navigate('playlists')}> Playlists </button>
+
+        <NavLink to="/" end className={({ isActive }) => isActive ? "active" : ""}>
+          Home
+        </NavLink>
+
+        <NavLink to="/playlists" className={({ isActive }) => isActive ? "active" : ""}>
+          Playlists
+        </NavLink>
+
+        <NavLink to="/about" className={({ isActive }) => isActive ? "active" : ""}>
+          About Us
+        </NavLink>
+
+        <NavLink to="/submitacreator" className={({ isActive }) => isActive ? "active" : ""}>
+          Add A Creator
+        </NavLink>
       </div>
     </div>
-    );
-};
+  );
+}

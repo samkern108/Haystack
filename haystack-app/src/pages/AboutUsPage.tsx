@@ -1,12 +1,12 @@
-import "./AboutUsPage.css";
+import "./styles/FormPage.css";
 import "../features/ui/styles/LinedPaper.scss";
 
 
 export function AboutUsPage() {
   return (
-  <div className="about-page">
+  <div className="form-page">
 
-    <section className="about-header">
+    <section className="form-header">
       <h1>What is Haystack?</h1>  
 
           <p className="lined-paper">
@@ -19,7 +19,7 @@ export function AboutUsPage() {
           </p>
     </section>
 
-    <section className="about-header">
+    <section className="form-header">
       <h1>We believe that</h1>  
         
           <ul className="lined-paper">

@@ -1,4 +1,4 @@
-.about-page {
+.form-page {
   min-height: 100vh;
   background: var(--color-background);
   color: var(--color-text);
@@ -6,20 +6,27 @@
   padding: 80px 24px;
 }
 
-.about-header strong {
+.form-header strong {
   color: var(--color-accent);
 }
 
-.about-header {
+.form-header {
   max-width: 800px;
   margin: 0 auto 64px;
   text-align: center;
 }
 
-.about-header h1 {
+.form-header h1 {
   color: var(--color-primary);
   font-size: clamp(2.5rem, 5vw, 4rem);
   font-weight: 800;
+  letter-spacing: -0.04em;
+}
+
+.form-header h2 {
+  color: var(--color-primary);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 600;
   letter-spacing: -0.04em;
 }
 
@@ -94,23 +101,4 @@ ul {
 
 .qa-item strong {
   color: var(--color-accent);
-}
-
-
-/* Mobile */
-
-@media (max-width: 600px) {
-
-  .about-page {
-    padding: 48px 16px;
-  }
-
-  .qa-item {
-    padding: 28px 24px;
-  }
-
-  .qa-item h2 {
-    font-size: 1.25rem;
-  }
-
 }

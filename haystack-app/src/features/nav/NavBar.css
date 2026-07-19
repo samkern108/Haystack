@@ -7,7 +7,7 @@
 
   padding: 18px 28px;
 
-  background: #faf8f2;
+  background: var(--color-background-navbar);
   border-bottom: 1px solid rgba(0,0,0,.08);
   box-shadow:0 3px 12px rgba(0,0,0,.06);
 
@@ -30,31 +30,26 @@
   gap: 1rem;
 }
 
-.nav-bar button {
-  background: none;
+
+
+.nav-bar a {
+  background: #fffdf9;
+  border-radius: 6px;
+  padding: .6rem 1rem;
+  transition: .15s;
+  text-decoration: none;
   border: none;
   font-size: 16px;
   color: var(--color-text);
 }
 
-.nav-bar input {
-  background: transparent;
-  border-style: solid;
-  border-width: 1px;
-  font-size: 16px;    
-  border: none;
-  border-bottom: 2px solid #c8c3b8;
-  padding: .5rem;
-}
-
-.nav-bar button {
-    background: #fffdf9;
-    border-radius: 6px;
-    padding: .6rem 1rem;
-    transition: .15s;
-}
-
-.nav-bar button:hover {
+.nav-bar a:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0,0,0,.08);
+}
+
+.buttons-bar a.active  {
+  color:white;
+  font-weight: 600;
+  background-color: var(--color-accent);
 }
