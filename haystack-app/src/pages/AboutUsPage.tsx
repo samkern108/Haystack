@@ -6,7 +6,7 @@ export function AboutUsPage() {
   return (
   <div className="form-page">
 
-    <section className="form-header">
+    <section className="form-section">
       <h1>What is Haystack?</h1>  
 
           <p className="lined-paper">
@@ -19,7 +19,7 @@ export function AboutUsPage() {
           </p>
     </section>
 
-    <section className="form-header">
+    <section className="form-section">
       <h1>We believe that</h1>  
         
           <ul className="lined-paper">

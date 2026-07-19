@@ -43,7 +43,7 @@
 // Styling for the labels on the side of the video card
 // Based on https://freefrontend.com/css-paper-effects/
 
-fieldset {
+.label-buttons-container fieldset {
 	--gap: 9px;
 	position: absolute;
 	top: calc(20px - var(--gap));

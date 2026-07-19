@@ -73,10 +73,24 @@ input {
   padding: .5rem;
   color: var(--color-text);
   margin: 0px 12px;
+
+  transition: .15s;
 }
 
 input:focus {
-    outline-width: 0;
+  outline: none;
+  background-color: #fffdf9;
+  border-radius: 4px 4px 2px 2px;
+
+  transform: translateY(-2px);
+}
+
+textarea:focus {
+  outline: none;
+  background-color: #fffdf9;
+  border-radius: 4px 4px 2px 2px;
+  
+  transform: translateY(-2px);
 }
 
 button {
