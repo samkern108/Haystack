@@ -97,6 +97,7 @@ export function PlaylistRow_Favorites(props: PlaylistRow_FavoritesProps) {
             key={video.videoId_yt}
             video={video}
             state={props.state}
+            displayCreator={true}
             dispatch={props.dispatch}
           />
         ))}

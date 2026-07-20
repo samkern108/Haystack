@@ -5,12 +5,12 @@ import type { State } from "../../state/state";
 import type { Video } from "../../state/types";
 import { getVideoLabelIcon } from "./icons";
 
-interface VideoLabelsDisplayProps {
+interface LabelDisplayProps {
   video: Video;
   state: State;
 }
 
-export default function VideoLabelsDisplay(props: VideoLabelsDisplayProps) {
+export default function LabelDisplay(props: LabelDisplayProps) {
   const videoState = props.state.creators?.[props.video.creatorId_yt]
     ?.videos?.[props.video.videoId_yt];
 

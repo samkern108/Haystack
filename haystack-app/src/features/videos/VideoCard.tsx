@@ -1,41 +1,77 @@
-import type { Video } from "../../state/types";
 import { useNavigate } from "react-router-dom";
 import LabelSelector from "../labels/LabelSelector";
-import type { State, Action } from "../../state/state";
-import VideoLabelDisplay from "../labels/LabelDisplay";
+import type { Video } from "../../state/types";
+import { type State, type Action } from "../../state/state";
+import { useDelayedHover } from "../../utils/hoverlogic";
+import { getCreatorById } from "../../utils/videohelpers";
+import { SYSTEM_VIDEO_LABELS, type VideoLabel } from "../labels/labels";
+import { getVideoLabelIcon } from "../labels/icons";
 import '../creators/CreatorRow.css'
 import "./VideoCard.css"
 import "../labels/Labels.scss"
-import { useDelayedHover } from "../../utils/hoverlogic";
 
 interface VideoCardProps {
   video: Video;
   state: State;
+  displayCreator: boolean;
   dispatch: React.ActionDispatch<[action: Action]>;
+}
+
+function renderCreatorRow(props: VideoCardProps) {
+  const creator = getCreatorById(props.video.creatorId_yt);
+  return (
+    <div className="video-creator">
+        <p>{'by'}</p>
+        <img className="creator-avatar" src={creator.avatarURL} alt={creator.name} />   
+        <p>{creator.name}</p>
+    </div>
+  );
+}
+
+function renderVideoLabel(videoLabel: VideoLabel) {
+  return (
+    <div className="label-buttons-container display">
+        <div className={`label-button active display`}
+        style={{ backgroundColor: videoLabel.color }}>
+            { getVideoLabelIcon(videoLabel.id) }
+        </div>
+    </div>
+  );
 }
 
 export function VideoCard( props : VideoCardProps) {
   const navigate = useNavigate();
   const hover = useDelayedHover(50, 150);
-    
+
+  const videoState = props.state.creators?.[props.video.creatorId_yt]
+  ?.videos?.[props.video.videoId_yt];
+
+  const videoLabelId = videoState?.videoLabelId ?? null;
+  const videoLabel = SYSTEM_VIDEO_LABELS.find((b) => b.id === videoLabelId);
+
   return (
     <div
       className="video-card"
+      style={{backgroundColor: `color-mix(in srgb, ${videoLabel?.color} 15%, transparent)`,
+    borderColor: `color-mix(in srgb, ${videoLabel?.color} 5%, transparent)`}}
       onPointerEnter={hover.onPointerEnter}
       onPointerLeave={hover.onPointerLeave}
     >
     <div>
-      <img src={props.video.thumbnail} />
-      <p>{props.video.title}</p>
+      <img className="thumbnail" src={props.video.thumbnail} />
+      <p className="video-title">{props.video.title}</p>
+      {props.displayCreator ? renderCreatorRow(props) : <></>}
     </div>
 
-    <VideoLabelDisplay video={props.video} state={props.state} />
+    { videoLabel && renderVideoLabel(videoLabel) }
 
      {hover.hovered && (
         <div className="video-card-popover">
           <LabelSelector video={props.video} state={props.state} dispatch={props.dispatch} />
-          <img src={props.video.thumbnail} onClick={() => navigate(`/video/${props.video.videoId_yt}`)} />
-          <strong>{props.video.title}</strong>
+          <img className="thumbnail" src={props.video.thumbnail} onClick={() => navigate(`/video/${props.video.videoId_yt}`)} />
+
+          <strong className="video-title">{props.video.title}</strong>
+          {props.displayCreator ? renderCreatorRow(props) : <></>}
         </div>
       )}
     </div>

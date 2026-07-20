@@ -23,6 +23,7 @@ export function CreatorRow( props : CreatorRowProps) {
             key={video.videoId_yt}
             video={video}
             state={props.state}
+            displayCreator={false}
             dispatch={props.dispatch}
           />
         ))}

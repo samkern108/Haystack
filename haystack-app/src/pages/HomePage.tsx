@@ -11,7 +11,8 @@ interface HomePageProps {
 export function HomePage(props: HomePageProps) {
   return (
     <div style={{marginTop: 24}}>
-      {MockData_AllCreators.map((creator) => (
+      
+      {Object.values(MockData_AllCreators).map((creator) => (
         <CreatorRow
           key={creator.creatorId_yt}
           creator={creator}
