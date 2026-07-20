@@ -20,7 +20,7 @@ export function SubmitACreatorPage() {
   <div className="form-page">
 
     <section className="form-section">
-      <h1>Submit A Creator</h1>  
+      <h1>Submit a Creator</h1>  
       
         <p className="lined-paper">
           <strong>Add your favorite Youtube creators to Haystack!</strong>
@@ -28,7 +28,7 @@ export function SubmitACreatorPage() {
           During <strong>Phase One</strong>, we've given this website to friends and colleagues whose taste
           and judgment we trust. Help us make connections between great creators and passionate viewers!
           <br></br>
-          <strong>Please review our guidelines first!</strong>
+          <strong>Please only submit creators consistent with our guidelines (below)!</strong>
         </p>
     </section>
 
@@ -46,25 +46,27 @@ export function SubmitACreatorPage() {
         
     </section>
 
-    <section className="form-section">
+    <section className="form-section lined-paper">
       <h2>Submission Form</h2>
 
       <div>
         <form onSubmit={handleSubmit}>
 
-          <label htmlFor="youtube-handle">
-            YouTube Handle
-          </label>
+          <div className="inline">
+            <label htmlFor="youtube-handle">
+              YouTube Handle
+            </label>
 
-          <input
-            id="youtube-handle"
-            name="youtube-handle"
-            type="text"
-            placeholder="@creatorname"
-            value={youtubeHandle}
-            onChange={(e) => setYoutubeHandle(e.target.value)}
-            required
-          />
+            <input
+              id="youtube-handle"
+              name="youtube-handle"
+              type="text"
+              placeholder="@creatorname"
+              value={youtubeHandle}
+              onChange={(e) => setYoutubeHandle(e.target.value)}
+              required
+            />
+          </div>
 
           <fieldset>
             <legend>How would you describe this creator's content?</legend>
@@ -105,13 +107,13 @@ export function SubmitACreatorPage() {
 
             <label>
               <input type="checkbox" name="criteria" value="no-ai" />
-              Creator does not use generative AI to produce their scripts, narration,
+              Creator does not use generative AI to produce their scripts, VO,
               music, or visuals.
             </label>
 
             <label>
               <input type="checkbox" name="criteria" value="not-bandwagoning" />
-              Creator's content is not primarily driven by bandwagons,
+              Creator's content is not primarily driven by bandwagoning,
               controversy-chasing, or sensationalism.
             </label>
 
