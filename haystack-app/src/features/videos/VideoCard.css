@@ -50,6 +50,10 @@
   gap:.25rem;
   align-items: center;
   justify-content: center;
+
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
 }
 
 .video-creator img {

@@ -20,11 +20,16 @@ interface VideoCardProps {
 function renderCreatorRow(props: VideoCardProps) {
   const creator = getCreatorById(props.video.creatorId_yt);
   return (
-    <div className="video-creator">
+    <a
+      className="video-creator"
+      href={`https://www.youtube.com/@${props.video.creatorId_yt}`}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
         <p>{'by'}</p>
         <img className="creator-avatar" src={creator.avatarURL} alt={creator.name} />   
         <p>{creator.name}</p>
-    </div>
+    </a>
   );
 }
 
