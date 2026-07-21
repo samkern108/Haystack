@@ -9,6 +9,7 @@ import "../ui/Tooltip.css"
 interface LabelSelectorProps {
   video: Video;
   state: State;
+  layout: "horizontal" | "vertical";
   dispatch: React.ActionDispatch<[action: Action]>;
 }
 
@@ -45,7 +46,7 @@ export default function LabelSelector(props: LabelSelectorProps) {
   }
 
   return (
-    <div className={`label-buttons-container`}>
+    <div className={`label-buttons-container ${props.layout}`}>
       <div className={'label-tabs'}>
         {SYSTEM_VIDEO_LABELS.map((videoLabel) => renderLabel(videoLabel))}
       </div>

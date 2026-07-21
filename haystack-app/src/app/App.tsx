@@ -32,7 +32,7 @@ export default function App() {
 
       <Routes>
         <Route path={AppRoutes.HOME} element={<HomePage state={state} dispatch={dispatch} />} />
-        <Route path={AppRoutes.VIDEO} element={<VideoPage />} />
+        <Route path={AppRoutes.VIDEO} element={<VideoPage state={state} dispatch={dispatch} />} />
         <Route path={AppRoutes.ABOUT} element={<AboutUsPage />} />
         <Route path={AppRoutes.PLAYLISTS} element={<PlaylistsPage state={state} dispatch={dispatch} />} />
         <Route path={AppRoutes.SUBMIT_A_CREATOR} element={<SubmitACreatorPage state={state} dispatch={dispatch} />} />

@@ -4,4 +4,27 @@
   align-items: center;
   gap: .5rem;
   padding: 2rem;
+  width: 100%;
+
+  #video-player {
+    width: 100%;
+  }
+
+  #video-header {
+    display:flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+
+    h1 {
+      font-size: 22px;
+      letter-spacing: -.75px;
+    }
+
+    #creator-row {
+      display: flex;
+      align-items: center;
+      gap: .25rem;
+    }
+  }
 }

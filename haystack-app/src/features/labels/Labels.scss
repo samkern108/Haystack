@@ -1,9 +1,3 @@
-.label-buttons-container {
-  position: absolute;
-  top: -10px;
-  right: -10px;
-}
-
 .label-button {
   width: 40px;
   height: 40px;
@@ -29,19 +23,27 @@
 }
 
 
+.label-buttons-container.display {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+}
+
+.label-buttons-container.vertical {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+}
+
+.label-buttons-container.horizontal {
+  position: relative;
+}
+
+
 // Styling for the labels on the side of the video card
 // Based on https://freefrontend.com/css-paper-effects/
 
 .label-buttons-container .label-tabs {
-	--gap: 9px;
-	position: absolute;
-	top: calc(20px - var(--gap));
-	right: 7px;
-	border: none;
-	margin: -4px;
-	padding: 0;
-	width: 30px;
-	z-index: 1000;
 
 	.label-icon {
 		position: absolute;
@@ -77,7 +79,6 @@
 		padding: 0;
 
 		&:hover:before {
-			transform: translate(0, 0) scaleX(1.25);
 			filter: brightness(100%);
 		}
 
@@ -93,8 +94,6 @@
 			width: 30px;
 			height: 30px;
 			background: var(--bg-color);
-			transform: translate(0, 0) scaleX(1);
-			transform-origin: left center;
 			filter: brightness(90%);
 			transition-property: transform filter;
 			transition-duration: 0.2s;
@@ -114,10 +113,71 @@
 			border-left: 0px solid transparent;
 			border-bottom: 5px solid transparent;
 			filter: brightness(62%);
-			transition-property: border-right filter;
+			transition-property: transform filter border-right;
 			transition-duration: 0.2s;
 			transition-timing-function: cubic-bezier(1, 1, 0.5, 1.3333);
+		}
 
+		&:hover:after {
+			border-right: 12px solid transparent;
+		}
+	}
+
+	.label-selector-button.active .label-icon,
+	.label-selector-button:hover .label-icon {
+		transform: translate(-35%, -50%) scale(1.25);
+	}
+
+	.label-selector-button.active {
+		&:before {
+			filter: brightness(100%);
+		}
+
+		&:after {
+			filter: brightness(50%);
+		}
+	}
+
+	.label-selector-button.love {
+		--bg-color: var(--color-love);
+	}
+
+	.label-selector-button.star {
+		--bg-color: var(--color-star);
+	}
+
+	.label-selector-button.x {
+		--bg-color: var(--color-x);
+	}
+}
+
+.label-buttons-container.vertical .label-tabs {
+	--gap: 9px;
+	position: absolute;
+	top: calc(20px - var(--gap));
+	right: 7px;
+	border: none;
+	margin: -4px;
+	padding: 0;
+	width: 30px;
+	z-index: 1000;
+
+	.label-selector-button {
+
+		&:hover:before {
+			transform: translate(0, 0) scaleX(1.25);
+		}
+
+		&:before {
+			transform: translate(0, 0) scaleX(1);
+			transform-origin: left center;
+			transition-duration: 0.2s;
+			transition-timing-function: cubic-bezier(1, 1, 0.5, 1.3333);
+		}
+
+		&:after {
+			transition-duration: 0.2s;
+			transition-timing-function: cubic-bezier(1, 1, 0.5, 1.3333);
 			transform: translate(0, 0) scaleX(1);
 			transform-origin: left;
 		}
@@ -136,25 +196,51 @@
 	.label-selector-button.active {
 		&:before {
 			transform: translate(0, 0) scaleX(1.25);
-			filter: brightness(100%);
 		}
 
 		&:after {
 			border-right: 12px solid transparent;
 			transform: translate(5px, 0) scaleX(1.25);
-			filter: brightness(50%);
+		}
+	}
+}
+
+// Styling for the labels on the side of the video card
+// Based on https://freefrontend.com/css-paper-effects/
+
+.label-buttons-container.horizontal .label-tabs {
+	--gap: 8px;
+	display: flex;
+	flex-direction: row;
+	gap: var(--gap);
+	align-items: flex-start;
+	position: relative;
+
+	.label-selector-button {
+
+		&:hover:before {
+			transform: translate(0, 0) scaleY(1.25);
+		}
+
+		&:hover:after {
+			transform: translate(0px, 5px) scaleY(1.25);
+			border-right: 12px solid transparent;
 		}
 	}
 
-	.label-selector-button.love {
-		--bg-color: var(--color-love);
+	.label-selector-button.active .label-icon,
+	.label-selector-button:hover .label-icon {
+		transform: translate(-50%, -65%) scale(1.25);
 	}
 
-	.label-selector-button.star {
-		--bg-color: var(--color-star);
-	}
+	.label-selector-button.active {
+		&:before {
+			transform: translate(0, -4px) scaleY(1.25);
+		}
 
-	.label-selector-button.x {
-		--bg-color: var(--color-x);
+		&:after {
+			border-right: 12px solid transparent;
+			transform: translate(0px, 1px) scaleY(1.25);
+		}
 	}
 }

@@ -73,7 +73,7 @@ export function VideoCard( props : VideoCardProps) {
 
      {hover.hovered && (
         <div className="video-card-popover">
-          <LabelSelector video={props.video} state={props.state} dispatch={props.dispatch} />
+          <LabelSelector video={props.video} state={props.state} dispatch={props.dispatch} layout={"vertical"} />
           <img className="thumbnail" src={props.video.thumbnail} onClick={() => navigate(`/video/${props.video.videoId_yt}`)} />
 
           <strong className="video-title">{props.video.title}</strong>
