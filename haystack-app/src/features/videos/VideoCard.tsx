@@ -46,7 +46,7 @@ function renderVideoLabel(videoLabel: VideoLabel) {
 
 export function VideoCard( props : VideoCardProps) {
   const navigate = useNavigate();
-  const hover = useDelayedHover(50, 150000);
+  const hover = useDelayedHover(50, 150);
 
   const videoState = props.state.creators?.[props.video.creatorId_yt]
   ?.videos?.[props.video.videoId_yt];
@@ -57,8 +57,9 @@ export function VideoCard( props : VideoCardProps) {
   return (
     <div
       className="video-card"
-      style={{backgroundColor: `color-mix(in srgb, ${videoLabel?.color} 15%, transparent)`,
-    borderColor: `color-mix(in srgb, ${videoLabel?.color} 5%, transparent)`}}
+      style={{backgroundColor: `color-mix(in srgb, ${videoLabel?.color} 5%, transparent)`,
+    
+      borderColor: `color-mix(in srgb, ${videoLabel?.color} 40%, transparent)`}}
       onPointerEnter={hover.onPointerEnter}
       onPointerLeave={hover.onPointerLeave}
     >
