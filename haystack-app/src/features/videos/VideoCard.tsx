@@ -46,7 +46,7 @@ function renderVideoLabel(videoLabel: VideoLabel) {
 
 export function VideoCard( props : VideoCardProps) {
   const navigate = useNavigate();
-  const hover = useDelayedHover(50, 150);
+  const hover = useDelayedHover(50, 150000);
 
   const videoState = props.state.creators?.[props.video.creatorId_yt]
   ?.videos?.[props.video.videoId_yt];

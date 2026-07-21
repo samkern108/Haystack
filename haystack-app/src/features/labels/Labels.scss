@@ -70,6 +70,11 @@
 		font-size: 0;
 		cursor: pointer;
 
+		appearance: none;
+		border: none;
+		background: transparent;
+		padding: 0;
+
 		&:hover:before {
 			transform: translate(0, 0) scaleX(1.25);
 			filter: brightness(100%);
@@ -121,7 +126,7 @@
 		}
 	}
 
-	.label-selector-button.active + .label-icon,
+	.label-selector-button.active .label-icon,
 	.label-selector-button:hover .label-icon {
 		transform: translate(-35%, -50%) scale(1.25);
 	}
