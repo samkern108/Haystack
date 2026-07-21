@@ -10,9 +10,10 @@ import { HomePage } from '../pages/HomePage';
 import { AboutUsPage } from '../pages/AboutUsPage';
 import { PlaylistsPage } from '../pages/PlaylistsPage';
 import { NavBar } from '../features/nav/NavBar';
-import { AppRoutes } from './routes';
+import { AppRoutes } from '../features/nav/routes';
 import {reducer, initialState} from '../state/state';
 import { loadState, saveState } from '../storage/storage';
+import { SearchPage } from "../pages/SearchPage";
 
 export default function App() {
   const [state, dispatch] = useReducer(
@@ -35,6 +36,7 @@ export default function App() {
         <Route path={AppRoutes.ABOUT} element={<AboutUsPage />} />
         <Route path={AppRoutes.PLAYLISTS} element={<PlaylistsPage state={state} dispatch={dispatch} />} />
         <Route path={AppRoutes.SUBMIT_A_CREATOR} element={<SubmitACreatorPage state={state} dispatch={dispatch} />} />
+        <Route path={AppRoutes.SEARCH} element={<SearchPage/>} />
       </Routes>
     </div>
   );

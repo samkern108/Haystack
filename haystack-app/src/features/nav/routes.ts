@@ -4,6 +4,7 @@ export const AppRoutes = {
   VIDEO: "/video/:id",
   PLAYLISTS: "/playlists",
   SUBMIT_A_CREATOR: "/submitacreator",
+  SEARCH: "/search",
 
   video: (id: string) => `/video/${id}`,
 } as const;
