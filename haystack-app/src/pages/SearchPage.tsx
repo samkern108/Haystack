@@ -8,6 +8,8 @@ export function SearchPage() {
   return (
     <div>
         <h1>Searching for "{query}"</h1>
+
+        <p>No results because search is not implemented yet :) </p>
     </div>
   );
 }
