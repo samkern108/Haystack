@@ -37,14 +37,14 @@ export function XIcon(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-export function getVideoLabelIcon(id: string): import("react").ReactNode {
+export function getVideoLabelIcon(id: string, className?: string): import("react").ReactNode {
     switch (id) {
         case "love":
-            return <LoveIcon />;
+            return <LoveIcon className={className}/>;
         case "star":
-            return <StarIcon />;
+            return <StarIcon className={className}/>;
         case "x":
-            return <XIcon />;
+            return <XIcon className={className}/>;
         default:
             throw new Error(`Icon for label ID '${id}' not implemented.`);
     }

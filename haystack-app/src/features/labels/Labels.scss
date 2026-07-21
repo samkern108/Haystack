@@ -32,7 +32,7 @@
 // Styling for the labels on the side of the video card
 // Based on https://freefrontend.com/css-paper-effects/
 
-.label-buttons-container fieldset {
+.label-buttons-container .label-tabs {
 	--gap: 9px;
 	position: absolute;
 	top: calc(20px - var(--gap));
@@ -41,21 +41,7 @@
 	margin: -4px;
 	padding: 0;
 	width: 30px;
-
-	legend {
-		position: absolute;
-		inset: 0;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		font-size: 0;
-	}
-
-	input {
-		position: absolute;
-		opacity: 0;
-		pointer-events: 0;
-	}
+	z-index: 1000;
 
 	.label-icon {
 		position: absolute;
@@ -76,7 +62,7 @@
 		filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, .2));
 	}
 
-	label {
+	.label-selector-button {
 		position: relative;
 		display: block;
 		width: 30px;
@@ -135,13 +121,12 @@
 		}
 	}
 
-	input:checked + label .label-icon,
-	label:hover .label-icon {
+	.label-selector-button.active + .label-icon,
+	.label-selector-button:hover .label-icon {
 		transform: translate(-35%, -50%) scale(1.25);
 	}
 
-	input:checked + label,
-	input:focus + label {
+	.label-selector-button.active {
 		&:before {
 			transform: translate(0, 0) scaleX(1.25);
 			filter: brightness(100%);
@@ -154,15 +139,15 @@
 		}
 	}
 
-	label.love {
+	.label-selector-button.love {
 		--bg-color: var(--color-love);
 	}
 
-	label.star {
+	.label-selector-button.star {
 		--bg-color: var(--color-star);
 	}
 
-	label.x {
+	.label-selector-button.x {
 		--bg-color: var(--color-x);
 	}
 }
