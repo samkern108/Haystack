@@ -46,6 +46,6 @@ export function getVideoLabelIcon(id: string, className?: string): import("react
         case "x":
             return <XIcon className={className}/>;
         default:
-            throw new Error(`Icon for label ID '${id}' not implemented.`);
+            return <StarIcon className={className}/>;
     }
 }
