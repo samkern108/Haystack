@@ -4,12 +4,48 @@ import type { Action, State } from "../state/state";
 import LabelSelector from "../features/labels/LabelSelector";
 import { getCreatorById, getVideoById, getVideosByIds } from "../utils/videohelpers";
 import { VideoCard } from "../features/videos/VideoCard";
+import type { Creator, Video} from "../state/types";
 interface VideoPageProps {
   state: State;
   dispatch: React.ActionDispatch<[Action]>;
 }
 
+function renderOtherVideosFromCreator(creator: Creator, activeVideoId: string, props: VideoPageProps) {
+  
+  const allCreatorVideos = getVideosByIds(creator.videoIds);
+  const returnVideos = [] as Video[];
+ 
+  allCreatorVideos.forEach((video) => {
+    if (video.videoId_yt !== activeVideoId) {
+      const videoState = props.state.creators?.[creator.creatorId_yt]?.videos?.[video.videoId_yt];
+      if (videoState?.videoLabelId !== "x")
+        returnVideos.push(video);
+    }
+  });
+
+  if (returnVideos.length === 0) {
+    return (<></>);
+  }
+  
+  return (
+    <section className="creator-videos">
+      <h3>More from {creator.name}</h3>
+      <div className="video-strip">
+        {returnVideos.map((video) => (
+          <VideoCard
+            key={video.videoId_yt}
+            video={video}
+            state={props.state}
+            displayCreator={false}
+            dispatch={props.dispatch}
+          />
+        ))}
+      </div>
+    </section>);
+}
+
 export function VideoPage(props: VideoPageProps) {
+
   const { id } = useParams();
 
   if (!id) return <p>Video not found.</p>;
@@ -42,31 +78,18 @@ export function VideoPage(props: VideoPageProps) {
           />
         </div>
 
-        <div id="creator-row">
-          <img
-            className="creator-avatar"
-            src={creator.avatarURL}
-            alt={creator.name}
-          />
-          <h2>{creator.name}</h2>
-        </div>
+        <a
+          href={`https://www.youtube.com/@${video.creatorId_yt}`}
+          target="_blank"
+          id="creator-row"
+          rel="noopener noreferrer"
+        >
+            <img className="creator-avatar" src={creator.avatarURL} alt={creator.name} />   
+            <h2>{creator.name}</h2>
+        </a>
       </section>
 
-      <section className="creator-videos">
-        <h3>More from {creator.name}</h3>
-
-        <div className="video-strip">
-          {getVideosByIds(creator.videoIds).map((video) => (
-            <VideoCard
-              key={video.videoId_yt}
-              video={video}
-              state={props.state}
-              displayCreator={false}
-              dispatch={props.dispatch}
-            />
-          ))}
-        </div>
-      </section>
+      { renderOtherVideosFromCreator(creator, video.videoId_yt, props) }
     </div>
   );
 }
