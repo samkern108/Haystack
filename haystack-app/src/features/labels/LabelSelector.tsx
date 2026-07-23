@@ -46,10 +46,8 @@ export default function LabelSelector(props: LabelSelectorProps) {
   }
 
   return (
-    <div className={`label-buttons-container ${props.layout}`}>
-      <div className={'label-tabs'}>
-        {SYSTEM_VIDEO_LABELS.map((videoLabel) => renderLabel(videoLabel))}
-      </div>
+    <div className={`label-tabs ${props.layout}`}>
+      {SYSTEM_VIDEO_LABELS.map((videoLabel) => renderLabel(videoLabel))}
     </div>
   );
 }
