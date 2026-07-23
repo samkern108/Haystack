@@ -15,7 +15,7 @@ interface CreatorRowProps {
 export function CreatorRow( props : CreatorRowProps) {
   return (
     <section className="creator-row">
-      <CreatorInfo creator={props.creator} />
+      <CreatorInfo creator={props.creator} state={props.state} dispatch={props.dispatch} />
 
       <div className="video-strip">
         {getVideosByIds(props.creator.videoIds).map((video) => (

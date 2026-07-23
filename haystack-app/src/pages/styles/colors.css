@@ -19,6 +19,8 @@
   --color-love: #c46180;
   --color-x: #ef4444;
   --color-star: #facc15; 
+
+  --color-comment: #2c6db7;
 }
 
 [data-theme="dark"] {
