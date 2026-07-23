@@ -11,6 +11,7 @@ import { CommentCard } from '../comments/CommentCard';
 import '../creators/CreatorRow.css'
 import "./VideoCard.css"
 import "../labels/Labels.scss"
+import { TooltipTrigger } from "../ui/Tooltip";
 
 interface VideoCardProps {
   video: Video;
@@ -20,7 +21,7 @@ interface VideoCardProps {
 }
 
 export function VideoCard( props : VideoCardProps) {
-  const hover = useDelayedHover(50, 15000000);
+  const hover = useDelayedHover(60, 160);
   const navigate = useNavigate();
 
   const videoState = props.state.creators?.[props.video.creatorId_yt]
@@ -72,9 +73,9 @@ function renderVideoLabel(videoLabel: VideoLabel, hasComment: boolean) {
   return(
     <div className="video-card-popover">
 
-      <div className="video-label-controls">
+      <div className="video-popover-controls">
         <LabelSelector video={props.video} state={props.state} dispatch={props.dispatch} layout={"vertical"} />
-        <button className="comment-button" onClick={openCommentCard}> { <CommentIcon/> } </button>
+        <button className="comment-button" onClick={openCommentCard}> { <TooltipTrigger text="Leave a comment"><CommentIcon/></TooltipTrigger> } </button>
       </div>
       <img className="thumbnail" src={props.video.thumbnail} onClick={() => navigate(`/video/${props.video.videoId_yt}`)} />
 

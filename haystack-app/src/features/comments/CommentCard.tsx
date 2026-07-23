@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { Action } from '../../state/state';
 import type { Video } from '../../state/types';
 import './CommentCard.css';
+import '../ui/styles/LinedPaper.scss'
 
 interface CommentCardProps {
   onClose: () => void;
@@ -21,10 +22,12 @@ export function CommentCard(props: CommentCardProps) {
             videoId: props.video.videoId_yt,
             comment: comment,
         });
+
+        props.onClose();
     }
 
   return (
-    <div className="comment-card">
+    <div className="comment-card lined-paper">
         <h3 className="comment-card-title">
             Add a comment
         </h3>
@@ -33,20 +36,20 @@ export function CommentCard(props: CommentCardProps) {
         className="comment-textarea"
         value={commentText}
         onChange={(e) => setCommentText(e.target.value)}
-        placeholder="What do you think about this moment?"
+        placeholder="What do you think about this video?"
         />
 
         <div className="comment-card-buttons">
-            <button className="comment-undo-button" onClick={() => setCommentText(props.comment || "")}>
+            <button className="comment-white-button" onClick={props.onClose}>
+            Close
+            </button>
+
+            <button className="comment-white-button" onClick={() => setCommentText(props.comment || "")}>
             Undo
             </button>
 
-            <button className="comment-save-button" onClick={() => saveComment(commentText)}>
+            <button className="comment-emphasis-button" onClick={() => saveComment(commentText)}>
             Save
-            </button>
-
-            <button className="comment-save-button" onClick={props.onClose}>
-            Close
             </button>
         </div>
     </div>

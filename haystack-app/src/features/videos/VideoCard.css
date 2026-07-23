@@ -88,6 +88,17 @@
 
 .video-label-controls {
   position: absolute;
+  top: -8px;
+  right: -8px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.video-popover-controls {
+  position: absolute;
   top: 0px;
   right: 0px;
 
@@ -112,14 +123,17 @@
   align-items: center;
   justify-content: center;
 
-  transform: translate(12px, 8px);
   padding: 0px;
 
   color: var(--color-comment);
   filter: drop-shadow(1px 1px 1px rgba(100, 100, 0, .4));
 }
 
-.comment-button:hover {
+.video-card-popover .comment-button {
+  transform: translate(12px, 8px);
+}
+
+.video-card-popover .comment-button:hover {
   transform: translate(12px, 6px);
 }
 
