@@ -27,7 +27,7 @@ export function CommentCard(props: CommentCardProps) {
     }
 
   return (
-    <div className="comment-card lined-paper">
+    <div className="lined-paper comment-card">
         <h3 className="comment-card-title">
             Add a comment
         </h3>
