@@ -14,6 +14,7 @@ import { AppRoutes } from '../features/nav/routes';
 import {reducer, initialState} from '../state/state';
 import { loadState, saveState } from '../storage/storage';
 import { SearchPage } from "../pages/SearchPage";
+import { UserProfilePage } from "../pages/UserProfilePage";
 
 export default function App() {
   const [state, dispatch] = useReducer(
@@ -35,8 +36,9 @@ export default function App() {
         <Route path={AppRoutes.VIDEO} element={<VideoPage state={state} dispatch={dispatch} />} />
         <Route path={AppRoutes.ABOUT} element={<AboutUsPage />} />
         <Route path={AppRoutes.PLAYLISTS} element={<PlaylistsPage state={state} dispatch={dispatch} />} />
-        <Route path={AppRoutes.SUBMIT_A_CREATOR} element={<SubmitACreatorPage state={state} dispatch={dispatch} />} />
+        <Route path={AppRoutes.SUBMIT_A_CREATOR} element={<SubmitACreatorPage />} />
         <Route path={AppRoutes.SEARCH} element={<SearchPage/>} />
+        <Route path={AppRoutes.USER_PROFILE} element={<UserProfilePage/>} />
       </Routes>
     </div>
   );
