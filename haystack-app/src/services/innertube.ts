@@ -1,6 +1,14 @@
 import { Innertube } from "youtubei.js/web";
 import { PROXY_SERVER_URL } from "../config/server.ts";
 
+// An uninitialized / dummy innertube object to serve as a placeholder until Innertube initialization completes.
+export function getDummyInnertube() {
+  return {
+    ready: false,
+    base: null
+  }
+}
+
 /* Using 
  *   https://github.com/LuanRT/googlevideo/blob/main/examples/sabr-shaka-example/src/main.ts and
  *   https://github.com/LuanRT/googlevideo/blob/main/examples/sabr-shaka-example/src/helpers.ts
@@ -27,6 +35,23 @@ export async function getInnertube() {
   const innertube = await Innertube.create({
     fetch: fetchHandler
   });
+
+  console.log("got innertube");
+
+  return {
+    ready: true,
+    base: innertube
+  }
+}
+
+export async function getVideosByChannelId(innertube, channelId) {
+  const channelData = await innertube.base.getChannel(channelId);
+  console.log(channelData);
+
+  const channelVideos = await channelData.getVideos();
+  console.log(channelVideos);
+
+  return channelVideos;
 }
 
 async function fetchHandler(request: RequestInfo | URL, init?: RequestInit) {

@@ -1,8 +1,11 @@
+import { useState, useEffect, useContext } from "react";
+
 import type { Creator } from "../../state/types";
 import { VideoCard } from "../videos/VideoCard";
 import { CreatorInfo } from "./CreatorInfo";
 import type { State, Action } from "../../state/state";
 import { getVideosByIds } from "../../utils/videohelpers";
+import { InnertubeContext } from "../../contexts/InnertubeContext";
 import './CreatorRow.css'
 import '../videos/VideoCard.css'
 
@@ -13,6 +16,21 @@ interface CreatorRowProps {
 }
 
 export function CreatorRow( props : CreatorRowProps) {
+  const innertube = useContext(InnertubeContext);
+  const [videos, setVideos] = useState([]);
+
+  useEffect(() => {
+    console.log("calling effect - " + props.creator.creatorId_yt)
+    if(videos.length === 0 && innertube.ready) {
+      console.log("fetching videos")
+      const fetchVideos = async () => {
+        const videoData = getVideosByChannelId(props.creator.creatorId_yt);
+
+        setVideos(videoData);
+      }
+    }
+  }, [videos, innertube]);
+
   return (
     <section className="creator-row">
       <CreatorInfo creator={props.creator} state={props.state} dispatch={props.dispatch} />
