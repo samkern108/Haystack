@@ -1,11 +1,13 @@
 .nav-bar {
   position: sticky;
   top: 0;
+  z-index: 1000;
 
   display: flex;
   align-items: center;
 
   padding: 18px 28px;
+  margin-bottom: 24px;
 
   background: var(--color-background-navbar);
   border-bottom: 1px solid rgba(0,0,0,.08);
