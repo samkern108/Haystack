@@ -73,15 +73,19 @@ async function fetchHandler(request: RequestInfo | URL, init?: RequestInit) {
       headers: {
         "Content-Type": "application/json"
       },
-      body: wrapRequestParameters(init)
+      body: wrapRequestParameters(consolidateRequest(init, request))
     }
   )
 }
 
-function innertubePath(request: URL | String) {
+function innertubePath(request: Request | String | URL) {
   if(request instanceof URL) {
     console.log("Handling request with URL...")
     return request.href.replace(/https?:\/\/(www.)?youtube.com\//, '')
+  }
+  else if(request instanceof Request) {
+    console.log("Handling request with Request...")
+    return request.url.replace(/https?:\/\/(www.)?youtube.com\//, '')
   }
   else if(typeof(request) === "string") {
     console.log("Handling request with String...")
@@ -90,6 +94,50 @@ function innertubePath(request: URL | String) {
   else {
     console.log("WARNING! Cannot handle request of type " + typeof(request))
   }
+}
+
+function consolidateRequest(init: RequestInit, request?: Request | String | URL) {
+  if(typeof(init) === "undefined") {
+    if(request instanceof(Request)) {
+      return {
+        method: request.method,
+        headers: request.headers,
+        body: request.body
+      }
+    }
+
+    return {};
+  }
+
+  // The Request type contains the request method, which must be passed through to the backend in the body.
+  // For other request types, it is the init object which contains the request method.
+  if(request instanceof(Request)) {
+    /*
+    if(Object.hasOwn(request, "headers")) {
+      if(init.headers instanceOf(Headers)) {
+        request.headers.forEach((header, value) => {
+          init.headers.set(header, value);
+        });
+      }
+      else {
+        init.headers = request.headers;
+      }
+    }
+    */
+    console.log("consolidating request...")
+    if(request.method) {
+      console.log("consolidating method...")
+      init.method = request.method;
+    }
+    if(request.body) {
+      console.log("consolidating body...")
+      init.body = request.body;
+    }
+  }
+
+  console.log(init);
+
+  return init;
 }
 
 function wrapRequestParameters(init: RequestInit) {

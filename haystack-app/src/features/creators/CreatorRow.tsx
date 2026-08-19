@@ -6,6 +6,7 @@ import { CreatorInfo } from "./CreatorInfo";
 import type { State, Action } from "../../state/state";
 import { getVideosByIds } from "../../utils/videohelpers";
 import { InnertubeContext } from "../../contexts/InnertubeContext";
+import { getVideosByChannelId } from "../../services/innertube.js";
 import './CreatorRow.css'
 import '../videos/VideoCard.css'
 
@@ -24,10 +25,14 @@ export function CreatorRow( props : CreatorRowProps) {
     if(videos.length === 0 && innertube.ready) {
       console.log("fetching videos")
       const fetchVideos = async () => {
-        const videoData = getVideosByChannelId(props.creator.creatorId_yt);
+        const videoData = getVideosByChannelId(innertube, props.creator.creatorId_yt);
+
+		console.log("fetch complete - " + props.creator.creatorId_yt);
 
         setVideos(videoData);
       }
+
+	  fetchVideos();
     }
   }, [videos, innertube]);
 
