@@ -1,11 +1,13 @@
 .nav-bar {
   position: sticky;
   top: 0;
+  z-index: 1000;
 
   display: flex;
   align-items: center;
 
   padding: 18px 28px;
+  margin-bottom: 24px;
 
   background: var(--color-background-navbar);
   border-bottom: 1px solid rgba(0,0,0,.08);
@@ -26,6 +28,7 @@
   margin-left: auto;
   display: flex;
   gap: 1rem;
+  align-items: center;
 }
 
 
@@ -41,6 +44,20 @@
   color: var(--color-text);
 }
 
+.nav-bar a.profile {
+  width: 38px;
+  height: 38px;
+  min-width: 40px;
+  max-width: 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+  padding: 4px;
+}
+
 .nav-bar a:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0,0,0,.08);
@@ -50,4 +67,19 @@
   color:white;
   font-weight: 600;
   background-color: var(--color-accent);
+}
+
+.profile svg {
+  width: 80%;
+  height: 80%;
+
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.profile:hover {
+  transform: scale(1.08);
 }

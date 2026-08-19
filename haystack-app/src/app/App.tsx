@@ -16,6 +16,7 @@ import { loadState, saveState } from '../storage/storage';
 import { SearchPage } from "../pages/SearchPage";
 import { InnertubeContext } from "../contexts/InnertubeContext";
 import { getInnertube, getDummyInnertube } from "../services/innertube.js";
+import { UserProfilePage } from "../pages/UserProfilePage";
 
 export default function App() {
   const [innertube, setInnertube] = useState(getDummyInnertube());
@@ -52,6 +53,7 @@ export default function App() {
           <Route path={AppRoutes.PLAYLISTS} element={<PlaylistsPage state={state} dispatch={dispatch} />} />
           <Route path={AppRoutes.SUBMIT_A_CREATOR} element={<SubmitACreatorPage state={state} dispatch={dispatch} />} />
           <Route path={AppRoutes.SEARCH} element={<SearchPage/>} />
+		  <Route path={AppRoutes.USER_PROFILE} element={<UserProfilePage/>} />
         </Routes>
       </InnertubeContext>
     </div>

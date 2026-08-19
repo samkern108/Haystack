@@ -9,7 +9,7 @@ export function AboutUsPage() {
     <section className="form-section">
       <h1>What is Haystack?</h1>  
 
-          <p className="lined-paper">
+          <p className="lined-paper relative">
           <strong>Our goal is simple:</strong> to connect viewers with creators making thoughtful, original work.
           <br></br>
           As fans of online auteur video, we are frustrated by platforms that prioritize engagement over quality, 
@@ -22,7 +22,7 @@ export function AboutUsPage() {
     <section className="form-section">
       <h1>We believe that</h1>  
         
-          <ul className="lined-paper">
+          <ul className="lined-paper relative">
             <li>Art should be human</li>
             <li>Our time should be respected</li>
             <li>Sensationalism is cheap</li>
@@ -51,7 +51,7 @@ export function AboutUsPage() {
       <article>
         <h2>What we're looking for</h2>
         <p>We prioritize creators who:</p>
-        <ul className="lined-paper small">
+        <ul className="lined-paper relative small">
           <li>Demonstrate a commitment to quality and originality</li>
           <li>Have a clear and authentic voice</li>
         </ul>
@@ -62,7 +62,7 @@ export function AboutUsPage() {
       <article>
         <h2>Disqualifying Criteria</h2>
         <p>A creator may be excluded or removed if they:</p>
-        <ul className="lined-paper small">
+        <ul className="lined-paper relative small">
           <li>Utilize AI-generated visuals, audio, or text</li>
           <li>Plagiarize or duplicate content</li>
           <li>Spread dis/misinformation</li>
