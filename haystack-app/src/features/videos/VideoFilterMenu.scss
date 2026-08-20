@@ -1,0 +1,187 @@
+.video-filter {
+  position: relative;
+}
+
+.video-filter-button {
+  cursor: pointer;
+}
+
+.video-filter-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+
+  min-width: 240px;
+  padding: 16px;
+
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+
+  z-index: 100;
+}
+
+.video-filter-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+
+  border: none;
+  background: transparent;
+
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.video-filter-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 24px;
+  margin-bottom: 12px;
+}
+
+.video-filter-label {
+  font-weight: bold;
+}
+
+.video-filter-toggle {
+  min-width: 100px;
+  padding: 6px 10px;
+
+  cursor: pointer;
+}
+
+
+
+
+
+.time-filter {
+  width: 100%;
+}
+
+.time-filter-label {
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.time-filter-range {
+  position: relative;
+  height: 30px;
+}
+
+/* single shared track */
+.time-filter-range::before {
+  content: "";
+
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+
+  height: 4px;
+
+  background: #aaa;
+  border-radius: 2px;
+
+  transform: translateY(-50%);
+}
+
+/* both range inputs sit on top of the same shared track */
+.time-slider {
+  position: absolute;
+  left: 0;
+  top: 0;
+
+  width: 100%;
+  height: 30px;
+
+  margin: 0;
+  padding: 0;
+
+  appearance: none;
+  -webkit-appearance: none;
+
+  background: transparent;
+
+  pointer-events: none;
+  border: none;
+}
+
+/* make the native tracks invisible */
+.time-slider::-webkit-slider-runnable-track {
+  height: 4px;
+  background: transparent;
+  border: none;
+}
+
+.time-slider::-moz-range-track {
+  height: 4px;
+  background: transparent;
+  border: none;
+}
+
+/* Chrome / Safari thumb */
+.time-slider::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+
+  width: 16px;
+  height: 16px;
+
+  margin-top: -6px;
+
+  border: 2px solid black;
+  border-radius: 50%;
+
+  background: white;
+
+  cursor: grab;
+  pointer-events: auto;
+}
+
+.time-slider::-webkit-slider-thumb:active {
+  cursor: grabbing;
+}
+
+/* Firefox thumb */
+.time-slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+
+  border: 2px solid black;
+  border-radius: 50%;
+
+  background: white;
+
+  cursor: grab;
+  pointer-events: auto;
+}
+
+.time-slider::-moz-range-thumb:active {
+  cursor: grabbing;
+}
+
+/* keep the minimum handle visually above the maximum handle */
+.time-slider-min {
+  z-index: 2;
+}
+
+.time-slider-max {
+  z-index: 1;
+}
+
+.time-filter-selection {
+  text-align: center;
+  font-size: 16px;
+}
+
+.time-slider:focus {
+  outline: none;
+  background: transparent;
+}
+
+.time-slider:focus-visible {
+  outline: none;
+}

@@ -1,6 +1,7 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import './NavBar.scss';
+import { VideoFilterMenu } from "../videos/VideoFilterMenu";
 
 export function NavBar() {
 
@@ -44,6 +45,8 @@ export function NavBar() {
         <NavLink to="/submitacreator" className={({ isActive }) => isActive ? "active" : ""}>
           Add A Creator
         </NavLink>
+
+        <VideoFilterMenu />
 
         <NavLink
           to="/profile"

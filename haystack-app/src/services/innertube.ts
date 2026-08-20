@@ -1,6 +1,14 @@
 import { Innertube } from "youtubei.js/web";
 import { PROXY_SERVER_URL } from "../config/server.ts";
 
+// An uninitialized / dummy innertube object to serve as a placeholder until Innertube initialization completes.
+export function getDummyInnertube() {
+  return {
+    ready: false,
+    base: null
+  }
+}
+
 /* Using 
  *   https://github.com/LuanRT/googlevideo/blob/main/examples/sabr-shaka-example/src/main.ts and
  *   https://github.com/LuanRT/googlevideo/blob/main/examples/sabr-shaka-example/src/helpers.ts
@@ -27,6 +35,23 @@ export async function getInnertube() {
   const innertube = await Innertube.create({
     fetch: fetchHandler
   });
+
+  console.log("got innertube");
+
+  return {
+    ready: true,
+    base: innertube
+  }
+}
+
+export async function getVideosByChannelId(innertube, channelId) {
+  const channelData = await innertube.base.getChannel(channelId);
+  console.log(channelData);
+
+  const channelVideos = await channelData.getVideos();
+  console.log(channelVideos);
+
+  return channelVideos;
 }
 
 async function fetchHandler(request: RequestInfo | URL, init?: RequestInit) {
@@ -48,15 +73,19 @@ async function fetchHandler(request: RequestInfo | URL, init?: RequestInit) {
       headers: {
         "Content-Type": "application/json"
       },
-      body: wrapRequestParameters(init)
+      body: wrapRequestParameters(consolidateRequest(init, request))
     }
   )
 }
 
-function innertubePath(request: URL | String) {
+function innertubePath(request: Request | String | URL) {
   if(request instanceof URL) {
     console.log("Handling request with URL...")
     return request.href.replace(/https?:\/\/(www.)?youtube.com\//, '')
+  }
+  else if(request instanceof Request) {
+    console.log("Handling request with Request...")
+    return request.url.replace(/https?:\/\/(www.)?youtube.com\//, '')
   }
   else if(typeof(request) === "string") {
     console.log("Handling request with String...")
@@ -65,6 +94,50 @@ function innertubePath(request: URL | String) {
   else {
     console.log("WARNING! Cannot handle request of type " + typeof(request))
   }
+}
+
+function consolidateRequest(init: RequestInit, request?: Request | String | URL) {
+  if(typeof(init) === "undefined") {
+    if(request instanceof(Request)) {
+      return {
+        method: request.method,
+        headers: request.headers,
+        body: request.body
+      }
+    }
+
+    return {};
+  }
+
+  // The Request type contains the request method, which must be passed through to the backend in the body.
+  // For other request types, it is the init object which contains the request method.
+  if(request instanceof(Request)) {
+    /*
+    if(Object.hasOwn(request, "headers")) {
+      if(init.headers instanceOf(Headers)) {
+        request.headers.forEach((header, value) => {
+          init.headers.set(header, value);
+        });
+      }
+      else {
+        init.headers = request.headers;
+      }
+    }
+    */
+    console.log("consolidating request...")
+    if(request.method) {
+      console.log("consolidating method...")
+      init.method = request.method;
+    }
+    if(request.body) {
+      console.log("consolidating body...")
+      init.body = request.body;
+    }
+  }
+
+  console.log(init);
+
+  return init;
 }
 
 function wrapRequestParameters(init: RequestInit) {
