@@ -1,46 +1,10 @@
-import type { Creator, Video } from "../state/types";
+import { Innertube } from "youtubei.js/web";
+import { writeFileSync } from "node:fs";
 
-export const MockData_AllVideos: Record<string, Video> = {
-    "MeNYH8pTT0I": {
-      title: "Final Fantasy 4 and Disability",
-      thumbnail: "https://i.ytimg.com/vi/MeNYH8pTT0I/hqdefault.jpg?sqp=-oaymwEnCNACELwBSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLBzaFkI_ZFj6XKaZWw9g-8GI8FX0w",
-      videoId_yt: "MeNYH8pTT0I",
-      creatorId_yt: "QuestingRefuge",
-    },
-    "APoEQ1cc0lU": {
-      title: "The fake shot that saved WALL-E",
-      thumbnail: "https://i.ytimg.com/vi/APoEQ1cc0lU/hqdefault.jpg?sqp=-oaymwEnCNACELwBSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLBk869MyDDRVzFXRHTh-y-ArhMDsg",
-      videoId_yt: "APoEQ1cc0lU",
-      creatorId_yt: "Kikikrazed",
-    },
-    "tCi5k1XCj-E": {
-      title: "This is the best scene in Notting Hill",
-      thumbnail: "https://i.ytimg.com/vi/tCi5k1XCj-E/hqdefault.jpg?sqp=-oaymwEnCNACELwBSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLDsettOJhr9Wtegwaom6iCKkkPPsg",
-      videoId_yt: "tCi5k1XCj-E",
-      creatorId_yt: "Kikikrazed",
-    }
-  }
-
-export const MockData_AllCreators: Record<string, Creator> = {
-  "Kikikrazed" : {
-    creatorId_yt: "@kikikrazed",
-    name: "Kikikrazed",
-    avatarURL: "https://yt3.googleusercontent.com/sasx1iTZchZlzobI02xl-nOqO6jiEhdnTH6yA9bi0jm7-2WQYYvqlP4PFxNh7yi_ToYXARXM=s160-c-k-c0x00ffffff-no-rj",
-    videoIds: ["APoEQ1cc0lU", "tCi5k1XCj-E"],
-  },
-  "QuestingRefuge" : {
-    creatorId_yt: "@QuestingRefuge",
-    channelId: "UClmuot4amsrbqglBOJLBwTw",
-    name: "Questing Refuge",
-    avatarURL: "https://yt3.googleusercontent.com/ytc/AIdro_nMxL8r9S3s3xPv8EDlgQnaqgYy9-WLSRVhYDe8hpi4xMY=s160-c-k-c0x00ffffff-no-rj",
-    videoIds: ["MeNYH8pTT0I"],
-  },
-};
-
-export const MockData_CreatorIds: [string, string][] = [
+const creators = [
   ["Kikikrazed", "@Kikikrazed"],
   ["QuestingRefuge", "@QuestingRefuge"],
-  ["Voidzilla", "@Voidzilla"],
+  ["Voidzilla", "@coffeezillaextras"],
   ["Bigbluebackpack", "@BigBlueBackpack"],
   ["Legendary Lore", "@TheLegendaryLore"],
   ["Kurzgesagt", "@kurzgesagt"],
@@ -73,13 +37,13 @@ export const MockData_CreatorIds: [string, string][] = [
   ["Step Back", "@StepBackHistory"],
   ["Not Just Bikes", "@NotJustBikes"],
   ["Real Life Lore", "@RealLifeLore"],
-  ["Carlos Maza (obvs)", "@CarlosMaza"],
+  ["Carlos Maza (obvs)", "@CarlosMazaTube"],
   ["Josh Johnson", "@JoshJohnsonComedy"],
   ["More Perfect Union", "@MorePerfectUnion"],
   ["Thought Slime", "@ThoughtSlime"],
   ["Adam Ragusea", "@aragusea"],
   ["Quinn Curio", "@QuinnCurio"],
-  ["Sin Squad", "@sinsquad"],
+  ["Sin Squad", "@The_Sin_Squad"],
   ["Vlogbrothers", "@vlogbrothers"],
   ["Idea Channel", "@IdeaChannel"],
   ["Jack Saint", "@LackingSaint"],
@@ -103,7 +67,7 @@ export const MockData_CreatorIds: [string, string][] = [
   ["Taylor Lorenz", "@TaylorLorenz"],
   ["D'Angelo Wallace", "@DAngeloWallace"],
   ["Siobhan Brier Aguilar", "@SiobhanBrierAguilar"],
-  ["Drew Gooden", "@DrewGooden1"],
+  ["Drew Gooden", "@drewisgooden"],
   ["Jay Foreman", "@JayForeman"],
   ["Kikikrazed", "@KikiKrazed"],
   ["HizzyHay", "@HizzyHay"],
@@ -113,13 +77,13 @@ export const MockData_CreatorIds: [string, string][] = [
   ["James Woodall", "@JamesWoodall"],
   ["Josh with Parentheses", "@JoshwithParentheses"],
   ["PixelADay", "@PixelADay"],
-  ["Jarvis Johnson", "@JarvisJohnson"],
+  ["Jarvis Johnson", "@jarvis"],
   ["Joseph Anderson", "@JosephAndersonChannel"],
-  ["Noah Caldwell-Gervais", "@NoahCaldwellGervais"],
+  ["Noah Caldwell-Gervais", "@broadcaststsatic"],
   ["Matt Bernstein", "@MattBernstein"],
   ["Izzzyzzz", "@Izzzyzzz"],
-  ["StrangeAeons", "@StrangeAeons"],
-  ["Eddie Burback", "@EddieBurback"],
+  ["StrangeAeons", "@STRANGEONS"],
+  ["Eddy Burback", "@EddyBurback"],
   ["Cosmonaut Variety Hour", "@CosmonautVarietyHour"],
   ["MovieBob", "@MovieBobCentral"],
   ["Nerdwriter1", "@Nerdwriter1"],
@@ -128,8 +92,8 @@ export const MockData_CreatorIds: [string, string][] = [
   ["Let's Game It Out", "@LetsGameItOut"],
   ["The Majority Report", "@TheMajorityReport"],
   ["Action Button", "@ActionButton"],
-  ["Alexander Avila", "@alexanderavila"],
-  ["Be Kind Rewind", "@BeKindRewind"],
+  ["Alexander Avila", "@alexander_avila"],
+  ["Be Kind Rewind", "@bkrewind"],
   ["CJ The X", "@CJTheX"],
   ["Codex Entry", "@CodexEntry"],
   ["eliquorice", "@eliquorice"],
@@ -142,7 +106,7 @@ export const MockData_CreatorIds: [string, string][] = [
   ["Overly Sarcastic Productions", "@OverlySarcasticProductions"],
   ["Meatcanyon", "@MeatCanyon"],
   ["Egoraptor", "@Egoraptor"],
-  ["Sorry About The Mess", "@SorryAboutTheMess"],
+  ["Sorry About The Mess", "@SATMtheseries"],
   ["Transparency Boo", "@transparencyboo"],
   ["Yhara zayd", "@yharazayd"],
   ["AI In Context", "@AI_In_Context"],
@@ -160,17 +124,17 @@ export const MockData_CreatorIds: [string, string][] = [
   ["Contrapoints", "@ContraPoints"],
   ["Oki's Weird Stories", "@OkisWeirdStories"],
   ["The Soy Pill", "@TheSoyPill"],
-  ["Mainley Mandy", "@MainleyMandy"],
-  ["Shawn Grenier | The Canvas", "@ShawnGrenier"],
+  ["Mainely Mandy", "@MainelyMandy"],
+  ["Shawn Grenier | The Canvas", "@Shawn.Grenier"],
   ["Second Wind", "@SecondWindGroup"],
-  ["/noclip", "@noclip"],
-  ["Ju Almighty", "@JuAlmighty"],
+  ["/noclip", "@NoclipDocs"],
+  ["Ju Almighty", "@Ju_Almighty"],
   ["Robert Reich", "@RBReich"],
   ["Heather Cox Richardson", "@HeatherCoxRichardson"],
   ["Genetically Modified Skeptic", "@GeneticallyModifiedSkeptic"],
   ["Olurinatti", "@olurinatti"],
   ["Zoe Bee", "@zoe_bee"],
-  ["Respect The Dead", "@RespectTheDead"],
+  ["Respect The Dead", "@RespectTheDeadPodcast"],
   ["Hoots", "@hootshootman"],
   ["Jenny Nicholson", "@JennyNicholson"],
   ["Afterthoughts", "@Afterthoughts"],
@@ -182,7 +146,7 @@ export const MockData_CreatorIds: [string, string][] = [
   ["West Side Tyler", "@WestSideTyler"],
   ["Olivia Unplugged", "@Olivia.Unplugged"],
   ["Patrick Moore", "@PatrickMooreYT"],
-  ["Sincerely On Main", "@SincerelyOnMain"],
+  ["sincere on main", "@sincereonmain"],
   ["chriswaves", "@chriswaves"],
   ["Pancake", "@PancakeVideoEssays"],
   ["Sideways", "@Sideways440"],
@@ -203,15 +167,15 @@ export const MockData_CreatorIds: [string, string][] = [
   ["Captain Astronaut", "@CaptainAstronaut"],
   ["Kirby Ferguson", "@KirbyFerguson"],
   ["cari can read", "@caricanread"],
-  ["Nick DiRamio", "@NickDiRamio"],
+  ["Nick DiRamio", "@NickDiRamioTV"],
   ["Fionapollo", "@Fionapollo"],
-  ["History Buffs", "@HistoryBuffsLondon"],
+  ["History Buffs", "@HistoryBuffs"],
   ["HassledVania", "@HassledVania"],
   ["Well There's Your Problem", "@wtyppod"],
   ["Defunctland", "@Defunctland"],
   ["Mike Rugnetta", "@MikeRugnetta"],
   ["julia cudney", "@juliacudney"],
-  ["jax exci", "@JaxExci"],
+  ["Jay Exci", "@JayExci"],
   ["indietrix", "@Indietrix"],
   ["Radical Soda", "@RadicalSoda"],
   ["Arlo", "@ArloStuff"],
@@ -220,21 +184,21 @@ export const MockData_CreatorIds: [string, string][] = [
   ["Johnny 2 Cellos", "@Johnny2Cellos"],
   ["Lord Ravenscraft", "@LordRavenscraft"],
   ["geothebio", "@geothebio"],
-  ["For Harriet", "@ForHarriet"],
+  ["For Harriet", "@ForHarriet619"],
   ["Friendly Space Ninja", "@FriendlySpaceNinja"],
   ["ThatGuyGlen", "@ThatGuyGlen"],
   ["Treesicle", "@Treesicle"],
   ["SuperEyepatchWolf", "@SuperEyepatchWolf"],
-  ["Ana Isabel", "@AnaIsabel"],
+  ["Ana Isabel", "@ana-isabel"],
   ["CopsHateMoe", "@CopsHateMoe"],
   ["Khadija Mbowe", "@KhadijaMbowe"],
-  ["Unlearning Economics", "@UnlearningEconomics"],
+  ["Unlearning Economics", "@unlearningeconomics9021"],
   ["Atrocity Guide", "@AtrocityGuide"],
   ["Shonalika", "@Shonalika"],
   ["Tee Noir", "@TeeNoir"],
-  ["LaRon Readus", "@LaRonReadus"],
+  ["LaRon Readus", "@Readus101"],
   ["StrucciMovies", "@StrucciMovies"],
-  ["Premodernist,", "@Premodernist"],
+  ["Premodernist,", "@premodernist_history"],
   ["Townsends,", "@townsends"],
   ["Clint's Reptiles,", "@ClintsReptiles"],
   ["Hank Green,", "@hankgreen"],
@@ -242,3 +206,44 @@ export const MockData_CreatorIds: [string, string][] = [
   ["3blue1brown", "@3blue1brown"],
   ["Steve Mould", "@stevemould"], 
 ]
+
+function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
+const innertube = await Innertube.create();
+
+let creatorData = []
+
+for(const creator of creators) {
+  const handle = creator[1];
+  const channelUrl = "https://www.youtube.com/" + handle;
+  const channelEndpoint = await innertube.resolveURL(channelUrl);
+  const channelId = channelEndpoint.payload.browseId;
+
+  const creatorInfo = {
+    name: creator[0],
+    handle: creator[1],
+    ucid: channelId
+  };
+
+  creatorData.push(creatorInfo);
+
+  console.log(creatorInfo);
+
+  if(typeof(channelId) === "undefined") {
+    console.log("ERROR! Could not extract UCID!");
+  }
+  else {
+    const channelData = await innertube.getChannel(channelId);
+    const channelVideos = await channelData.getVideos();
+
+    writeFileSync("src/storage/cannedResponses/" + channelId + "-videos.json", JSON.stringify(channelVideos));
+  }
+
+  await sleep(200 + (Math.random() * 1000));
+}
+
+writeFileSync("src/storage/creatorData.json", JSON.stringify(creatorData));
