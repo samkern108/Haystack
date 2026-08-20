@@ -35,20 +35,13 @@ export function VideoFilterMenu() {
     <div className="video-filter">
       <button
         className="video-filter-button"
-        onClick={() => setIsOpen(true)}
+        onClick={() => setIsOpen(!isOpen)}
       >
-        Filter
+        {isOpen ? "Close Filters" : "Open Filters"}
       </button>
 
       {isOpen && (
         <div className="video-filter-menu">
-          <button
-            className="video-filter-close"
-            onClick={() => setIsOpen(false)}
-          >
-            ×
-          </button>
-
           <div className="video-filter-row">
             <span className="video-filter-label">Creator</span>
 
