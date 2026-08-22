@@ -1,7 +1,6 @@
 import type { Action, State } from "../state/state";
-import { MockData_AllCreators } from "../storage/mockData";
-import { CreatorRow } from "../features/creators/CreatorRow";
 import { TestButton } from "../features/ui/TestButton";
+import { VideoGrid } from "../features/videos/VideoGrid";
 
 interface HomePageProps {
   state: State;
@@ -12,14 +11,11 @@ export function HomePage(props: HomePageProps) {
   return (
     <div style={{marginTop: 24}}>
       
-      {Object.values(MockData_AllCreators).map((creator) => (
-        <CreatorRow
-          key={creator.creatorId_yt}
-          creator={creator}
-          state={props.state}
-          dispatch={props.dispatch}
-        />
-      ))}
+      <VideoGrid
+        videoIds={[]}
+        state={props.state}
+        dispatch={props.dispatch}
+      />
 
       <TestButton />
     </div>

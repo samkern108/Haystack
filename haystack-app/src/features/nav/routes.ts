@@ -1,5 +1,6 @@
 export const AppRoutes = {
   HOME: "/",
+  CREATORS: "/creators",
   ABOUT: "/about",
   VIDEO: "/video/:id",
   PLAYLISTS: "/playlists",

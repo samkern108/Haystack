@@ -23,19 +23,20 @@ export const MockData_AllVideos: Record<string, Video> = {
 
 export const MockData_AllCreators: Record<string, Creator> = {
   "Kikikrazed" : {
-    creatorId_yt: "Kikikrazed",
+    creatorId_yt: "@kikikrazed",
     name: "Kikikrazed",
     avatarURL: "https://yt3.googleusercontent.com/sasx1iTZchZlzobI02xl-nOqO6jiEhdnTH6yA9bi0jm7-2WQYYvqlP4PFxNh7yi_ToYXARXM=s160-c-k-c0x00ffffff-no-rj",
     videoIds: ["APoEQ1cc0lU", "tCi5k1XCj-E"],
   },
   "QuestingRefuge" : {
-    creatorId_yt: "QuestingRefuge",
+    creatorId_yt: "UClmuot4amsrbqglBOJLBwTw",
     name: "Questing Refuge",
     avatarURL: "https://yt3.googleusercontent.com/ytc/AIdro_nMxL8r9S3s3xPv8EDlgQnaqgYy9-WLSRVhYDe8hpi4xMY=s160-c-k-c0x00ffffff-no-rj",
     videoIds: ["MeNYH8pTT0I"],
   },
 };
 
+// TODO: Delete this?
 export const MockData_CreatorIds: [string, string][] = [
   ["Kikikrazed", "Kikikrazed"],
   ["QuestingRefuge", "QuestingRefuge"],
