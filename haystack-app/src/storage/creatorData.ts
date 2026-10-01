@@ -1,4 +1,6 @@
-[
+import type { Creator } from "../state/types"
+
+export const AllCreators: Creator[] = [
   {
     "name": "Kikikrazed",
     "handle": "@Kikikrazed",
@@ -61,18 +63,17 @@
   },
   {
     "name": "Nebula",
-    "handle": "@nebula", 
-    "ucid": "UCuLzkAd_VZtRpyPJGt5FrXw'"
+    "handle": "@nebula",
+    "ucid": "UCuLzkAd_VZtRpyPJGt5FrXw"
   },
   {
     "name": "Bailey Sarian",
-    "handle": "@BaileySarian",
-    "ucid": null
+    "handle": "@BaileySarian"
   },
   {
     "name": "Juby Philosophy",
-    "handle": "@jubyphilosophy",
-    "ucid": "UCLrpO7U1lnmbRtVxji843-Q"
+    "handle":"@jubyphilosophy",
+    "ucid":"UCLrpO7U1lnmbRtVxji843-Q"
   },
   {
     "name": "Skyehoppers",
@@ -577,7 +578,8 @@
   {
     "name": "Gigguk",
     "handle": "@gigguk",
-    "ucid": "UC7dF9qfBMXrSlaaFFDvV_Yg' }"
+    "ucid": "UC7dF9qfBMXrSlaaFFDvV_Yg"
+  },
   {
     "name": "Mother's Basement",
     "handle": "@mothersbasement",
@@ -607,6 +609,11 @@
     "name": "The Soy Pill",
     "handle": "@TheSoyPill",
     "ucid": "UC_wpodAWmXyQanNVof8vyFg"
+  },
+  {
+    "name": "Mainely Mandy",
+    "handle": "@MainelyMandy",
+    "ucid": "UCG6JLEm_rWK9hEM6YG8IGwA"
   },
   {
     "name": "Shawn Grenier | The Canvas",
@@ -974,27 +981,27 @@
     "ucid": "UCh9DnjvObUcvvwrYbJ4-cLQ"
   },
   {
-    "name": "Premodernist,",
+    "name": "Premodernist",
     "handle": "@premodernist_history",
     "ucid": "UC2xHMABk_sX2aC14-D7OhIw"
   },
   {
-    "name": "Townsends,",
+    "name": "Townsends",
     "handle": "@townsends",
-    "ucid":"UCxr2d4As312LulcajAkKJYw"
+    "ucid": "UCxr2d4As312LulcajAkKJYw"
   },
   {
-    "name": "Clint's Reptiles,",
+    "name": "Clint's Reptiles",
     "handle": "@ClintsReptiles",
     "ucid": "UCH18915fTE6yZzKrqdea8RQ"
   },
   {
-    "name": "Hank Green,",
+    "name": "Hank Green",
     "handle": "@hankgreen",
     "ucid": "UC_dvqFmaVUj16kRKSLYBaSw"
   },
   {
-    "name": "Stefan Milo,",
+    "name": "Stefan Milo",
     "handle": "@StefanMilo",
     "ucid": "UCZ9jWH_8tJ-Nmaj8dSQdEYA"
   },
@@ -1006,6 +1013,6 @@
   {
     "name": "Steve Mould",
     "handle": "@stevemould",
-    "ucid":"UCEIwxahdLz7bap-VDs9h35A"
+    "ucid": "UCEIwxahdLz7bap-VDs9h35A"
   }
 ]

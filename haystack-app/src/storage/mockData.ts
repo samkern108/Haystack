@@ -1,6 +1,6 @@
-import type { Creator, Video } from "../state/types";
+import type { MockCreator, MockVideo } from "../state/types";
 
-export const MockData_AllVideos: Record<string, Video> = {
+export const MockData_AllVideos: Record<string, MockVideo> = {
     "MeNYH8pTT0I": {
       title: "Final Fantasy 4 and Disability",
       thumbnail: "https://i.ytimg.com/vi/MeNYH8pTT0I/hqdefault.jpg?sqp=-oaymwEnCNACELwBSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLBzaFkI_ZFj6XKaZWw9g-8GI8FX0w",
@@ -21,7 +21,7 @@ export const MockData_AllVideos: Record<string, Video> = {
     }
   }
 
-export const MockData_AllCreators: Record<string, Creator> = {
+export const MockData_AllCreators: Record<string, MockCreator> = {
   "Kikikrazed" : {
     creatorId_yt: "@kikikrazed",
     name: "Kikikrazed",

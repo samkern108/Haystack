@@ -44,7 +44,7 @@ export async function getInnertube() {
   }
 }
 
-export async function convertHandleToUCID(innertube, handle: String) {
+export async function convertHandleToUCID(innertube, handle: string) {
   const channelUrl = "https://www.youtube.com/" + handle;
 
   const data = await innertube.base.resolveURL(channelUrl);
@@ -93,7 +93,7 @@ async function fetchHandler(request: RequestInfo | URL, init?: RequestInit) {
   )
 }
 
-function innertubePath(request: Request | String | URL) {
+function innertubePath(request: Request | URL | string) {
   if(request instanceof URL) {
     console.log("Handling request with URL...")
     return request.href.replace(/https?:\/\/(www.)?youtube.com\//, '')
@@ -111,7 +111,7 @@ function innertubePath(request: Request | String | URL) {
   }
 }
 
-function consolidateRequest(init: RequestInit, request?: Request | String | URL) {
+function consolidateRequest(init: RequestInit, request?: Request | URL | string) {
   if(typeof(init) === "undefined") {
     if(request instanceof(Request)) {
       return {
