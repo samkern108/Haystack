@@ -128,7 +128,7 @@ function toggleVideoInPlaylist(
 ): State {
   const playlist = getPlaylist(state, playlistId);
 
-  let playlists = { ...state.playlists };
+  const playlists = { ...state.playlists };
 
   // If this is an exclusive playlist, remove the video from all other exclusive playlists.
   if (playlist.exclusive) {

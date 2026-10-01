@@ -33,6 +33,7 @@ export default function App() {
   }, [state]);
 
   useEffect(() => {
+    // Initialize the Innertube connection after rendering, and update the InnertubeContext to allow child components to use the connection to fetch videos or perform other operations.
     const initInnertube = async () => {
       const innertube = await getInnertube();
 

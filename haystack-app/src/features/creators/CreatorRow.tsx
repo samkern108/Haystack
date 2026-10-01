@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 
-import type { Creator } from "../../state/types";
+import type { MockCreator } from "../../state/types";
 import { VideoCard } from "../videos/VideoCard";
 import { CreatorInfo } from "./CreatorInfo";
 import type { State, Action } from "../../state/state";
@@ -11,7 +11,7 @@ import './CreatorRow.css'
 import '../videos/VideoCard.css'
 
 interface CreatorRowProps {
-  creator: Creator;
+  creator: MockCreator;
   state: State;
   dispatch: React.ActionDispatch<[action: Action]>;
 }

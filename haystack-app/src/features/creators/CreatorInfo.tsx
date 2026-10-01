@@ -1,11 +1,11 @@
 import type { State, Action } from "../../state/state";
-import type { Creator } from "../../state/types";
+import type { MockCreator } from "../../state/types";
 import { useDelayedHover } from "../../utils/hoverlogic";
 import "./CreatorRow.css"
 import "../ui/styles/LinedPaper.scss"
 
 interface CreatorInfoProps {
-  creator: Creator;
+  creator: MockCreator;
   state: State;
   dispatch: React.ActionDispatch<[action: Action]>;
 }

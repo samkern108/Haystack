@@ -68,7 +68,7 @@ const creators = [
   ["D'Angelo Wallace", "@DAngeloWallace"],
   ["Siobhan Brier Aguilar", "@SiobhanBrierAguilar"],
   ["Drew Gooden", "@drewisgooden"],
-  ["Jay Foreman", "@JayForeman"],
+  ["Map Men", "@JayAndMark"],
   ["Kikikrazed", "@KikiKrazed"],
   ["HizzyHay", "@HizzyHay"],
   ["James Delisio", "@JamesDelisio"],
@@ -226,12 +226,13 @@ for(const creator of creators) {
   const creatorInfo = {
     name: creator[0],
     handle: creator[1],
-    ucid: channelId
+    ucid: channelId,
+    avatar: {
+      url: undefined,
+      width: undefined,
+      height: undefined
+    }
   };
-
-  creatorData.push(creatorInfo);
-
-  console.log(creatorInfo);
 
   if(typeof(channelId) === "undefined") {
     console.log("ERROR! Could not extract UCID!");
@@ -240,8 +241,16 @@ for(const creator of creators) {
     const channelData = await innertube.getChannel(channelId);
     const channelVideos = await channelData.getVideos();
 
+    creatorInfo.avatar.url = channelData.metadata.avatar[0]?.url
+    creatorInfo.avatar.width = channelData.metadata.avatar[0]?.width
+    creatorInfo.avatar.height = channelData.metadata.avatar[0]?.height
+
     writeFileSync("src/storage/cannedResponses/" + channelId + "-videos.json", JSON.stringify(channelVideos));
   }
+
+  creatorData.push(creatorInfo);
+
+  console.log(creatorInfo);
 
   await sleep(200 + (Math.random() * 1000));
 }
