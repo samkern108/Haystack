@@ -44,7 +44,22 @@ export async function getInnertube() {
   }
 }
 
+export async function convertHandleToUCID(innertube, handle: String) {
+  const channelUrl = "https://www.youtube.com/" + handle;
+
+  const data = await innertube.base.resolveURL(channelUrl);
+
+  console.log(data.payload);
+  console.log(data.payload.browseId);
+
+  // TODO error handling if unable to resolve URL
+  return data.payload.browseId;
+}
+
 export async function getVideosByChannelId(innertube, channelId) {
+  //const channelId = await convertHandleToUCID(innertube, channelHandle);
+  //console.log(channelId);
+
   const channelData = await innertube.base.getChannel(channelId);
   console.log(channelData);
 

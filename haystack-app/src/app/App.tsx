@@ -14,10 +14,10 @@ import { AppRoutes } from '../features/nav/routes';
 import {reducer, initialState} from '../state/state';
 import { loadState, saveState } from '../storage/storage';
 import { SearchPage } from "../pages/SearchPage";
-import { UserProfilePage } from "../pages/UserProfilePage";
-import { InnertubeContext } from "../contexts/InnertubeContext";
 import { getInnertube, getDummyInnertube } from "../services/innertube.js";
 import { CreatorsPage } from "../pages/CreatorsPage.js";
+import { UserProfilePage } from "../pages/UserProfilePage";
+import { InnertubeContext } from "../contexts/InnertubeContext.js";
 
 export default function App() {
   const [innertube, setInnertube] = useState(getDummyInnertube());
@@ -46,17 +46,17 @@ export default function App() {
     <div>
       <InnertubeContext value={innertube}>
         <NavBar></NavBar>
-        <Routes>
-          <Route path={AppRoutes.HOME} element={<HomePage state={state} dispatch={dispatch} />} />
-          <Route path={AppRoutes.CREATORS} element={<CreatorsPage state={state} dispatch={dispatch} />} />
-          <Route path={AppRoutes.VIDEO} element={<VideoPage state={state} dispatch={dispatch} />} />
-          <Route path={AppRoutes.ABOUT} element={<AboutUsPage />} />
-          <Route path={AppRoutes.PLAYLISTS} element={<PlaylistsPage state={state} dispatch={dispatch} />} />
-          <Route path={AppRoutes.SUBMIT_A_CREATOR} element={<SubmitACreatorPage />} />
-          <Route path={AppRoutes.SEARCH} element={<SearchPage/>} />
-          <Route path={AppRoutes.USER_PROFILE} element={<UserProfilePage/>} />
-        </Routes>
-      </InnertubeContext>
-    </div>
+          <Routes>
+            <Route path={AppRoutes.HOME} element={<HomePage state={state} dispatch={dispatch} />} />
+            <Route path={AppRoutes.CREATORS} element={<CreatorsPage state={state} dispatch={dispatch} />} />
+            <Route path={AppRoutes.VIDEO} element={<VideoPage state={state} dispatch={dispatch} />} />
+            <Route path={AppRoutes.ABOUT} element={<AboutUsPage />} />
+            <Route path={AppRoutes.PLAYLISTS} element={<PlaylistsPage state={state} dispatch={dispatch} />} />
+            <Route path={AppRoutes.SUBMIT_A_CREATOR} element={<SubmitACreatorPage />} />
+            <Route path={AppRoutes.SEARCH} element={<SearchPage/>} />
+            <Route path={AppRoutes.USER_PROFILE} element={<UserProfilePage/>} />
+          </Routes>
+        </InnertubeContext>
+      </div>
   );
 }

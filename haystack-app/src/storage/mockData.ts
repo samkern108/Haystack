@@ -29,7 +29,8 @@ export const MockData_AllCreators: Record<string, Creator> = {
     videoIds: ["APoEQ1cc0lU", "tCi5k1XCj-E"],
   },
   "QuestingRefuge" : {
-    creatorId_yt: "UClmuot4amsrbqglBOJLBwTw",
+    creatorId_yt: "@QuestingRefuge",
+    channelId: "UClmuot4amsrbqglBOJLBwTw",
     name: "Questing Refuge",
     avatarURL: "https://yt3.googleusercontent.com/ytc/AIdro_nMxL8r9S3s3xPv8EDlgQnaqgYy9-WLSRVhYDe8hpi4xMY=s160-c-k-c0x00ffffff-no-rj",
     videoIds: ["MeNYH8pTT0I"],
@@ -38,8 +39,8 @@ export const MockData_AllCreators: Record<string, Creator> = {
 
 // TODO: Delete this?
 export const MockData_CreatorIds: [string, string][] = [
-  ["Kikikrazed", "Kikikrazed"],
-  ["QuestingRefuge", "QuestingRefuge"],
+  ["Kikikrazed", "@Kikikrazed"],
+  ["QuestingRefuge", "@QuestingRefuge"],
   ["Voidzilla", "@Voidzilla"],
   ["Bigbluebackpack", "@BigBlueBackpack"],
   ["Legendary Lore", "@TheLegendaryLore"],
