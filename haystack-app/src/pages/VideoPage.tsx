@@ -4,13 +4,13 @@ import type { Action, State } from "../state/state";
 import LabelSelector from "../features/labels/LabelSelector";
 import { getCreatorById, getVideoById, getVideosByIds } from "../utils/videohelpers";
 import { VideoCard } from "../features/videos/VideoCard";
-import type { Creator, Video} from "../state/types";
+import type { MockCreator, Video} from "../state/types";
 interface VideoPageProps {
   state: State;
   dispatch: React.ActionDispatch<[Action]>;
 }
 
-function renderOtherVideosFromCreator(creator: Creator, activeVideoId: string, props: VideoPageProps) {
+function renderOtherVideosFromCreator(creator: MockCreator, activeVideoId: string, props: VideoPageProps) {
   
   const allCreatorVideos = getVideosByIds(creator.videoIds);
   const returnVideos = [] as Video[];
