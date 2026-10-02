@@ -1,4 +1,4 @@
-import type { MockCreator, MockVideo } from "../state/types";
+import type { Creator, MockVideo } from "../state/types";
 
 export const MockData_AllVideos: Record<string, MockVideo> = {
     "MeNYH8pTT0I": {
@@ -20,22 +20,6 @@ export const MockData_AllVideos: Record<string, MockVideo> = {
       creatorId_yt: "Kikikrazed",
     }
   }
-
-export const MockData_AllCreators: Record<string, MockCreator> = {
-  "Kikikrazed" : {
-    creatorId_yt: "@kikikrazed",
-    name: "Kikikrazed",
-    avatarURL: "https://yt3.googleusercontent.com/sasx1iTZchZlzobI02xl-nOqO6jiEhdnTH6yA9bi0jm7-2WQYYvqlP4PFxNh7yi_ToYXARXM=s160-c-k-c0x00ffffff-no-rj",
-    videoIds: ["APoEQ1cc0lU", "tCi5k1XCj-E"],
-  },
-  "QuestingRefuge" : {
-    creatorId_yt: "@QuestingRefuge",
-    channelId: "UClmuot4amsrbqglBOJLBwTw",
-    name: "Questing Refuge",
-    avatarURL: "https://yt3.googleusercontent.com/ytc/AIdro_nMxL8r9S3s3xPv8EDlgQnaqgYy9-WLSRVhYDe8hpi4xMY=s160-c-k-c0x00ffffff-no-rj",
-    videoIds: ["MeNYH8pTT0I"],
-  },
-};
 
 // TODO: Delete this?
 export const MockData_CreatorIds: [string, string][] = [

@@ -1,5 +1,4 @@
 import type { Action, State } from "../state/state";
-import { MockData_AllCreators } from "../storage/mockData";
 import { CreatorRow } from "../features/creators/CreatorRow";
 import { TestButton } from "../features/ui/TestButton";
 
@@ -14,7 +13,7 @@ export function CreatorsPage(props: CreatorsPageProps) {
       
       {Object.values(MockData_AllCreators).map((creator) => (
         <CreatorRow
-          key={creator.creatorId_yt}
+          key={creator.ucid}
           creator={creator}
           state={props.state}
           dispatch={props.dispatch}

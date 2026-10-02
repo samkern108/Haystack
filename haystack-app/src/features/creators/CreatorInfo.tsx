@@ -1,11 +1,11 @@
 import type { State, Action } from "../../state/state";
-import type { MockCreator } from "../../state/types";
 import { useDelayedHover } from "../../utils/hoverlogic";
 import "./CreatorRow.css"
 import "../ui/styles/LinedPaper.scss"
+import type { Creator } from "../../state/types";
 
 interface CreatorInfoProps {
-  creator: MockCreator;
+  creator: Creator;
   state: State;
   dispatch: React.ActionDispatch<[action: Action]>;
 }
@@ -13,7 +13,7 @@ interface CreatorInfoProps {
 export function CreatorInfo(props: CreatorInfoProps) {
   const hover = useDelayedHover(50);
 
-  const creatorState = props.state.creators?.[props.creator.creatorId_yt];
+  const creatorState = props.state.creators?.[props.creator.ucid];
 
   function handleExploreButtonClick() {
     
@@ -22,7 +22,7 @@ export function CreatorInfo(props: CreatorInfoProps) {
   function handleCreatorButtonClick(field: "followed" | "favorite" | "doNotShow") {
     props.dispatch({
       type: "TOGGLE_CREATOR_FLAG",
-      creatorId: props.creator.creatorId_yt,
+      creatorId: props.creator.ucid,
       field:field
     });
   }
@@ -33,7 +33,7 @@ export function CreatorInfo(props: CreatorInfoProps) {
       onPointerEnter={hover.onPointerEnter}
       onPointerLeave={hover.onPointerLeave}
     >
-      <img className="creator-avatar" src={props.creator.avatarURL} alt={props.creator.name} />
+      <img className="creator-avatar" src={props.creator.avatar.url} alt={props.creator.name} />
       <h2>{props.creator.name}</h2>
 
       {hover.hovered && (
@@ -45,7 +45,7 @@ export function CreatorInfo(props: CreatorInfoProps) {
           >
             <img
               className="creator-avatar"
-              src={props.creator.avatarURL}
+              src={props.creator.avatar.url}
               alt={props.creator.name}
             />
             <h2>{props.creator.name}</h2>

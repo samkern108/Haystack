@@ -132,11 +132,6 @@ export const AllCreators: Creator[] = [
     }
   },
   {
-    "name": "Bailey Sarian",
-    "handle": "@BaileySarian",
-    "avatar": {}
-  },
-  {
     "name": "Juby Philosophy",
     "handle": "@jubyphilosophy",
     "ucid": "UCLrpO7U1lnmbRtVxji843-Q",
@@ -1957,8 +1952,8 @@ export const AllCreators: Creator[] = [
     }
   },
   {
-    "name": "Premodernist,
-    ","handle": "@premodernist_history",
+    "name": "Premodernist",
+    "handle": "@premodernist_history",
     "ucid": "UC2xHMABk_sX2aC14-D7OhIw",
     "avatar": {
       "url": "https://yt3.googleusercontent.com/2bzBXCk0bPtaq2dVm0FuoojUtHtb5e1RNLBnXMcAkI9SVEBggRtlviQepJgRcQBUp527b_MsEd4=s900-c-k-c0x00ffffff-no-rj",
@@ -1967,8 +1962,8 @@ export const AllCreators: Creator[] = [
     }
   },
   {
-    "name": "Townsends,
-    ","handle": "@townsends",
+    "name": "Townsends",
+    "handle": "@townsends",
     "ucid": "UCxr2d4As312LulcajAkKJYw",
     "avatar": {
       "url": "https://yt3.googleusercontent.com/ytc/AIdro_lnXbU6gj6vrXSKlWZ0LpZ6VH5C_XO3h85uzZMr-6mFE6w=s900-c-k-c0x00ffffff-no-rj",
@@ -1977,8 +1972,8 @@ export const AllCreators: Creator[] = [
     }
   },
   {
-    "name": "Clint's Reptiles,
-    ","handle": "@ClintsReptiles",
+    "name": "Clint's Reptiles",
+    "handle": "@ClintsReptiles",
     "ucid": "UCH18915fTE6yZzKrqdea8RQ",
     "avatar": {
       "url": "https://yt3.googleusercontent.com/AQAubfUZCyQh_iXKerehefnRefdt9RTUsSYdvnVQSU3F1zFq69GixIo366gT4nItk8hflgRP=s900-c-k-c0x00ffffff-no-rj",
@@ -1987,8 +1982,8 @@ export const AllCreators: Creator[] = [
     }
   },
   {
-    "name": "Hank Green,
-    ","handle": "@hankgreen",
+    "name": "Hank Green",
+    "handle": "@hankgreen",
     "ucid": "UC_dvqFmaVUj16kRKSLYBaSw",
     "avatar": {
       "url": "https://yt3.googleusercontent.com/ytc/AIdro_m8iP07-HrFeeOJwfFSl6uTihlWuIkVGGkeL3F3R3sI4gA=s900-c-k-c0x00ffffff-no-rj",
@@ -1997,8 +1992,8 @@ export const AllCreators: Creator[] = [
     }
   },
   {
-    "name": "Stefan Milo,
-    ","handle": "@StefanMilo",
+    "name": "Stefan Milo",
+    "handle": "@StefanMilo",
     "ucid": "UCZ9jWH_8tJ-Nmaj8dSQdEYA",
     "avatar": {
       "url": "https://yt3.googleusercontent.com/K6p9DyVNooraxYK9LUzja0hIZI74tF-26vCzd6AwyvSX3_91fAKb5K6urMj-JYDr1wPqkQXTXg=s900-c-k-c0x00ffffff-no-rj",

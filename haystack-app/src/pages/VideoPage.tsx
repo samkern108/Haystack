@@ -4,20 +4,20 @@ import type { Action, State } from "../state/state";
 import LabelSelector from "../features/labels/LabelSelector";
 import { getCreatorById, getVideoById, getVideosByIds } from "../utils/videohelpers";
 import { VideoCard } from "../features/videos/VideoCard";
-import type { MockCreator, Video} from "../state/types";
+import type { Creator, Video} from "../state/types";
 interface VideoPageProps {
   state: State;
   dispatch: React.ActionDispatch<[Action]>;
 }
 
-function renderOtherVideosFromCreator(creator: MockCreator, activeVideoId: string, props: VideoPageProps) {
+function renderOtherVideosFromCreator(creator: Creator, activeVideoId: string, props: VideoPageProps) {
   
   const allCreatorVideos = getVideosByIds(creator.videoIds);
   const returnVideos = [] as Video[];
  
   allCreatorVideos.forEach((video) => {
     if (video.videoId_yt !== activeVideoId) {
-      const videoState = props.state.creators?.[creator.creatorId_yt]?.videos?.[video.videoId_yt];
+      const videoState = props.state.creators?.[creator.ucid]?.videos?.[video.videoId_yt];
       if (videoState?.videoLabelId !== "x")
         returnVideos.push(video);
     }
@@ -84,7 +84,7 @@ export function VideoPage(props: VideoPageProps) {
           id="creator-row"
           rel="noopener noreferrer"
         >
-            <img className="creator-avatar" src={creator.avatarURL} alt={creator.name} />   
+            <img className="creator-avatar" src={creator.avatar.url} alt={creator.name} />   
             <h2>{creator.name}</h2>
         </a>
       </section>

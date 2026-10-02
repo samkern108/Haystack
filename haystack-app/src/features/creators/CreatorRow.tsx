@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 
-import type { MockCreator } from "../../state/types";
+import type { Creator } from "../../state/types";
 import { VideoCard } from "../videos/VideoCard";
 import { CreatorInfo } from "./CreatorInfo";
 import type { State, Action } from "../../state/state";
@@ -11,7 +11,7 @@ import './CreatorRow.css'
 import '../videos/VideoCard.css'
 
 interface CreatorRowProps {
-  creator: MockCreator;
+  creator: Creator;
   state: State;
   dispatch: React.ActionDispatch<[action: Action]>;
 }
@@ -21,13 +21,13 @@ export function CreatorRow( props : CreatorRowProps) {
   const [videos, setVideos] = useState([]);
 
   useEffect(() => {
-    console.log("calling effect - " + props.creator.creatorId_yt)
+    console.log("calling effect - " + props.creator.ucid)
     if(videos.length === 0 && innertube.ready) {
       console.log("fetching videos")
       const fetchVideos = async () => {
-        const videoData = getVideosByChannelId(innertube, props.creator.creatorId_yt);
+        const videoData = getVideosByChannelId(innertube, props.creator.ucid);
 
-		console.log("fetch complete - " + props.creator.creatorId_yt);
+		console.log("fetch complete - " + props.creator.ucid);
 
         setVideos(videoData);
       }
