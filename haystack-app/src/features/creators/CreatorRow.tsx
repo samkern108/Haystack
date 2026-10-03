@@ -4,7 +4,6 @@ import type { Creator } from "../../state/types";
 import { VideoCard } from "../videos/VideoCard";
 import { CreatorInfo } from "./CreatorInfo";
 import type { State, Action } from "../../state/state";
-import { getVideosByIds } from "../../utils/videohelpers";
 import { InnertubeContext } from "../../contexts/InnertubeContext";
 import { getVideosByChannelId } from "../../services/innertube.js";
 import './CreatorRow.css'
@@ -41,9 +40,9 @@ export function CreatorRow( props : CreatorRowProps) {
       <CreatorInfo creator={props.creator} state={props.state} dispatch={props.dispatch} />
 
       <div className="video-strip">
-        {getVideosByIds(props.creator.videoIds).map((video) => (
+        {Object.values(props.creator.videos).map((video) => (
           <VideoCard
-            key={video.videoId_yt}
+            key={video.video_id}
             video={video}
             state={props.state}
             displayCreator={false}

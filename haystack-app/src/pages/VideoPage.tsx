@@ -2,9 +2,10 @@ import { useParams } from "react-router-dom";
 import './VideoPage.css'
 import type { Action, State } from "../state/state";
 import LabelSelector from "../features/labels/LabelSelector";
-import { getCreatorById, getVideoById, getVideosByIds } from "../utils/videohelpers";
+import { getCreatorById, getVideoById } from "../utils/videohelpers";
 import { VideoCard } from "../features/videos/VideoCard";
-import type { Creator, Video} from "../state/types";
+import { type Creator, type Video} from "../state/types";
+
 interface VideoPageProps {
   state: State;
   dispatch: React.ActionDispatch<[Action]>;
@@ -12,12 +13,12 @@ interface VideoPageProps {
 
 function renderOtherVideosFromCreator(creator: Creator, activeVideoId: string, props: VideoPageProps) {
   
-  const allCreatorVideos = getVideosByIds(creator.videoIds);
+  const allCreatorVideos = creator.videos;
   const returnVideos = [] as Video[];
  
-  allCreatorVideos.forEach((video) => {
-    if (video.videoId_yt !== activeVideoId) {
-      const videoState = props.state.creators?.[creator.ucid]?.videos?.[video.videoId_yt];
+  Object.values(allCreatorVideos).forEach((video) => {
+    if (video.video_id !== activeVideoId) {
+      const videoState = props.state.creators?.[creator.ucid]?.videos?.[video.video_id];
       if (videoState?.videoLabelId !== "x")
         returnVideos.push(video);
     }
@@ -33,7 +34,7 @@ function renderOtherVideosFromCreator(creator: Creator, activeVideoId: string, p
       <div className="video-strip">
         {returnVideos.map((video) => (
           <VideoCard
-            key={video.videoId_yt}
+            key={video.video_id}
             video={video}
             state={props.state}
             displayCreator={false}
@@ -46,15 +47,16 @@ function renderOtherVideosFromCreator(creator: Creator, activeVideoId: string, p
 
 export function VideoPage(props: VideoPageProps) {
 
-  const { id } = useParams();
+const { creatorId, videoId } = useParams();
 
-  if (!id) return <p>Video not found.</p>;
+  if (!creatorId) return <p>Creator not found.</p>;
+  if (!videoId) return <p>Video not found.</p>;
 
-  const video = getVideoById(id);
+  const video = getVideoById(creatorId, videoId);
 
   if (!video) return <p>Video not found.</p>;
 
-  const creator = getCreatorById(video.creatorId_yt);
+  const creator = getCreatorById(creatorId);
 
   return (
     <div id="video-page">
@@ -62,7 +64,7 @@ export function VideoPage(props: VideoPageProps) {
         <iframe
           width="100%"
           height="600"
-          src={`https://www.youtube-nocookie.com/embed/${id}`}
+          src={`https://www.youtube-nocookie.com/embed/${videoId}`}
           allowFullScreen
         />  
       </section>
@@ -79,7 +81,7 @@ export function VideoPage(props: VideoPageProps) {
         </div>
 
         <a
-          href={`https://www.youtube.com/@${video.creatorId_yt}`}
+          href={`https://www.youtube.com/@${creatorId}`}
           target="_blank"
           id="creator-row"
           rel="noopener noreferrer"
@@ -89,7 +91,7 @@ export function VideoPage(props: VideoPageProps) {
         </a>
       </section>
 
-      { renderOtherVideosFromCreator(creator, video.videoId_yt, props) }
+      { renderOtherVideosFromCreator(creator, video.video_id, props) }
     </div>
   );
 }

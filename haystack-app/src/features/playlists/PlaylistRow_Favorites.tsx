@@ -94,7 +94,7 @@ export function PlaylistRow_Favorites(props: PlaylistRow_FavoritesProps) {
       <div className="video-strip">
         {displayedVideos.map((video) => (
           <VideoCard
-            key={video.videoId_yt}
+            key={video.video_id}
             video={video}
             state={props.state}
             displayCreator={true}

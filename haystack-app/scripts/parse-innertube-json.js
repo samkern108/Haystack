@@ -31,7 +31,8 @@ for (const file of files) {
 
     output[filename][item.content_id] = {
       video_id: item.content_id,
-      thumbnail: item.content_image?.image?.[0]?.url,
+      title: item.metadata?.title?.text,
+      thumbnail_url: item.content_image?.image?.[0]?.url,
       timecode: item.content_image?.overlays?.[0]?.badges?.[0]?.text
     };
   }

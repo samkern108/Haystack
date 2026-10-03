@@ -29,7 +29,7 @@ export function PlaylistRow( props : PlaylistRowProps) {
       <div className="video-strip">
         {playlistVideos.map((video) => (
           <VideoCard
-            key={video.videoId_yt}
+            key={video.video_id}
             video={video}
             state={props.state}
             displayCreator={true}

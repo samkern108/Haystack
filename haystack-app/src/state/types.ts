@@ -1,3 +1,4 @@
+import creatorsData from "../storage/all_creators_object.json";
 
 export interface Avatar {
   url: string;
@@ -9,14 +10,19 @@ export interface Creator {
   handle: string;
   ucid: string; //used to be creatorId_yt
   avatar: Avatar;
-
-  // Do we need this in Creator? It was in MockCreator.
-  // videoIds: string[];
+  videos: Record<string, Video>;
 }
 
-export interface MockVideo {
+export interface Video {
+  video_id: string;
   title: string;
-  thumbnail: string;
-  videoId_yt: string;
-  creatorId_yt: string;
+  thumbnail_url: string;
+  timecode: string;
+  // creatorId_yt: string;
+  // Do we need this? ^
 }
+
+export type Creators = Record<string, Creator>;
+
+export const AllCreators: Record<string, Creator> = creatorsData;
+console.log("AllCreators loaded:", Object.keys(AllCreators).length, "creators");

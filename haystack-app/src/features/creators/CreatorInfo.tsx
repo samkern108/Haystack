@@ -39,7 +39,7 @@ export function CreatorInfo(props: CreatorInfoProps) {
       {hover.hovered && (
         <div className="creator-popover">
           <a
-            href={`https://www.youtube.com/${props.creator.creatorId_yt}`}
+            href={`https://www.youtube.com/${props.creator.ucid}`}
             target="_blank"
             rel="noreferrer"
           >

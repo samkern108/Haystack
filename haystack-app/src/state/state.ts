@@ -23,7 +23,7 @@ export interface PlaylistState {
   exclusive?: boolean;
   videoLabelId: VideoLabelId;
   description?: string;
-  videoIds: string[];
+  videoIds: [creatorId: string, videoId: string][];
 }
 
 export interface State {
@@ -124,7 +124,7 @@ export function getVideo(state: State, creatorId: string, videoId: string): Vide
 function toggleVideoInPlaylist(
   state: State,
   playlistId: string,
-  videoId: string
+  videoId: [creatorId: string, videoId: string]
 ): State {
   const playlist = getPlaylist(state, playlistId);
 
@@ -229,7 +229,7 @@ export function reducer(state: State, action: Action): State {
         state = toggleVideoInPlaylist(
           state,
           videoLabel.associatedPlaylistId,
-          videoId
+          [creatorId, videoId]
         );
       }
 
