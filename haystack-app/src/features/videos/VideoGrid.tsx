@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from "react";
 
 import { VideoCard } from "../videos/VideoCard";
 import type { State, Action } from "../../state/state";
-import { getCreatorById, getVideosByIds } from "../../utils/videohelpers";
+import { getCreatorById } from "../../utils/videohelpers";
 import { InnertubeContext } from "../../contexts/InnertubeContext";
 import '../videos/VideoCard.css'
 
