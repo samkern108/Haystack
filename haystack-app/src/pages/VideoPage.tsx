@@ -35,6 +35,7 @@ function renderOtherVideosFromCreator(creator: Creator, activeVideoId: string, p
         {returnVideos.map((video) => (
           <VideoCard
             key={video.video_id}
+            creator={creator}
             video={video}
             state={props.state}
             displayCreator={false}

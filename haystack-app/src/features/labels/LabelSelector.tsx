@@ -1,12 +1,13 @@
 import { SYSTEM_VIDEO_LABELS, type VideoLabel } from "./labels";
 import type { Action, State } from "../../state/state";
-import type { Video } from "../../state/types";
+import type { Creator, Video } from "../../state/types";
 import { getVideoLabelIcon } from "./icons";
 import { TooltipTrigger } from "../ui/Tooltip";
 import "../videos/VideoCard.css";
 import "../ui/Tooltip.css"
 
 interface LabelSelectorProps {
+  creator: Creator;
   video: Video;
   state: State;
   layout: "horizontal" | "vertical";
@@ -15,15 +16,15 @@ interface LabelSelectorProps {
 
 export default function LabelSelector(props: LabelSelectorProps) {
   const videoState =
-    props.state.creators?.[props.video.creatorId_yt]
-      ?.videos?.[props.video.videoId_yt];
+    props.state.creators?.[props.creator.ucid]
+      ?.videos?.[props.video.video_id];
 
   const activeVideoLabelId = videoState?.videoLabelId ?? null;
   function handleVideoLabelClick(videoLabel: VideoLabel) {
     props.dispatch({
       type: "SET_VIDEO_LABEL",
-      creatorId: props.video.creatorId_yt,
-      videoId: props.video.videoId_yt,
+      creatorId: props.creator.ucid,
+      videoId: props.video.video_id,
       videoLabel: videoLabel,
     });
   }

@@ -225,6 +225,8 @@ export function reducer(state: State, action: Action): State {
           ? null
           : videoLabel.id;
 
+      console.log(`SET_VIDEO_LABEL: ${creatorId} ${videoId} ${current} -> ${next}`);
+      
       if (videoLabel.associatedPlaylistId) {
         state = toggleVideoInPlaylist(
           state,

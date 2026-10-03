@@ -73,7 +73,7 @@ function renderVideoLabel(videoLabel: VideoLabel, hasComment: boolean) {
     <div className="video-card-popover">
 
       <div className="video-popover-controls">
-        <LabelSelector video={props.video} state={props.state} dispatch={props.dispatch} layout={"vertical"} />
+        <LabelSelector creator={props.creator} video={props.video} state={props.state} dispatch={props.dispatch} layout={"vertical"} />
         <button className="comment-button" onClick={openCommentCard}> { <TooltipTrigger text="Leave a comment"><CommentIcon/></TooltipTrigger> } </button>
       </div>
       <img className="thumbnail" src={props.video.thumbnail_url} onClick={() => navigate(`/video/${props.video.video_id}`)} />
