@@ -1,4 +1,5 @@
 import type { VideoLabelId, VideoLabel, VideoLabelIdOrNone } from "../features/labels/labels";
+import { AllCreators } from "./types";
 
 /* -----------------------------
    STATE
@@ -96,8 +97,26 @@ function createInitialPlaylists(): Record<string, PlaylistState> {
   return initialPlaylists;
 }
 
+// TODO(sam)
+// Depending on how we retrieve new creators from the backend,
+// we may want to initialize differently (or repeatedly)
 export const initialState: State = {
-  creators: {},
+  creators: Object.values(AllCreators).reduce((acc, creator) => {
+    acc[creator.ucid] = {
+      followed: false,
+      favorite: false,
+      doNotShow: false,
+      videos: Object.keys(creator.videos).reduce((videoAcc, videoId) => {
+        videoAcc[videoId] = {
+          watchPercentage: 0,
+          videoLabelId: null,
+          comment: "",
+        };
+        return videoAcc;
+      }, {} as Record<string, VideoState>),
+    };
+    return acc;
+  }, {} as Record<string, CreatorState>),
   playlists: createInitialPlaylists(),
 };
 

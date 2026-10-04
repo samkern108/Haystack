@@ -76,7 +76,7 @@ function renderVideoLabel(videoLabel: VideoLabel, hasComment: boolean) {
         <LabelSelector creator={props.creator} video={props.video} state={props.state} dispatch={props.dispatch} layout={"vertical"} />
         <button className="comment-button" onClick={openCommentCard}> { <TooltipTrigger text="Leave a comment"><CommentIcon/></TooltipTrigger> } </button>
       </div>
-      <img className="thumbnail" src={props.video.thumbnail_url} onClick={() => navigate(`/video/${props.video.video_id}`)} />
+      <img className="thumbnail" src={props.video.thumbnail_url} onClick={() => navigate(`/v/${props.video.video_id}/c/${props.creator.ucid}`)} />
 
       <strong className="video-title">{props.video.title}</strong>
       {props.displayCreator ? renderCreatorRow(props) : <></>}
