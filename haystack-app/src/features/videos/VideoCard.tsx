@@ -11,6 +11,7 @@ import '../creators/CreatorRow.css'
 import "./VideoCard.css"
 import "../labels/Labels.scss"
 import { TooltipTrigger } from "../ui/Tooltip";
+import { getChannelURL } from "../../utils/videohelpers";
 
 interface VideoCardProps {
   creator: Creator;
@@ -45,7 +46,7 @@ export function VideoCard( props : VideoCardProps) {
     return (
       <a
         className="video-creator"
-        href={`https://www.youtube.com/@${props.creator.ucid}`}
+        href={getChannelURL(props.creator.ucid)}
         target="_blank"
         rel="noopener noreferrer"
       >

@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 const MAX_TIME = 240;
 
 function snapTime(value: number) {
@@ -29,20 +27,27 @@ function formatTime(minutes: number, isMax = false) {
   return `${hours}h ${remainingMinutes}m`;
 }
 
-export function TimeFilterSelector() {
-  const [minTime, setMinTime] = useState(0);
-  const [maxTime, setMaxTime] = useState(MAX_TIME);
+interface TimeFilterSelectorProps {
+  minTime: number;
+  maxTime: number;
+  onMinTimeChange: (value: number) => void;
+  onMaxTimeChange: (value: number) => void;
+}
 
+export function TimeFilterSelector({
+  minTime,
+  maxTime,
+  onMinTimeChange,
+  onMaxTimeChange,
+}: TimeFilterSelectorProps) {
   function handleMinChange(value: number) {
     const snapped = snapTime(value);
-
-    setMinTime(Math.min(snapped, maxTime));
+    onMinTimeChange(Math.min(snapped, maxTime));
   }
 
   function handleMaxChange(value: number) {
     const snapped = snapTime(value);
-
-    setMaxTime(Math.max(snapped, minTime));
+    onMaxTimeChange(Math.max(snapped, minTime));
   }
 
   return (
@@ -54,9 +59,7 @@ export function TimeFilterSelector() {
           max={MAX_TIME}
           step="1"
           value={minTime}
-          onChange={(e) =>
-            handleMinChange(Number(e.target.value))
-          }
+          onChange={(e) => handleMinChange(Number(e.target.value))}
           className="time-slider time-slider-min"
         />
 
@@ -66,9 +69,7 @@ export function TimeFilterSelector() {
           max={MAX_TIME}
           step="1"
           value={maxTime}
-          onChange={(e) =>
-            handleMaxChange(Number(e.target.value))
-          }
+          onChange={(e) => handleMaxChange(Number(e.target.value))}
           className="time-slider time-slider-max"
         />
       </div>

@@ -7,3 +7,7 @@ export function getVideoById(creatorId: string, videoId: string): Video {
 export function getCreatorById(creatorId: string): Creator {
   return AllCreators[creatorId];
 }
+
+export function getChannelURL(creatorId: string): string {
+  return ("https://www.youtube.com/channel/" + creatorId);
+}

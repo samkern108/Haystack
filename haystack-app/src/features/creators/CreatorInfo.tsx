@@ -3,6 +3,7 @@ import { useDelayedHover } from "../../utils/hoverlogic";
 import "./CreatorRow.css"
 import "../ui/styles/LinedPaper.scss"
 import type { Creator } from "../../state/types";
+import { getChannelURL } from "../../utils/videohelpers";
 
 interface CreatorInfoProps {
   creator: Creator;
@@ -39,7 +40,7 @@ export function CreatorInfo(props: CreatorInfoProps) {
       {hover.hovered && (
         <div className="creator-popover">
           <a
-            href={`https://www.youtube.com/${props.creator.ucid}`}
+            href={getChannelURL(props.creator.ucid)}
             target="_blank"
             rel="noreferrer"
           >
