@@ -24,7 +24,7 @@ export function PlaylistRow( props : PlaylistRowProps) {
         <h2>{ props.playlist.name }</h2>
       </div>
       
-      <div className="video-strip">
+      <div className="video-strip scrollable">
         {props.playlist.videoIds.map(([creatorId, videoId]) => {
           const creator = getCreatorById(creatorId);
           if (!creator) {

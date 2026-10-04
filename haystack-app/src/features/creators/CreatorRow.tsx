@@ -1,13 +1,13 @@
 import { useState, useEffect, useContext } from "react";
 
 import type { Creator } from "../../state/types";
-import { VideoCard } from "../videos/VideoCard";
 import { CreatorInfo } from "./CreatorInfo";
 import type { State, Action } from "../../state/state";
 import { InnertubeContext } from "../../contexts/InnertubeContext";
 import { getVideosByChannelId } from "../../services/innertube.js";
 import './CreatorRow.css'
 import '../videos/VideoCard.css'
+import { VideoStrip } from "../videos/VideoStrip.js";
 
 interface CreatorRowProps {
   creator: Creator;
@@ -39,17 +39,13 @@ export function CreatorRow( props : CreatorRowProps) {
     <section className="creator-row">
       <CreatorInfo creator={props.creator} state={props.state} dispatch={props.dispatch} />
 
-      <div className="video-strip">
-        {Object.values(props.creator.videos).map((video) => (
-          <VideoCard
-            key={video.video_id}
-            video={video}
-            state={props.state}
-            displayCreator={false}
-            dispatch={props.dispatch}
-          />
-        ))}
-      </div>
+      <VideoStrip
+        key={props.creator.ucid}
+        state={props.state}
+        videoIds={Object.values(props.creator.videos).map((video) => [props.creator.ucid, video.video_id])}
+        dispatch={props.dispatch}
+        displayCreator={false}
+      />
     </section>
   );
 }

@@ -31,7 +31,7 @@ function renderOtherVideosFromCreator(creator: Creator, activeVideoId: string, p
   return (
     <section className="creator-videos">
       <h3>More from {creator.name}</h3>
-      <div className="video-strip">
+      <div className="video-strip scrollable">
         {returnVideos.map((video) => (
           <VideoCard
             key={video.video_id}
@@ -75,6 +75,7 @@ const { creatorId, videoId } = useParams();
         <div className="video-actions">
           <LabelSelector
             video={video}
+            creator={creator}
             state={props.state}
             layout="horizontal"
             dispatch={props.dispatch}

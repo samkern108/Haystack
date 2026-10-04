@@ -1,10 +1,9 @@
 import { useMemo, useState } from "react";
-import { VideoCard } from "../videos/VideoCard";
 import type { State, Action } from "../../state/state";
-import { getCreatorById } from "../../utils/videohelpers";
 import { SYSTEM_VIDEO_LABELS } from "../labels/labels";
 import './PlaylistRow.css'
 import { LoveIcon, StarIcon } from "../labels/icons";
+import { VideoStrip } from "../videos/VideoStrip";
 
 interface PlaylistRow_FavoritesProps {
   state: State;
@@ -88,30 +87,8 @@ export function PlaylistRow_Favorites(props: PlaylistRow_FavoritesProps) {
         <h2>{sectionTitle}</h2>
       </div>
 
-      <div className="video-strip">
-        {displayedVideos.map(([creatorId, videoId]) => {
-          const creator = getCreatorById(creatorId);
-          if (!creator) {
-            console.error(`Creator not found for ID: ${creatorId}`);
-            return null;
-          }
-          const video = creator.videos[videoId];
-          if (!video) {
-            console.error(`Video not found for ID: ${videoId} in creator ${creatorId}`);
-            return null;
-          }
-          return (
-            <VideoCard
-              key={video.video_id}
-              creator={creator}
-              video={video}
-              state={props.state}
-              displayCreator={true}
-              dispatch={props.dispatch}
-            />
-          );
-        })}
-      </div>
+      <VideoStrip state={props.state} videoIds={displayedVideos} dispatch={props.dispatch} displayCreator={false}>
+      </VideoStrip>
     </section>
   );
 }
