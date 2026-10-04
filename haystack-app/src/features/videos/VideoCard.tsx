@@ -42,47 +42,54 @@ export function VideoCard( props : VideoCardProps) {
   }
 
   function renderCreatorRow(props: VideoCardProps) {
-  return (
-    <a
-      className="video-creator"
-      href={`https://www.youtube.com/@${props.creator.ucid}`}
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-        <p>{'by'}</p>
-        <img className="creator-avatar" src={props.creator.avatar.url} alt={props.creator.name} />   
-        <p>{props.creator.name}</p>
-    </a>
-  );
-}
+    return (
+      <a
+        className="video-creator"
+        href={`https://www.youtube.com/@${props.creator.ucid}`}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+          <p>{'by'}</p>
+          <img className="creator-avatar" src={props.creator.avatar.url} alt={props.creator.name} />   
+          <p>{props.creator.name}</p>
+      </a>
+    );
+  }
 
-function renderVideoLabel(videoLabel: VideoLabel, hasComment: boolean) {
-  return (
-    <div className="video-label-controls">
-        <div className={`label-button`}
-        style={{ backgroundColor: videoLabel.color }}>
-            { getVideoLabelIcon(videoLabel.id) }
-        </div>
-        { hasComment && <div className="comment-button">{ <CommentIcon/> }</div>}
-    </div>
-  );
-}
+  function renderVideoLabel(videoLabel: VideoLabel, hasComment: boolean) {
+    return (
+      <div className="video-label-controls">
+          <div className={`label-button`}
+          style={{ backgroundColor: videoLabel.color }}>
+              { getVideoLabelIcon(videoLabel.id) }
+          </div>
+          { hasComment && <div className="comment-button">{ <CommentIcon/> }</div>}
+      </div>
+    );
+  }
 
   function renderVideoCardPopover(props: VideoCardProps, navigate: NavigateFunction) {
-  return(
-    <div className="video-card-popover">
+    return(
+      <div className="video-card-popover">
 
-      <div className="video-popover-controls">
-        <LabelSelector creator={props.creator} video={props.video} state={props.state} dispatch={props.dispatch} layout={"vertical"} />
-        <button className="comment-button" onClick={openCommentCard}> { <TooltipTrigger text="Leave a comment"><CommentIcon/></TooltipTrigger> } </button>
+        <div className="video-popover-controls">
+          <LabelSelector creator={props.creator} video={props.video} state={props.state} dispatch={props.dispatch} layout={"vertical"} />
+          <button className="comment-button" onClick={openCommentCard}> { <TooltipTrigger text="Leave a comment"><CommentIcon/></TooltipTrigger> } </button>
+        </div>
+
+        <div className="thumbnail-container" onClick={() => navigate(`/v/${props.video.video_id}/c/${props.creator.ucid}`)} >
+          <img className="thumbnail" src={props.video.thumbnail_url} />
+
+          <span className="video-duration">
+            {props.video.timecode}
+          </span>
+        </div>
+
+        <strong className="video-title">{props.video.title}</strong>
+        {props.displayCreator ? renderCreatorRow(props) : <></>}
       </div>
-      <img className="thumbnail" src={props.video.thumbnail_url} onClick={() => navigate(`/v/${props.video.video_id}/c/${props.creator.ucid}`)} />
-
-      <strong className="video-title">{props.video.title}</strong>
-      {props.displayCreator ? renderCreatorRow(props) : <></>}
-    </div>
-  );
-}
+    );
+  }
 
   return (
     <div
@@ -95,7 +102,15 @@ function renderVideoLabel(videoLabel: VideoLabel, hasComment: boolean) {
     >
 
     <div className={hover.hovered ? "hidden" : ""}>
-      <img className="thumbnail" src={props.video.thumbnail_url} />
+      
+      <div className="thumbnail-container">
+        <img className="thumbnail" src={props.video.thumbnail_url} />
+
+        <span className="video-duration">
+          {props.video.timecode}
+        </span>
+      </div>
+
       <p className="video-title">{props.video.title}</p>
       {props.displayCreator ? renderCreatorRow(props) : <></>}
     </div>

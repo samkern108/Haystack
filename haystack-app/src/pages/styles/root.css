@@ -110,5 +110,4 @@ button:hover {
 .scrollable {
   width: 100%;
   overflow-x: auto;
-  white-space: nowrap;
 }

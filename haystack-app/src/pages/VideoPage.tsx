@@ -5,6 +5,7 @@ import LabelSelector from "../features/labels/LabelSelector";
 import { getCreatorById, getVideoById } from "../utils/videohelpers";
 import { VideoCard } from "../features/videos/VideoCard";
 import { type Creator, type Video} from "../state/types";
+import { VideoStrip } from "../features/videos/VideoStrip";
 
 interface VideoPageProps {
   state: State;
@@ -31,18 +32,13 @@ function renderOtherVideosFromCreator(creator: Creator, activeVideoId: string, p
   return (
     <section className="creator-videos">
       <h3>More from {creator.name}</h3>
-      <div className="video-strip scrollable">
-        {returnVideos.map((video) => (
-          <VideoCard
-            key={video.video_id}
-            creator={creator}
-            video={video}
-            state={props.state}
-            displayCreator={false}
-            dispatch={props.dispatch}
-          />
-        ))}
-      </div>
+      <VideoStrip 
+        state={props.state} 
+        videoIds={returnVideos.map((video) => [creator.ucid, video.video_id])} 
+        dispatch={props.dispatch}
+        displayCreator={false}> 
+        
+      </VideoStrip>
     </section>);
 }
 
