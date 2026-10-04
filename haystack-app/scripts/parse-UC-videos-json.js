@@ -22,6 +22,10 @@ for (const file of files) {
     continue;
   }
 
+  // TODO(sam)
+  // the way we're retrieving thumbnails right now is a bit hacky.
+  // especially if youtube changes the options available, we should reinvestigate this.
+
   const filename = file.replace("-videos.json", "");
   // Creator object
   output[filename] = {};
