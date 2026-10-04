@@ -1,14 +1,12 @@
 // Steps to use:
 // Run extract-channel-ids (which produces creatorData_Raw.json)
-// Run parse-innertube-json (which produces creators_and_videos.json)
+// Run parse-innertube-json (which produces videos_per_creator_ucid.json)
 // Then, run this script
-// What it does:
-// 
 
 import { readFileSync, writeFileSync } from "node:fs";
 
 const creatorData_File = "src/storage/creatorData_Raw.json";
-const creatorsAndVideos_File = "src/storage/creators_and_videos.json";
+const creatorsAndVideos_File = "src/storage/videos_per_creator_ucid.json";
 
 const creatorData = JSON.parse(
   readFileSync(creatorData_File, "utf8")
