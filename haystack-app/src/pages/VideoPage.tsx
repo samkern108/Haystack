@@ -2,22 +2,23 @@ import { useParams } from "react-router-dom";
 import './VideoPage.css'
 import type { Action, State } from "../state/state";
 import LabelSelector from "../features/labels/LabelSelector";
-import { getCreatorById, getVideoById, getVideosByIds } from "../utils/videohelpers";
-import { VideoCard } from "../features/videos/VideoCard";
-import type { MockCreator, Video} from "../state/types";
+import { getCreatorById, getVideoById } from "../utils/videohelpers";
+import { type Creator, type Video} from "../state/types";
+import { VideoStrip } from "../features/videos/VideoStrip";
+
 interface VideoPageProps {
   state: State;
   dispatch: React.ActionDispatch<[Action]>;
 }
 
-function renderOtherVideosFromCreator(creator: MockCreator, activeVideoId: string, props: VideoPageProps) {
+function renderOtherVideosFromCreator(creator: Creator, activeVideoId: string, props: VideoPageProps) {
   
-  const allCreatorVideos = getVideosByIds(creator.videoIds);
+  const allCreatorVideos = creator.videos;
   const returnVideos = [] as Video[];
  
-  allCreatorVideos.forEach((video) => {
-    if (video.videoId_yt !== activeVideoId) {
-      const videoState = props.state.creators?.[creator.creatorId_yt]?.videos?.[video.videoId_yt];
+  Object.values(allCreatorVideos).forEach((video) => {
+    if (video.video_id !== activeVideoId) {
+      const videoState = props.state.creators?.[creator.ucid]?.videos?.[video.video_id];
       if (videoState?.videoLabelId !== "x")
         returnVideos.push(video);
     }
@@ -30,31 +31,28 @@ function renderOtherVideosFromCreator(creator: MockCreator, activeVideoId: strin
   return (
     <section className="creator-videos">
       <h3>More from {creator.name}</h3>
-      <div className="video-strip">
-        {returnVideos.map((video) => (
-          <VideoCard
-            key={video.videoId_yt}
-            video={video}
-            state={props.state}
-            displayCreator={false}
-            dispatch={props.dispatch}
-          />
-        ))}
-      </div>
+      <VideoStrip 
+        state={props.state} 
+        videoIds={returnVideos.map((video) => [creator.ucid, video.video_id])} 
+        dispatch={props.dispatch}
+        displayCreator={false}> 
+        
+      </VideoStrip>
     </section>);
 }
 
 export function VideoPage(props: VideoPageProps) {
 
-  const { id } = useParams();
+const { creatorId, videoId } = useParams();
 
-  if (!id) return <p>Video not found.</p>;
+  if (!creatorId) return <p>Creator not found.</p>;
+  if (!videoId) return <p>Video not found.</p>;
 
-  const video = getVideoById(id);
+  const video = getVideoById(creatorId, videoId);
 
   if (!video) return <p>Video not found.</p>;
 
-  const creator = getCreatorById(video.creatorId_yt);
+  const creator = getCreatorById(creatorId);
 
   return (
     <div id="video-page">
@@ -62,7 +60,7 @@ export function VideoPage(props: VideoPageProps) {
         <iframe
           width="100%"
           height="600"
-          src={`https://www.youtube-nocookie.com/embed/${id}`}
+          src={`https://www.youtube-nocookie.com/embed/${videoId}`}
           allowFullScreen
         />  
       </section>
@@ -72,6 +70,7 @@ export function VideoPage(props: VideoPageProps) {
         <div className="video-actions">
           <LabelSelector
             video={video}
+            creator={creator}
             state={props.state}
             layout="horizontal"
             dispatch={props.dispatch}
@@ -79,17 +78,17 @@ export function VideoPage(props: VideoPageProps) {
         </div>
 
         <a
-          href={`https://www.youtube.com/@${video.creatorId_yt}`}
+          href={`https://www.youtube.com/@${creatorId}`}
           target="_blank"
           id="creator-row"
           rel="noopener noreferrer"
         >
-            <img className="creator-avatar" src={creator.avatarURL} alt={creator.name} />   
+            <img className="creator-avatar" src={creator.avatar.url} alt={creator.name} />   
             <h2>{creator.name}</h2>
         </a>
       </section>
 
-      { renderOtherVideosFromCreator(creator, video.videoId_yt, props) }
+      { renderOtherVideosFromCreator(creator, video.video_id, props) }
     </div>
   );
 }

@@ -1,34 +1,82 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import "./VideoFilterMenu.scss";
 import { TimeFilterSelector } from "./TimeFilterSelector";
+import type { State } from "../../state/state";
 
+// TODO(samkern) Figure out if you want to incorporate this into State lol
 type CreatorFilter = "followed" | "unfollowed" | "both";
 type WatchedFilter = "yes" | "no" | "both";
 
-export function VideoFilterMenu() {
+interface VideoFilterState {
+  creator: CreatorFilter;
+  watched: WatchedFilter;
+  minTime: number;
+  maxTime: number;
+}
+
+const DEFAULT_FILTERS: VideoFilterState = {
+  creator: "both",
+  watched: "both",
+  minTime: 0,
+  maxTime: 240,
+};
+
+const FILTER_STORAGE_KEY = "video-filters";
+
+interface VideoFilterMenuProps {
+  state: State;
+}
+
+export function VideoFilterMenu(props: VideoFilterMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const [creatorFilter, setCreatorFilter] =
-    useState<CreatorFilter>("both");
+  const [filters, setFilters] = useState<VideoFilterState>(() => {
+    const saved = localStorage.getItem(FILTER_STORAGE_KEY);
 
-  const [watchedFilter, setWatchedFilter] =
-    useState<WatchedFilter>("both");
+    if (!saved) {
+      return DEFAULT_FILTERS;
+    }
+
+    try {
+      return {
+        ...DEFAULT_FILTERS,
+        ...JSON.parse(saved),
+      };
+    } catch {
+      return DEFAULT_FILTERS;
+    }
+  });
+
+  useEffect(() => {
+    localStorage.setItem(
+      FILTER_STORAGE_KEY,
+      JSON.stringify(filters)
+    );
+  }, [filters]);
 
   function cycleCreatorFilter() {
-    setCreatorFilter(current => {
-      if (current === "both") return "followed";
-      if (current === "followed") return "unfollowed";
-      return "both";
-    });
+    setFilters(current => ({
+      ...current,
+      creator:
+        current.creator === "both"
+          ? "followed"
+          : current.creator === "followed"
+            ? "unfollowed"
+            : "both",
+    }));
   }
 
   function cycleWatchedFilter() {
-    setWatchedFilter(current => {
-      if (current === "both") return "yes";
-      if (current === "yes") return "no";
-      return "both";
-    });
+    setFilters(current => ({
+      ...current,
+      watched:
+        current.watched === "both"
+          ? "yes"
+          : current.watched === "yes"
+            ? "no"
+            : "both",
+    }));
   }
 
   return (
@@ -49,7 +97,7 @@ export function VideoFilterMenu() {
               className="video-filter-toggle"
               onClick={cycleCreatorFilter}
             >
-              {creatorFilter}
+              {filters.creator}
             </button>
           </div>
 
@@ -60,13 +108,29 @@ export function VideoFilterMenu() {
               className="video-filter-toggle"
               onClick={cycleWatchedFilter}
             >
-              {watchedFilter}
+              {filters.watched}
             </button>
           </div>
 
           <div className="video-filter-row">
             <span className="video-filter-label">Time</span>
-            <TimeFilterSelector />
+
+            <TimeFilterSelector
+              minTime={filters.minTime}
+              maxTime={filters.maxTime}
+              onMinTimeChange={(minTime) =>
+                setFilters(current => ({
+                  ...current,
+                  minTime,
+                }))
+              }
+              onMaxTimeChange={(maxTime) =>
+                setFilters(current => ({
+                  ...current,
+                  maxTime,
+                }))
+              }
+            />
           </div>
         </div>
       )}

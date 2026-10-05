@@ -1,6 +1,6 @@
 import { VideoCard } from "../videos/VideoCard";
 import type { State, Action, PlaylistState } from "../../state/state";
-import { getVideosByIds } from "../../utils/videohelpers";
+import { getCreatorById } from "../../utils/videohelpers";
 import { SYSTEM_VIDEO_LABELS } from "../labels/labels";
 import './PlaylistRow.css'
 
@@ -12,9 +12,7 @@ interface PlaylistRowProps {
 
 export function PlaylistRow( props : PlaylistRowProps) {
 
-  const playlistVideos = getVideosByIds(props.playlist.videoIds);
   const videoLabel = SYSTEM_VIDEO_LABELS.find((b) => b.id === props.playlist.videoLabelId);
-  console.log(props.playlist.videoLabelId, videoLabel);
 
   return (
     <section className="playlist-row">
@@ -26,16 +24,29 @@ export function PlaylistRow( props : PlaylistRowProps) {
         <h2>{ props.playlist.name }</h2>
       </div>
       
-      <div className="video-strip">
-        {playlistVideos.map((video) => (
-          <VideoCard
-            key={video.videoId_yt}
-            video={video}
-            state={props.state}
-            displayCreator={true}
-            dispatch={props.dispatch}
-          />
-        ))}
+      <div className="video-strip scrollable">
+        {props.playlist.videoIds.map(([creatorId, videoId]) => {
+          const creator = getCreatorById(creatorId);
+          if (!creator) {
+            console.error(`Creator not found for ID: ${creatorId}`);
+            return null;
+          }
+          const video = creator.videos[videoId];
+          if (!video) {
+            console.error(`Video not found for ID: ${videoId} in creator ${creatorId}`);
+            return null;
+          }
+          return (
+            <VideoCard
+              key={video.video_id}
+              creator={creator}
+              video={video}
+              state={props.state}
+              displayCreator={true}
+              dispatch={props.dispatch}
+            />
+          );
+        })}
       </div>
     </section>
   );

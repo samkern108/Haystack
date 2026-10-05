@@ -1,4 +1,5 @@
 import type { VideoLabelId, VideoLabel, VideoLabelIdOrNone } from "../features/labels/labels";
+import { AllCreators } from "./types";
 
 /* -----------------------------
    STATE
@@ -23,7 +24,7 @@ export interface PlaylistState {
   exclusive?: boolean;
   videoLabelId: VideoLabelId;
   description?: string;
-  videoIds: string[];
+  videoIds: [creatorId: string, videoId: string][];
 }
 
 export interface State {
@@ -96,8 +97,26 @@ function createInitialPlaylists(): Record<string, PlaylistState> {
   return initialPlaylists;
 }
 
+// TODO(sam)
+// Depending on how we retrieve new creators from the backend,
+// we may want to initialize differently (or repeatedly)
 export const initialState: State = {
-  creators: {},
+  creators: Object.values(AllCreators).reduce((acc, creator) => {
+    acc[creator.ucid] = {
+      followed: false,
+      favorite: false,
+      doNotShow: false,
+      videos: Object.keys(creator.videos).reduce((videoAcc, videoId) => {
+        videoAcc[videoId] = {
+          watchPercentage: 0,
+          videoLabelId: null,
+          comment: "",
+        };
+        return videoAcc;
+      }, {} as Record<string, VideoState>),
+    };
+    return acc;
+  }, {} as Record<string, CreatorState>),
   playlists: createInitialPlaylists(),
 };
 
@@ -124,7 +143,7 @@ export function getVideo(state: State, creatorId: string, videoId: string): Vide
 function toggleVideoInPlaylist(
   state: State,
   playlistId: string,
-  videoId: string
+  videoId: [creatorId: string, videoId: string]
 ): State {
   const playlist = getPlaylist(state, playlistId);
 
@@ -225,11 +244,13 @@ export function reducer(state: State, action: Action): State {
           ? null
           : videoLabel.id;
 
+      console.log(`SET_VIDEO_LABEL: ${creatorId} ${videoId} ${current} -> ${next}`);
+      
       if (videoLabel.associatedPlaylistId) {
         state = toggleVideoInPlaylist(
           state,
           videoLabel.associatedPlaylistId,
-          videoId
+          [creatorId, videoId]
         );
       }
 

@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { useNavigate, type NavigateFunction } from "react-router-dom";
 import LabelSelector from "../labels/LabelSelector";
-import type { Video } from "../../state/types";
+import type { Creator, Video } from "../../state/types";
 import { type State, type Action } from "../../state/state";
 import { useDelayedHover } from "../../utils/hoverlogic";
-import { getCreatorById } from "../../utils/videohelpers";
 import { SYSTEM_VIDEO_LABELS, type VideoLabel } from "../labels/labels";
 import { CommentIcon, getVideoLabelIcon } from "../labels/icons";
 import { CommentCard } from '../comments/CommentCard';
@@ -12,8 +11,10 @@ import '../creators/CreatorRow.css'
 import "./VideoCard.css"
 import "../labels/Labels.scss"
 import { TooltipTrigger } from "../ui/Tooltip";
+import { getChannelURL } from "../../utils/videohelpers";
 
 interface VideoCardProps {
+  creator: Creator;
   video: Video;
   state: State;
   displayCreator: boolean;
@@ -24,8 +25,8 @@ export function VideoCard( props : VideoCardProps) {
   const hover = useDelayedHover(60, 160);
   const navigate = useNavigate();
 
-  const videoState = props.state.creators?.[props.video.creatorId_yt]
-  ?.videos?.[props.video.videoId_yt];
+  const videoState = props.state.creators?.[props.creator.ucid]
+  ?.videos?.[props.video.video_id];
 
   const videoLabelId = videoState?.videoLabelId ?? null;
   const videoLabel = SYSTEM_VIDEO_LABELS.find((b) => b.id === videoLabelId);
@@ -42,48 +43,54 @@ export function VideoCard( props : VideoCardProps) {
   }
 
   function renderCreatorRow(props: VideoCardProps) {
-  const creator = getCreatorById(props.video.creatorId_yt);
-  return (
-    <a
-      className="video-creator"
-      href={`https://www.youtube.com/@${props.video.creatorId_yt}`}
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-        <p>{'by'}</p>
-        <img className="creator-avatar" src={creator.avatarURL} alt={creator.name} />   
-        <p>{creator.name}</p>
-    </a>
-  );
-}
+    return (
+      <a
+        className="video-creator"
+        href={getChannelURL(props.creator.ucid)}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+          <p>{'by'}</p>
+          <img className="creator-avatar" src={props.creator.avatar.url} alt={props.creator.name} />   
+          <p>{props.creator.name}</p>
+      </a>
+    );
+  }
 
-function renderVideoLabel(videoLabel: VideoLabel, hasComment: boolean) {
-  return (
-    <div className="video-label-controls">
-        <div className={`label-button`}
-        style={{ backgroundColor: videoLabel.color }}>
-            { getVideoLabelIcon(videoLabel.id) }
-        </div>
-        { hasComment && <div className="comment-button">{ <CommentIcon/> }</div>}
-    </div>
-  );
-}
+  function renderVideoLabel(videoLabel: VideoLabel, hasComment: boolean) {
+    return (
+      <div className="video-label-controls">
+          <div className={`label-button`}
+          style={{ backgroundColor: videoLabel.color }}>
+              { getVideoLabelIcon(videoLabel.id) }
+          </div>
+          { hasComment && <div className="comment-button">{ <CommentIcon/> }</div>}
+      </div>
+    );
+  }
 
   function renderVideoCardPopover(props: VideoCardProps, navigate: NavigateFunction) {
-  return(
-    <div className="video-card-popover">
+    return(
+      <div className="video-card-popover">
 
-      <div className="video-popover-controls">
-        <LabelSelector video={props.video} state={props.state} dispatch={props.dispatch} layout={"vertical"} />
-        <button className="comment-button" onClick={openCommentCard}> { <TooltipTrigger text="Leave a comment"><CommentIcon/></TooltipTrigger> } </button>
+        <div className="video-popover-controls">
+          <LabelSelector creator={props.creator} video={props.video} state={props.state} dispatch={props.dispatch} layout={"vertical"} />
+          <button className="comment-button" onClick={openCommentCard}> { <TooltipTrigger text="Leave a comment"><CommentIcon/></TooltipTrigger> } </button>
+        </div>
+
+        <div className="thumbnail-container" onClick={() => navigate(`/v/${props.video.video_id}/c/${props.creator.ucid}`)} >
+          <img className="thumbnail" src={props.video.thumbnail_url} />
+
+          <span className="video-duration">
+            {props.video.timecode}
+          </span>
+        </div>
+
+        <strong className="video-title">{props.video.title}</strong>
+        {props.displayCreator ? renderCreatorRow(props) : <></>}
       </div>
-      <img className="thumbnail" src={props.video.thumbnail} onClick={() => navigate(`/video/${props.video.videoId_yt}`)} />
-
-      <strong className="video-title">{props.video.title}</strong>
-      {props.displayCreator ? renderCreatorRow(props) : <></>}
-    </div>
-  );
-}
+    );
+  }
 
   return (
     <div
@@ -96,7 +103,15 @@ function renderVideoLabel(videoLabel: VideoLabel, hasComment: boolean) {
     >
 
     <div className={hover.hovered ? "hidden" : ""}>
-      <img className="thumbnail" src={props.video.thumbnail} />
+      
+      <div className="thumbnail-container">
+        <img className="thumbnail" src={props.video.thumbnail_url} />
+
+        <span className="video-duration">
+          {props.video.timecode}
+        </span>
+      </div>
+
       <p className="video-title">{props.video.title}</p>
       {props.displayCreator ? renderCreatorRow(props) : <></>}
     </div>

@@ -1,14 +1,13 @@
-import type { Creator, Video } from "../state/types";
-import { MockData_AllCreators, MockData_AllVideos } from "../storage/mockData";
+import { AllCreators, type Creator, type Video } from "../state/types";
 
-export function getVideoById(videoId: string): Video {
-  return MockData_AllVideos[videoId];
-}
-
-export function getVideosByIds(videoIds: string[]): Video[] {
-  return videoIds.map(getVideoById);
+export function getVideoById(creatorId: string, videoId: string): Video {
+  return AllCreators[creatorId]?.videos?.[videoId];
 }
 
 export function getCreatorById(creatorId: string): Creator {
-  return MockData_AllCreators[creatorId];
+  return AllCreators[creatorId];
+}
+
+export function getChannelURL(creatorId: string): string {
+  return ("https://www.youtube.com/channel/" + creatorId);
 }

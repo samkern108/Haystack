@@ -1,17 +1,16 @@
 import { useState, useEffect, useContext } from "react";
 
-import type { MockCreator } from "../../state/types";
-import { VideoCard } from "../videos/VideoCard";
+import type { Creator } from "../../state/types";
 import { CreatorInfo } from "./CreatorInfo";
 import type { State, Action } from "../../state/state";
-import { getVideosByIds } from "../../utils/videohelpers";
 import { InnertubeContext } from "../../contexts/InnertubeContext";
 import { getVideosByChannelId } from "../../services/innertube.js";
+import { VideoStrip } from "../videos/VideoStrip.js";
 import './CreatorRow.css'
 import '../videos/VideoCard.css'
 
 interface CreatorRowProps {
-  creator: MockCreator;
+  creator: Creator;
   state: State;
   dispatch: React.ActionDispatch<[action: Action]>;
 }
@@ -21,13 +20,13 @@ export function CreatorRow( props : CreatorRowProps) {
   const [videos, setVideos] = useState([]);
 
   useEffect(() => {
-    console.log("calling effect - " + props.creator.creatorId_yt)
+    console.log("calling effect - " + props.creator.ucid)
     if(videos.length === 0 && innertube.ready) {
       console.log("fetching videos")
       const fetchVideos = async () => {
-        const videoData = getVideosByChannelId(innertube, props.creator.creatorId_yt);
+        const videoData = getVideosByChannelId(innertube, props.creator.ucid);
 
-		console.log("fetch complete - " + props.creator.creatorId_yt);
+		console.log("fetch complete - " + props.creator.ucid);
 
         setVideos(videoData);
       }
@@ -40,17 +39,13 @@ export function CreatorRow( props : CreatorRowProps) {
     <section className="creator-row">
       <CreatorInfo creator={props.creator} state={props.state} dispatch={props.dispatch} />
 
-      <div className="video-strip">
-        {getVideosByIds(props.creator.videoIds).map((video) => (
-          <VideoCard
-            key={video.videoId_yt}
-            video={video}
-            state={props.state}
-            displayCreator={false}
-            dispatch={props.dispatch}
-          />
-        ))}
-      </div>
+      <VideoStrip
+        key={props.creator.ucid}
+        state={props.state}
+        videoIds={Object.values(props.creator.videos).map((video) => [props.creator.ucid, video.video_id])}
+        dispatch={props.dispatch}
+        displayCreator={false}
+      />
     </section>
   );
 }

@@ -11,7 +11,7 @@ import { AboutUsPage } from '../pages/AboutUsPage';
 import { PlaylistsPage } from '../pages/PlaylistsPage';
 import { NavBar } from '../features/nav/NavBar';
 import { AppRoutes } from '../features/nav/routes';
-import {reducer, initialState} from '../state/state';
+import { reducer, initialState } from '../state/state';
 import { loadState, saveState } from '../storage/storage';
 import { SearchPage } from "../pages/SearchPage";
 import { getInnertube, getDummyInnertube } from "../services/innertube.js";

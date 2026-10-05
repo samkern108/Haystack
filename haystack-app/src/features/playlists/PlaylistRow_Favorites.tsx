@@ -1,10 +1,9 @@
 import { useMemo, useState } from "react";
-import { VideoCard } from "../videos/VideoCard";
 import type { State, Action } from "../../state/state";
-import { getVideosByIds } from "../../utils/videohelpers";
 import { SYSTEM_VIDEO_LABELS } from "../labels/labels";
 import './PlaylistRow.css'
 import { LoveIcon, StarIcon } from "../labels/icons";
+import { VideoStrip } from "../videos/VideoStrip";
 
 interface PlaylistRow_FavoritesProps {
   state: State;
@@ -16,9 +15,6 @@ export function PlaylistRow_Favorites(props: PlaylistRow_FavoritesProps) {
 
   const playlistState_Star = props.state.playlists["star"];
   const playlistState_Heart = props.state.playlists["love"];
-
-  const playlistVideos_Star = getVideosByIds(playlistState_Star.videoIds);
-  const playlistVideos_Heart = getVideosByIds(playlistState_Heart.videoIds);
 
   const sectionTitle = useMemo(() => {
     switch (filter) {
@@ -36,15 +32,15 @@ export function PlaylistRow_Favorites(props: PlaylistRow_FavoritesProps) {
   const displayedVideos = useMemo(() => {
     switch (filter) {
       case "star":
-        return playlistVideos_Star;
+        return playlistState_Star.videoIds;
 
       case "love":
-        return playlistVideos_Heart;
+        return playlistState_Heart.videoIds;
 
       default:
-        return [...playlistVideos_Star, ...playlistVideos_Heart];
+        return [...playlistState_Star.videoIds, ...playlistState_Heart.videoIds];
     }
-  }, [filter, playlistVideos_Star, playlistVideos_Heart]);
+  }, [filter, playlistState_Star, playlistState_Heart]);
 
   const videoLabel_Star = SYSTEM_VIDEO_LABELS.find(
     (b) => b.id === playlistState_Star.videoLabelId
@@ -91,17 +87,8 @@ export function PlaylistRow_Favorites(props: PlaylistRow_FavoritesProps) {
         <h2>{sectionTitle}</h2>
       </div>
 
-      <div className="video-strip">
-        {displayedVideos.map((video) => (
-          <VideoCard
-            key={video.videoId_yt}
-            video={video}
-            state={props.state}
-            displayCreator={true}
-            dispatch={props.dispatch}
-          />
-        ))}
-      </div>
+      <VideoStrip state={props.state} videoIds={displayedVideos} dispatch={props.dispatch} displayCreator={false}>
+      </VideoStrip>
     </section>
   );
 }
