@@ -3,7 +3,6 @@ import './VideoPage.css'
 import type { Action, State } from "../state/state";
 import LabelSelector from "../features/labels/LabelSelector";
 import { getCreatorById, getVideoById } from "../utils/videohelpers";
-import { VideoCard } from "../features/videos/VideoCard";
 import { type Creator, type Video} from "../state/types";
 import { VideoStrip } from "../features/videos/VideoStrip";
 

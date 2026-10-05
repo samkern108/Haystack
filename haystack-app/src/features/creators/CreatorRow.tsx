@@ -5,9 +5,9 @@ import { CreatorInfo } from "./CreatorInfo";
 import type { State, Action } from "../../state/state";
 import { InnertubeContext } from "../../contexts/InnertubeContext";
 import { getVideosByChannelId } from "../../services/innertube.js";
+import { VideoStrip } from "../videos/VideoStrip.js";
 import './CreatorRow.css'
 import '../videos/VideoCard.css'
-import { VideoStrip } from "../videos/VideoStrip.js";
 
 interface CreatorRowProps {
   creator: Creator;

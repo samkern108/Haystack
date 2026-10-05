@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 
 import "./VideoFilterMenu.scss";
 import { TimeFilterSelector } from "./TimeFilterSelector";
+import type { State } from "../../state/state";
 
+// TODO(samkern) Figure out if you want to incorporate this into State lol
 type CreatorFilter = "followed" | "unfollowed" | "both";
 type WatchedFilter = "yes" | "no" | "both";
 
@@ -22,7 +24,11 @@ const DEFAULT_FILTERS: VideoFilterState = {
 
 const FILTER_STORAGE_KEY = "video-filters";
 
-export function VideoFilterMenu() {
+interface VideoFilterMenuProps {
+  state: State;
+}
+
+export function VideoFilterMenu(props: VideoFilterMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const [filters, setFilters] = useState<VideoFilterState>(() => {

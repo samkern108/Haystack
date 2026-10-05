@@ -18,11 +18,11 @@ export interface Video {
   title: string;
   thumbnail_url: string;
   timecode: string;
-  // creatorId_yt: string;
-  // Do we need this? ^
 }
 
 export type Creators = Record<string, Creator>;
 
+// TODO(Sam)
+// This should DEFINITELY not live in this file
 export const AllCreators: Record<string, Creator> = creatorsData;
 console.log("AllCreators loaded:", Object.keys(AllCreators).length, "creators");
