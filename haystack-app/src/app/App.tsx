@@ -46,7 +46,7 @@ export default function App() {
   return (
     <div>
       <InnertubeContext value={innertube}>
-        <NavBar></NavBar>
+        <NavBar state={state} dispatch={dispatch} />
           <Routes>
             <Route path={AppRoutes.HOME} element={<HomePage state={state} dispatch={dispatch} />} />
             <Route path={AppRoutes.CREATORS} element={<CreatorsPage state={state} dispatch={dispatch} />} />

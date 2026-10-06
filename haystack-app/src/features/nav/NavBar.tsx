@@ -2,8 +2,14 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import './NavBar.scss';
 import { VideoFilterMenu } from "../videos/VideoFilterMenu";
+import type { Action, State } from "../../state/state";
 
-export function NavBar() {
+interface NavBarProps {
+  state: State;
+  dispatch: React.ActionDispatch<[action: Action]>;
+}
+
+export function NavBar(props: NavBarProps) {
 
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
@@ -46,7 +52,7 @@ export function NavBar() {
           Add A Creator
         </NavLink>
 
-        <VideoFilterMenu />
+        <VideoFilterMenu state={props.state} dispatch={props.dispatch} />
 
         <NavLink
           to="/profile"

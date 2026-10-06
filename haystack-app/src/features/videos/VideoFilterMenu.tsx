@@ -1,82 +1,59 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import "./VideoFilterMenu.scss";
 import { TimeFilterSelector } from "./TimeFilterSelector";
-import type { State } from "../../state/state";
+import { getVideoFilters, type State, type VideoFilterState } from "../../state/state";
 
-// TODO(samkern) Figure out if you want to incorporate this into State lol
-type CreatorFilter = "followed" | "unfollowed" | "both";
-type WatchedFilter = "yes" | "no" | "both";
+export type CreatorFilter = "followed" | "unfollowed" | "both";
+export type WatchedFilter = "yes" | "no" | "both";
 
-interface VideoFilterState {
-  creator: CreatorFilter;
-  watched: WatchedFilter;
-  minTime: number;
-  maxTime: number;
-}
-
-const DEFAULT_FILTERS: VideoFilterState = {
-  creator: "both",
-  watched: "both",
-  minTime: 0,
-  maxTime: 240,
-};
-
-const FILTER_STORAGE_KEY = "video-filters";
+// TODO(samkern):
+// there's a bug here I don't wanna fix right now :(
+// videos longer than 4h will NEVER DISPLAY because of the way filter
+// logic is coded.
 
 interface VideoFilterMenuProps {
   state: State;
+  dispatch: React.ActionDispatch<[
+    action: { type: "SET_VIDEO_FILTERS"; filters: VideoFilterState }
+  ]>;
 }
 
 export function VideoFilterMenu(props: VideoFilterMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const [filters, setFilters] = useState<VideoFilterState>(() => {
-    const saved = localStorage.getItem(FILTER_STORAGE_KEY);
+  const filters = getVideoFilters(props.state);
 
-    if (!saved) {
-      return DEFAULT_FILTERS;
-    }
-
-    try {
-      return {
-        ...DEFAULT_FILTERS,
-        ...JSON.parse(saved),
-      };
-    } catch {
-      return DEFAULT_FILTERS;
-    }
-  });
-
-  useEffect(() => {
-    localStorage.setItem(
-      FILTER_STORAGE_KEY,
-      JSON.stringify(filters)
-    );
-  }, [filters]);
+  function updateFilters(update: Partial<VideoFilterState>) {
+    props.dispatch({
+      type: "SET_VIDEO_FILTERS",
+      filters: {
+        ...filters,
+        ...update,
+      },
+    });
+  }
 
   function cycleCreatorFilter() {
-    setFilters(current => ({
-      ...current,
+    updateFilters({
       creator:
-        current.creator === "both"
+        filters.creator === "both"
           ? "followed"
-          : current.creator === "followed"
+          : filters.creator === "followed"
             ? "unfollowed"
             : "both",
-    }));
+    });
   }
 
   function cycleWatchedFilter() {
-    setFilters(current => ({
-      ...current,
+    updateFilters({
       watched:
-        current.watched === "both"
+        filters.watched === "both"
           ? "yes"
-          : current.watched === "yes"
+          : filters.watched === "yes"
             ? "no"
             : "both",
-    }));
+    });
   }
 
   return (
@@ -119,16 +96,10 @@ export function VideoFilterMenu(props: VideoFilterMenuProps) {
               minTime={filters.minTime}
               maxTime={filters.maxTime}
               onMinTimeChange={(minTime) =>
-                setFilters(current => ({
-                  ...current,
-                  minTime,
-                }))
+                updateFilters({ minTime })
               }
               onMaxTimeChange={(maxTime) =>
-                setFilters(current => ({
-                  ...current,
-                  maxTime,
-                }))
+                updateFilters({ maxTime })
               }
             />
           </div>

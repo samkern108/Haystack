@@ -1,11 +1,19 @@
 const MAX_TIME = 240;
 
-function snapTime(value: number) {
+function snapMaxTime(value: number) {
+  if (value === 0) value = 5; // To prevent max and min from being the same, which breaks the scrollbar.
   if (value <= 60) {
     return Math.round(value / 5) * 5;
   }
+  return Math.round(value / 10) * 10;
+}
 
-  return Math.round(value / 30) * 30;
+function snapMinTime(value: number) {
+  if (value === MAX_TIME) value = MAX_TIME - 10; // To prevent max and min from being the same, which breaks the scrollbar.
+  if (value <= 60) {
+    return Math.round(value / 5) * 5;
+  }
+  return Math.round(value / 10) * 10;
 }
 
 function formatTime(minutes: number, isMax = false) {
@@ -41,12 +49,12 @@ export function TimeFilterSelector({
   onMaxTimeChange,
 }: TimeFilterSelectorProps) {
   function handleMinChange(value: number) {
-    const snapped = snapTime(value);
+    const snapped = snapMinTime(value);
     onMinTimeChange(Math.min(snapped, maxTime));
   }
 
   function handleMaxChange(value: number) {
-    const snapped = snapTime(value);
+    const snapped = snapMaxTime(value);
     onMaxTimeChange(Math.max(snapped, minTime));
   }
 

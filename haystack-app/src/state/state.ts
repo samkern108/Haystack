@@ -1,4 +1,5 @@
 import type { VideoLabelId, VideoLabel, VideoLabelIdOrNone } from "../features/labels/labels";
+import type { CreatorFilter, WatchedFilter } from "../features/videos/VideoFilterMenu";
 import { AllCreators } from "./types";
 
 /* -----------------------------
@@ -18,6 +19,13 @@ export interface CreatorState {
   videos?: Record<string, VideoState>;
 }
 
+export interface VideoFilterState {
+  creator: CreatorFilter;
+  watched: WatchedFilter;
+  minTime: number;
+  maxTime: number;
+}
+
 export interface PlaylistState {
   id: string;
   name: string;
@@ -30,6 +38,7 @@ export interface PlaylistState {
 export interface State {
   creators: Record<string, CreatorState>;
   playlists: Record<string, PlaylistState>;
+  videoFilters: VideoFilterState;
 }
 
 /* -----------------------------
@@ -37,6 +46,10 @@ export interface State {
 ------------------------------ */
 
 export type Action =
+  | {
+      type: "SET_VIDEO_FILTERS";
+      filters: VideoFilterState;
+    }
   | {
       type: "TOGGLE_CREATOR_FLAG";
       creatorId: string;
@@ -70,6 +83,13 @@ export type Action =
 /* -----------------------------
    INITIAL STATE
 ------------------------------ */
+
+export const DEFAULT_VIDEO_FILTERS: VideoFilterState = {
+  creator: "both",
+  watched: "both",
+  minTime: 0,
+  maxTime: 240,
+};
 
 function createInitialPlaylists(): Record<string, PlaylistState> {
   const initialPlaylists = {} as Record<string, PlaylistState>;
@@ -118,6 +138,7 @@ export const initialState: State = {
     return acc;
   }, {} as Record<string, CreatorState>),
   playlists: createInitialPlaylists(),
+  videoFilters: DEFAULT_VIDEO_FILTERS,
 };
 
 /* -----------------------------
@@ -134,6 +155,10 @@ export function getCreator(state: State, creatorId: string): CreatorState {
 
 export function getVideo(state: State, creatorId: string, videoId: string): VideoState {
   return state.creators?.[creatorId]?.videos?.[videoId] ?? {};
+}
+
+export function getVideoFilters(state: State): VideoFilterState {
+  return state.videoFilters ?? DEFAULT_VIDEO_FILTERS;
 }
 
 /* -----------------------------
@@ -189,6 +214,13 @@ function toggleVideoInPlaylist(
 
 export function reducer(state: State, action: Action): State {
   switch (action.type) {
+    
+    case "SET_VIDEO_FILTERS": {
+      return {
+        ...state,
+        videoFilters: action.filters
+      };
+    }
 
     case "TOGGLE_CREATOR_FLAG": {
       const { creatorId, field } = action;
