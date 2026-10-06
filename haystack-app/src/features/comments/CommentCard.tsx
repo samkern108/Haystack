@@ -6,6 +6,7 @@ import '../ui/styles/LinedPaper.scss'
 
 interface CommentCardProps {
   onClose: () => void;
+  creatorId: string;
   video: Video;
   dispatch: React.ActionDispatch<[action: Action]>;
   comment?: string;
@@ -18,8 +19,8 @@ export function CommentCard(props: CommentCardProps) {
     function saveComment(comment: string) {
         props.dispatch({
             type: "SET_COMMENT",
-            creatorId: props.video.creatorId_yt,
-            videoId: props.video.videoId_yt,
+            creatorId: props.creatorId,
+            videoId: props.video.video_id,
             comment: comment,
         });
 

@@ -120,7 +120,7 @@ export function VideoCard( props : VideoCardProps) {
     { hover.hovered && renderVideoCardPopover(props, navigate) }
 
     {commentCardOpen && (
-      <CommentCard video={props.video} dispatch={props.dispatch} onClose={closeCommentCard} comment={videoState?.comment}/>
+      <CommentCard creatorId={props.creator.ucid} video={props.video} dispatch={props.dispatch} onClose={closeCommentCard} comment={videoState?.comment}/>
     )}
     </div>
   );
