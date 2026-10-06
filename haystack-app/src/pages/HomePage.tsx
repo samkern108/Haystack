@@ -1,6 +1,6 @@
 import type { Action, State } from "../state/state";
 import { TestButton } from "../features/ui/TestButton";
-import { AllCreators } from "../state/types";
+import { AllCreators, type Creator } from "../state/types";
 import { CreatorRow } from "../features/creators/CreatorRow";
 import { useEffect, useRef, useState } from "react";
 
@@ -18,6 +18,21 @@ export function HomePage(props: HomePageProps) {
   const [loadAmount, setLoadAmount] = useState(10);
   const lastLoadHeight = useRef(0);
 
+  // Remove creators based on the user's defined filters.
+  const creatorsList: Creator[] = Object.values(AllCreators).filter(creator => {
+    const creatorState = props.state.creators[creator.ucid];
+
+    if (props.state.videoFilters.creator === "unfollowed") {
+      return !creatorState.followed;
+    }
+
+    if (props.state.videoFilters.creator === "followed") {
+      return creatorState.followed;
+    }
+
+    return true;
+  });
+
   useEffect(() => {
     const handleScroll = () => {
       const scrollHeight = document.documentElement.scrollHeight;
@@ -33,7 +48,7 @@ export function HomePage(props: HomePageProps) {
         lastLoadHeight.current = scrollHeight;
 
         setLoadAmount((prev) =>
-          Math.min(prev + 10, Object.values(AllCreators).length)
+          Math.min(prev + 10, creatorsList.length)
         );
       }
     };
@@ -46,12 +61,17 @@ export function HomePage(props: HomePageProps) {
   }, []);
   // END SCROLL LOGIC
 
+  if (!creatorsList || creatorsList.length === 0) {
+    return <></>;
+  }
+    
+
   return (
     <div style={{marginTop: 24}}>
       <TestButton />
 
       <section className="video-grid">
-        {Object.values(AllCreators).slice(0, loadAmount).map((creator) => {
+        {creatorsList.slice(0, loadAmount).map((creator) => {
           return (
             <CreatorRow
               key={creator.ucid}

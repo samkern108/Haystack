@@ -22,13 +22,13 @@ export function CreatorRow( props : CreatorRowProps) {
   const filters = props.state.videoFilters;
 
   useEffect(() => {
-    console.log("calling effect - " + props.creator.ucid)
+    // console.log("calling effect - " + props.creator.ucid)
     if(videos.length === 0 && innertube.ready) {
       console.log("fetching videos")
       const fetchVideos = async () => {
         const videoData = getVideosByChannelId(innertube, props.creator.ucid);
 
-		console.log("fetch complete - " + props.creator.ucid);
+		 // console.log("fetch complete - " + props.creator.ucid);
 
         setVideos(videoData);
       }
@@ -42,13 +42,31 @@ export function CreatorRow( props : CreatorRowProps) {
   // TODO(samkern): Is there a better way to do this
   // to avoid load calls taking SUCH a long time while dragging the
   // filter bar?
+
+  const creatorState = props.state.creators[props.creator.ucid];
+
+  // TIME FILTER LOGIC & WATCHED FILTER LOGIC
   Object.values(props.creator.videos).forEach((video) => {
+    // TODO(samkern)
+    // Put this in a helper function in videoHelpers that also checks
+    // a "manualWatchTriggered" flag
+    const watched = creatorState.videos[video.video_id].historicalMaxWatchPercentage > .9;
+    console.log('watchpercentage ' + creatorState.videos[video.video_id].historicalMaxWatchPercentage);
+
+
+    // WATCHED
+    if ((filters.watched === 'no' && watched) || (filters.watched === 'yes' && !watched)) {
+      return;
+    }
+
+    // TIME
     const duration = getDurationInSecondsFromTimecode(video.timecode);
     if (duration <= (filters.maxTime * 60) && duration >= (filters.minTime * 60)) {
       videoIds.push([props.creator.ucid, video.video_id]);
     }
   });
 
+  // If all the videos have been filtered out... don't show the creator row lol
   if(videoIds.length === 0) {
     return <></>
   }

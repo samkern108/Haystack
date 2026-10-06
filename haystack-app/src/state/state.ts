@@ -7,16 +7,19 @@ import { AllCreators } from "./types";
 ------------------------------ */
 
 export interface VideoState {
-  watchPercentage?: number;
+  currentWatchPercentage: number;
+  historicalMaxWatchPercentage: number;
+  // TODO(samkern) – add the ability for users to manually mark a video as "watched"
+  // then set the historicalMaxWatchPercentage as 100%
   videoLabelId?: VideoLabelIdOrNone;
   comment?: string;
 }
 
 export interface CreatorState {
-  followed?: boolean;
-  favorite?: boolean;
+  followed: boolean;
+  favorite: boolean;
   doNotShow?: boolean;
-  videos?: Record<string, VideoState>;
+  videos: Record<string, VideoState>;
 }
 
 export interface VideoFilterState {
@@ -128,7 +131,8 @@ export const initialState: State = {
       doNotShow: false,
       videos: Object.keys(creator.videos).reduce((videoAcc, videoId) => {
         videoAcc[videoId] = {
-          watchPercentage: 0,
+          currentWatchPercentage: 0,
+          historicalMaxWatchPercentage: 0,
           videoLabelId: null,
           comment: "",
         };
@@ -153,7 +157,7 @@ export function getCreator(state: State, creatorId: string): CreatorState {
   return state.creators?.[creatorId] ?? {};
 }
 
-export function getVideo(state: State, creatorId: string, videoId: string): VideoState {
+export function getVideo(state: State, creatorId: string, videoId: string): VideoState | {} {
   return state.creators?.[creatorId]?.videos?.[videoId] ?? {};
 }
 
@@ -311,6 +315,8 @@ export function reducer(state: State, action: Action): State {
       const videos = creator.videos ?? {};
       const video = videos[videoId] ?? {};
 
+      const maxValue = (value > video.historicalMaxWatchPercentage) ? value : video.historicalMaxWatchPercentage;
+
       return {
         ...state,
         creators: {
@@ -321,8 +327,9 @@ export function reducer(state: State, action: Action): State {
               ...videos,
               [videoId]: {
                 ...video,
-                watchPercentage: value
-              }
+                currentWatchPercentage: value,
+                historicalMaxWatchPercentage: maxValue,
+              } 
             }
           }
         }

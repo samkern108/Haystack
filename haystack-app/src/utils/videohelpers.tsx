@@ -18,6 +18,5 @@ export function getDurationInSecondsFromTimecode(timecode: string): number {
   for (let i = 0; i < parts.length; i++) {
     duration += parts[parts.length - 1 - i] * Math.pow(60, i);
   }
-  console.log(`Timecode: ${timecode}, Duration: ${duration} seconds`);
   return duration;
 } 

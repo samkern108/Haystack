@@ -5,6 +5,7 @@ import LabelSelector from "../features/labels/LabelSelector";
 import { getCreatorById, getVideoById } from "../utils/videohelpers";
 import { type Creator, type Video} from "../state/types";
 import { VideoStrip } from "../features/videos/VideoStrip";
+import { useEffect, useRef } from "react";
 
 interface VideoPageProps {
   state: State;
@@ -24,9 +25,7 @@ function renderOtherVideosFromCreator(creator: Creator, activeVideoId: string, p
     }
   });
 
-  if (returnVideos.length === 0) {
-    return (<></>);
-  }
+  if (returnVideos.length === 0) return (<></>);
   
   return (
     <section className="creator-videos">
@@ -41,9 +40,31 @@ function renderOtherVideosFromCreator(creator: Creator, activeVideoId: string, p
     </section>);
 }
 
+function loadYouTubeAPI(): Promise<typeof YT> {
+  return new Promise((resolve) => {
+    if (window.YT) {
+      resolve(window.YT);
+      return;
+    }
+
+    window.onYouTubeIframeAPIReady = () => {
+      resolve(window.YT);
+    };
+
+    const script = document.createElement("script");
+    script.src = "https://www.youtube.com/iframe_api";
+    script.async = true;
+
+    document.body.appendChild(script);
+  });
+}
+
 export function VideoPage(props: VideoPageProps) {
 
-const { creatorId, videoId } = useParams();
+  const playerRef = useRef<YT.Player | null>(null);
+  const watchIntervalRef = useRef<number | null>(null);
+
+  const { creatorId, videoId } = useParams();
 
   if (!creatorId) return <p>Creator not found.</p>;
   if (!videoId) return <p>Video not found.</p>;
@@ -53,16 +74,86 @@ const { creatorId, videoId } = useParams();
   if (!video) return <p>Video not found.</p>;
 
   const creator = getCreatorById(creatorId);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  const recordWatchProgress = () => {
+    const player = playerRef.current;
+
+    if (!player) return;
+
+    const currentTime = player.getCurrentTime();
+    const duration = player.getDuration();
+
+    if (!duration) return;
+
+    const percentage = currentTime / duration;
+
+    console.log("Watch percentage:", percentage);
+
+    props.dispatch({
+      type: "SET_WATCH_PERCENTAGE",
+      creatorId: creatorId,
+      videoId: videoId,
+      value: percentage,
+    });
+
+  };
+
+  const startWatchTracking = () => {
+    if (watchIntervalRef.current !== null) return;
+
+    watchIntervalRef.current = window.setInterval(() => {
+      recordWatchProgress();
+    }, 1000);
+  };
+
+  const stopWatchTracking = () => {
+    if (watchIntervalRef.current !== null) {
+      window.clearInterval(watchIntervalRef.current);
+      watchIntervalRef.current = null;
+    }
+  };
+
+    useEffect(() => {
+    let cancelled = false;
+
+    loadYouTubeAPI().then(() => {
+      if (cancelled || !iframeRef.current) return;
+
+      playerRef.current = new YT.Player(iframeRef.current, {
+        events: {
+          onReady: () => {
+            console.log("YouTube player ready!");
+          },
+
+          onStateChange: (event) => {
+            if (event.data === YT.PlayerState.PLAYING) {
+              startWatchTracking();
+            } else {
+              stopWatchTracking();
+            }
+          },
+        },
+      });
+    });
+
+    return () => {
+      cancelled = true;
+      playerRef.current?.destroy();
+      playerRef.current = null;
+    };
+  }, []);
 
   return (
     <div id="video-page">
       <section id="video-player">
         <iframe
+          ref={iframeRef}
           width="100%"
           height="600"
-          src={`https://www.youtube-nocookie.com/embed/${videoId}`}
+          src={`https://www.youtube-nocookie.com/embed/${videoId}?enablejsapi=1&origin=${window.location.origin}`}
           allowFullScreen
-        />  
+        />
       </section>
 
       <section id="video-header">
