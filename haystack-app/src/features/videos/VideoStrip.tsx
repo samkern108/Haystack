@@ -1,5 +1,5 @@
 import { VideoCard } from "../videos/VideoCard";
-import type { State, Action } from "../../state/state";
+import { type State, type Action, getVideoState } from "../../state/state";
 import { getCreatorById } from "../../utils/videohelpers";
 import '../videos/VideoCard.css'
 import '../videos/VideoStrip.css'
@@ -25,12 +25,19 @@ export function VideoStrip( props : VideoStripProps) {
                 console.error(`Video not found for ID: ${videoId} in creator ${creatorId}`);
                 return null;
             }
+
+            const videoState = getVideoState(props.state, creatorId, videoId);
+            if (!videoState) {
+                console.error(`Video state not found for ID: ${videoId} in creator ${creatorId}`);
+                return null;
+            }
+
             return (
                 <VideoCard
                     key={video.video_id}
                     creator={creator}
                     video={video}
-                    state={props.state}
+                    videoState={videoState}
                     displayCreator={props.displayCreator}
                     dispatch={props.dispatch}
                 />

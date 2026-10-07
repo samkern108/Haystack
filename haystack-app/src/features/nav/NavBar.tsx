@@ -1,7 +1,7 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import './NavBar.scss';
-import { VideoFilterMenu } from "../videos/VideoFilterMenu";
+import { VideoFilterMenu } from "../filtering/VideoFilterMenu";
 import type { Action, State } from "../../state/state";
 
 interface NavBarProps {

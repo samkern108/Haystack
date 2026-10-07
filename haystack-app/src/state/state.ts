@@ -1,5 +1,5 @@
 import type { VideoLabelId, VideoLabel, VideoLabelIdOrNone } from "../features/labels/labels";
-import type { CreatorFilter, WatchedFilter } from "../features/videos/VideoFilterMenu";
+import type { CreatorFilter, WatchedFilter } from "../features/filtering/VideoFilterMenu";
 import { sameVideo } from "../utils/videohelpers";
 import { AllCreators } from "./types";
 
@@ -20,7 +20,7 @@ export interface CreatorState {
   followed: boolean;
   favorite: boolean;
   doNotShow?: boolean;
-  videos: Record<string, VideoState>;
+  videoStates: Record<string, VideoState>;
 }
 
 export interface VideoFilterState {
@@ -40,9 +40,9 @@ export interface PlaylistState {
 }
 
 export interface State {
-  creators: Record<string, CreatorState>;
-  playlists: Record<string, PlaylistState>;
-  videoFilters: VideoFilterState;
+  creatorStates: Record<string, CreatorState>;
+  playlistStates: Record<string, PlaylistState>;
+  videoFilterStates: VideoFilterState;
 }
 
 /* -----------------------------
@@ -95,7 +95,7 @@ export const DEFAULT_VIDEO_FILTERS: VideoFilterState = {
   maxTime: 240,
 };
 
-function createInitialPlaylists(): Record<string, PlaylistState> {
+function createInitialPlaylistStates(): Record<string, PlaylistState> {
   const initialPlaylists = {} as Record<string, PlaylistState>;
   initialPlaylists['love'] = {
     id: 'love',
@@ -125,12 +125,12 @@ function createInitialPlaylists(): Record<string, PlaylistState> {
 // Depending on how we retrieve new creators from the backend,
 // we may want to initialize differently (or repeatedly)
 export const initialState: State = {
-  creators: Object.values(AllCreators).reduce((acc, creator) => {
+  creatorStates: Object.values(AllCreators).reduce((acc, creator) => {
     acc[creator.ucid] = {
       followed: false,
       favorite: false,
       doNotShow: false,
-      videos: Object.keys(creator.videos).reduce((videoAcc, videoId) => {
+      videoStates: Object.keys(creator.videos).reduce((videoAcc, videoId) => {
         videoAcc[videoId] = {
           currentWatchPercentage: 0,
           historicalMaxWatchPercentage: 0,
@@ -142,28 +142,28 @@ export const initialState: State = {
     };
     return acc;
   }, {} as Record<string, CreatorState>),
-  playlists: createInitialPlaylists(),
-  videoFilters: DEFAULT_VIDEO_FILTERS,
+  playlistStates: createInitialPlaylistStates(),
+  videoFilterStates: DEFAULT_VIDEO_FILTERS,
 };
 
 /* -----------------------------
    SAFE READ HELPERS
 ------------------------------ */
 
-export function getPlaylist(state: State, playlistId: string): PlaylistState {
-  return state.playlists?.[playlistId] ?? {};
+export function getPlaylistState(state: State, playlistId: string): PlaylistState {
+  return state.playlistStates?.[playlistId] ?? {};
 }
 
-export function getCreator(state: State, creatorId: string): CreatorState {
-  return state.creators?.[creatorId] ?? {};
+export function getCreatorState(state: State, creatorId: string): CreatorState {
+  return state.creatorStates?.[creatorId] ?? {};
 }
 
-export function getVideo(state: State, creatorId: string, videoId: string): VideoState | {} {
-  return state.creators?.[creatorId]?.videos?.[videoId] ?? {};
+export function getVideoState(state: State, creatorId: string, videoId: string): VideoState | undefined {
+  return state.creatorStates?.[creatorId]?.videoStates?.[videoId] ?? undefined;
 }
 
-export function getVideoFilters(state: State): VideoFilterState {
-  return state.videoFilters ?? DEFAULT_VIDEO_FILTERS;
+export function getVideoFilterStates(state: State): VideoFilterState {
+  return state.videoFilterStates ?? DEFAULT_VIDEO_FILTERS;
 }
 
 /* -----------------------------
@@ -175,19 +175,19 @@ function toggleVideoInPlaylist(
   playlistId: string,
   videoId: [creatorId: string, videoId: string]
 ): State {
-  const playlist = getPlaylist(state, playlistId);
-  const playlists = { ...state.playlists };
+  const playlistState = getPlaylistState(state, playlistId);
+  const playlistStates = { ...state.playlistStates };
 
   // If this is an exclusive playlist, remove the video
   // from all other exclusive playlists.
-  if (playlist.exclusive) {
-    Object.entries(playlists).forEach(([otherPlaylistId, otherPlaylist]) => {
+  if (playlistState.exclusive) {
+    Object.entries(playlistStates).forEach(([otherPlaylistId, otherPlaylist]) => {
       if (
         otherPlaylistId !== playlistId &&
         otherPlaylist.exclusive &&
         otherPlaylist.videoIds.some(id => sameVideo(id, videoId))
       ) {
-        playlists[otherPlaylistId] = {
+        playlistStates[otherPlaylistId] = {
           ...otherPlaylist,
           videoIds: otherPlaylist.videoIds.filter(
             id => !sameVideo(id, videoId)
@@ -197,21 +197,21 @@ function toggleVideoInPlaylist(
     });
   }
 
-  const currentVideos = playlists[playlistId].videoIds;
+  const currentVideos = playlistStates[playlistId].videoIds;
   const alreadyIncluded = currentVideos.some(id => sameVideo(id, videoId));
 
   const nextVideos = alreadyIncluded
     ? currentVideos.filter(id => !sameVideo(id, videoId))
     : [...currentVideos, videoId];
 
-  playlists[playlistId] = {
-    ...playlists[playlistId],
+  playlistStates[playlistId] = {
+    ...playlistStates[playlistId],
     videoIds: nextVideos,
   };
 
   return {
     ...state,
-    playlists,
+    playlistStates,
   };
 }
 
@@ -225,19 +225,19 @@ export function reducer(state: State, action: Action): State {
     case "SET_VIDEO_FILTERS": {
       return {
         ...state,
-        videoFilters: action.filters
+        videoFilterStates: action.filters
       };
     }
 
     case "TOGGLE_CREATOR_FLAG": {
       const { creatorId, field } = action;
 
-      const creator = getCreator(state, creatorId);
+      const creator = getCreatorState(state, creatorId);
 
       return {
         ...state,
-        creators: {
-          ...state.creators,
+        creatorStates: {
+          ...state.creatorStates,
           [creatorId]: {
             ...creator,
             [field]: !creator[field]
@@ -259,8 +259,8 @@ export function reducer(state: State, action: Action): State {
       } as PlaylistState;
       return {
         ...state,
-        playlists: {
-          ...state.playlists,
+        playlistStates: {
+          ...state.playlistStates,
           [playlistId]: playlist,
         },
       };
@@ -269,8 +269,8 @@ export function reducer(state: State, action: Action): State {
     case "SET_VIDEO_LABEL": {
       const { creatorId, videoId, videoLabel } = action;
 
-      const creator = getCreator(state, creatorId);
-      const videos = creator.videos ?? {};
+      const creator = getCreatorState(state, creatorId);
+      const videos = creator.videoStates ?? {};
       const video = videos[videoId] ?? {};
 
       const current = video.videoLabelId ?? null;
@@ -282,22 +282,23 @@ export function reducer(state: State, action: Action): State {
         current === videoLabel.id
           ? null
           : videoLabel.id;
-      
+
+      let nextState = state;
       if (videoLabel.associatedPlaylistId) {
-        state = toggleVideoInPlaylist(
-          state,
+        nextState = toggleVideoInPlaylist(
+          nextState,
           videoLabel.associatedPlaylistId,
           [creatorId, videoId]
         );
       }
 
       return {
-        ...state,
-        creators: {
-          ...state.creators,
+        ...nextState,
+        creatorStates: {
+          ...nextState.creatorStates,
           [creatorId]: {
             ...creator,
-            videos: {
+            videoStates: {
               ...videos,
               [videoId]: {
                 ...video,
@@ -312,19 +313,19 @@ export function reducer(state: State, action: Action): State {
     case "SET_WATCH_PERCENTAGE": {
       const { creatorId, videoId, value } = action;
 
-      const creator = getCreator(state, creatorId);
-      const videos = creator.videos ?? {};
+      const creator = getCreatorState(state, creatorId);
+      const videos = creator.videoStates ?? {};
       const video = videos[videoId] ?? {};
 
       const maxValue = (value > video.historicalMaxWatchPercentage) ? value : video.historicalMaxWatchPercentage;
 
       return {
         ...state,
-        creators: {
-          ...state.creators,
+        creatorStates: {
+          ...state.creatorStates,
           [creatorId]: {
             ...creator,
-            videos: {
+            videoStates: {
               ...videos,
               [videoId]: {
                 ...video,
@@ -340,17 +341,17 @@ export function reducer(state: State, action: Action): State {
     case "SET_COMMENT": {
       const { creatorId, videoId, comment } = action;
 
-      const creator = getCreator(state, creatorId);
-      const videos = creator.videos ?? {};
+      const creator = getCreatorState(state, creatorId);
+      const videos = creator.videoStates ?? {};
       const video = videos[videoId] ?? {};
 
       return {
         ...state,
-        creators: {
-          ...state.creators,
+        creatorStates: {
+          ...state.creatorStates,
           [creatorId]: {
             ...creator,
-            videos: {
+            videoStates: {
               ...videos,
               [videoId]: {
                 ...video,

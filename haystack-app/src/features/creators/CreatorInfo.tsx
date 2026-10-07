@@ -14,7 +14,7 @@ interface CreatorInfoProps {
 export function CreatorInfo(props: CreatorInfoProps) {
   const hover = useDelayedHover(50);
 
-  const creatorState = props.state.creators?.[props.creator.ucid];
+  const creatorState = props.state.creatorStates?.[props.creator.ucid];
 
   function handleExploreButtonClick() {
     

@@ -20,13 +20,13 @@ export function HomePage(props: HomePageProps) {
 
   // Remove creators based on the user's defined filters.
   const creatorsList: Creator[] = Object.values(AllCreators).filter(creator => {
-    const creatorState = props.state.creators[creator.ucid];
+    const creatorState = props.state.creatorStates[creator.ucid];
 
-    if (props.state.videoFilters.creator === "unfollowed") {
+    if (props.state.videoFilterStates.creator === "unfollowed") {
       return !creatorState.followed;
     }
 
-    if (props.state.videoFilters.creator === "followed") {
+    if (props.state.videoFilterStates.creator === "followed") {
       return creatorState.followed;
     }
 

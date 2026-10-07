@@ -36,12 +36,14 @@ export function PlaylistRow( props : PlaylistRowProps) {
             console.error(`Video not found for ID: ${videoId} in creator ${creatorId}`);
             return null;
           }
+          const videoState = props.state.creatorStates?.[creator.ucid] ?.videoStates?.[video.video_id];
+          
           return (
             <VideoCard
               key={video.video_id}
               creator={creator}
               video={video}
-              state={props.state}
+              videoState={videoState}
               displayCreator={true}
               dispatch={props.dispatch}
             />

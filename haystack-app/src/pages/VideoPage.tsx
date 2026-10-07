@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import './VideoPage.css'
-import type { Action, State } from "../state/state";
+import { getVideoState, type Action, type State } from "../state/state";
 import LabelSelector from "../features/labels/LabelSelector";
 import { getCreatorById, getVideoById } from "../utils/videohelpers";
 import { type Creator, type Video} from "../state/types";
@@ -19,7 +19,7 @@ function renderOtherVideosFromCreator(creator: Creator, activeVideoId: string, p
  
   Object.values(allCreatorVideos).forEach((video) => {
     if (video.video_id !== activeVideoId) {
-      const videoState = props.state.creators?.[creator.ucid]?.videos?.[video.video_id];
+      const videoState = getVideoState(props.state, creator.ucid, video.video_id);
       if (videoState?.videoLabelId !== "x")
         returnVideos.push(video);
     }
@@ -144,6 +144,9 @@ export function VideoPage(props: VideoPageProps) {
     };
   }, []);
 
+  const videoState = getVideoState(props.state, creator.ucid, video.video_id);
+  if (!videoState) return null;
+
   return (
     <div id="video-page">
       <section id="video-player">
@@ -162,7 +165,7 @@ export function VideoPage(props: VideoPageProps) {
           <LabelSelector
             video={video}
             creator={creator}
-            state={props.state}
+            videoState={videoState}
             layout="horizontal"
             dispatch={props.dispatch}
           />

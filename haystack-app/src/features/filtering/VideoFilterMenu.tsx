@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import "./VideoFilterMenu.scss";
 import { TimeFilterSelector } from "./TimeFilterSelector";
-import { getVideoFilters, type State, type VideoFilterState } from "../../state/state";
+import { getVideoFilterStates, type State, type VideoFilterState } from "../../state/state";
 
 export type CreatorFilter = "followed" | "unfollowed" | "both";
 export type WatchedFilter = "yes" | "no" | "both";
@@ -22,7 +22,7 @@ interface VideoFilterMenuProps {
 export function VideoFilterMenu(props: VideoFilterMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const filters = getVideoFilters(props.state);
+  const filters = getVideoFilterStates(props.state);
 
   function updateFilters(update: Partial<VideoFilterState>) {
     props.dispatch({

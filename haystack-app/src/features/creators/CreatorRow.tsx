@@ -19,7 +19,7 @@ interface CreatorRowProps {
 export function CreatorRow( props : CreatorRowProps) {
   const innertube = useContext(InnertubeContext);
   const [videos, setVideos] = useState([]);
-  const filters = props.state.videoFilters;
+  const filters = props.state.videoFilterStates;
 
   useEffect(() => {
     // console.log("calling effect - " + props.creator.ucid)
@@ -43,15 +43,15 @@ export function CreatorRow( props : CreatorRowProps) {
   // to avoid load calls taking SUCH a long time while dragging the
   // filter bar?
 
-  const creatorState = props.state.creators[props.creator.ucid];
+  const creatorState = props.state.creatorStates[props.creator.ucid];
 
   // TIME FILTER LOGIC & WATCHED FILTER LOGIC
   Object.values(props.creator.videos).forEach((video) => {
     // TODO(samkern)
     // Put this in a helper function in videoHelpers that also checks
     // a "manualWatchTriggered" flag
-    const watched = creatorState.videos[video.video_id].historicalMaxWatchPercentage > .9;
-    console.log('watchpercentage ' + creatorState.videos[video.video_id].historicalMaxWatchPercentage);
+    const watched = creatorState.videoStates[video.video_id].historicalMaxWatchPercentage > .9;
+    console.log('watchpercentage ' + creatorState.videoStates[video.video_id].historicalMaxWatchPercentage);
 
 
     // WATCHED

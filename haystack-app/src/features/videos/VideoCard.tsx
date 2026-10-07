@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate, type NavigateFunction } from "react-router-dom";
 import LabelSelector from "../labels/LabelSelector";
 import type { Creator, Video } from "../../state/types";
-import { type State, type Action } from "../../state/state";
+import { type VideoState, type Action } from "../../state/state";
 import { useDelayedHover } from "../../utils/hoverlogic";
 import { SYSTEM_VIDEO_LABELS, type VideoLabel } from "../labels/labels";
 import { CommentIcon, getVideoLabelIcon } from "../labels/icons";
@@ -16,7 +16,7 @@ import "../labels/Labels.scss"
 interface VideoCardProps {
   creator: Creator;
   video: Video;
-  state: State;
+  videoState: VideoState;
   displayCreator: boolean;
   dispatch: React.ActionDispatch<[action: Action]>;
 }
@@ -25,12 +25,9 @@ export function VideoCard( props : VideoCardProps) {
   const hover = useDelayedHover(60, 160);
   const navigate = useNavigate();
 
-  const videoState = props.state.creators?.[props.creator.ucid]
-  ?.videos?.[props.video.video_id];
-
-  const videoLabelId = videoState?.videoLabelId ?? null;
+  const videoLabelId = props.videoState.videoLabelId ?? null;
   const videoLabel = SYSTEM_VIDEO_LABELS.find((b) => b.id === videoLabelId);
-  const hasComment = (videoState?.comment && videoState?.comment?.length > 0) as boolean;
+  const hasComment = (props.videoState.comment && props.videoState.comment?.length > 0) as boolean;
 
   const [commentCardOpen, setCommentCardOpen] = useState(false);
 
@@ -74,7 +71,7 @@ export function VideoCard( props : VideoCardProps) {
       <div className="video-card-popover">
 
         <div className="video-popover-controls">
-          <LabelSelector creator={props.creator} video={props.video} state={props.state} dispatch={props.dispatch} layout={"horizontal"} />
+          <LabelSelector creator={props.creator} video={props.video} videoState={props.videoState} dispatch={props.dispatch} layout={"horizontal"} />
         </div>
 
         <button className="comment-button" onClick={openCommentCard}> { <TooltipTrigger text="Leave a comment"><CommentIcon/></TooltipTrigger> } </button>
@@ -82,9 +79,7 @@ export function VideoCard( props : VideoCardProps) {
         <div className="thumbnail-container" onClick={() => navigate(`/v/${props.video.video_id}/c/${props.creator.ucid}`)} >
           <img className="thumbnail" src={props.video.thumbnail_url} />
 
-          <span className="video-duration">
-            {props.video.timecode}
-          </span>
+          <span className="video-duration"> {props.video.timecode} </span>
         </div>
 
         <strong className="video-title">{props.video.title}</strong>
@@ -108,9 +103,7 @@ export function VideoCard( props : VideoCardProps) {
       <div className="thumbnail-container">
         <img className="thumbnail" src={props.video.thumbnail_url} />
 
-        <span className="video-duration">
-          {props.video.timecode}
-        </span>
+        <span className="video-duration"> {props.video.timecode} </span>
       </div>
 
       <p className="video-title">{props.video.title}</p>
@@ -121,7 +114,7 @@ export function VideoCard( props : VideoCardProps) {
     { hover.hovered && renderVideoCardPopover(props, navigate) }
 
     {commentCardOpen && (
-      <CommentCard creatorId={props.creator.ucid} video={props.video} dispatch={props.dispatch} onClose={closeCommentCard} comment={videoState?.comment}/>
+      <CommentCard creatorId={props.creator.ucid} video={props.video} dispatch={props.dispatch} onClose={closeCommentCard} comment={props.videoState.comment}/>
     )}
     </div>
   );

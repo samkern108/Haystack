@@ -13,8 +13,8 @@ interface PlaylistRow_FavoritesProps {
 export function PlaylistRow_Favorites(props: PlaylistRow_FavoritesProps) {
   const [filter, setFilter] = useState<"all" | "star" | "love">("all");
 
-  const playlistState_Star = props.state.playlists["star"];
-  const playlistState_Heart = props.state.playlists["love"];
+  const playlistState_Star = props.state.playlistStates["star"];
+  const playlistState_Heart = props.state.playlistStates["love"];
 
   const sectionTitle = useMemo(() => {
     switch (filter) {
