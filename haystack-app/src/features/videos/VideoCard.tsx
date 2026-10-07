@@ -7,11 +7,11 @@ import { useDelayedHover } from "../../utils/hoverlogic";
 import { SYSTEM_VIDEO_LABELS, type VideoLabel } from "../labels/labels";
 import { CommentIcon, getVideoLabelIcon } from "../labels/icons";
 import { CommentCard } from '../comments/CommentCard';
+import { TooltipTrigger } from "../ui/Tooltip";
+import { getChannelURL } from "../../utils/videohelpers";
 import '../creators/CreatorRow.css'
 import "./VideoCard.css"
 import "../labels/Labels.scss"
-import { TooltipTrigger } from "../ui/Tooltip";
-import { getChannelURL } from "../../utils/videohelpers";
 
 interface VideoCardProps {
   creator: Creator;
@@ -59,7 +59,7 @@ export function VideoCard( props : VideoCardProps) {
 
   function renderVideoLabel(videoLabel: VideoLabel, hasComment: boolean) {
     return (
-      <div className="video-label-controls">
+      <div className="video-labels-display">
           <div className={`label-button`}
           style={{ backgroundColor: videoLabel.color }}>
               { getVideoLabelIcon(videoLabel.id) }
@@ -74,9 +74,10 @@ export function VideoCard( props : VideoCardProps) {
       <div className="video-card-popover">
 
         <div className="video-popover-controls">
-          <LabelSelector creator={props.creator} video={props.video} state={props.state} dispatch={props.dispatch} layout={"vertical"} />
-          <button className="comment-button" onClick={openCommentCard}> { <TooltipTrigger text="Leave a comment"><CommentIcon/></TooltipTrigger> } </button>
+          <LabelSelector creator={props.creator} video={props.video} state={props.state} dispatch={props.dispatch} layout={"horizontal"} />
         </div>
+
+        <button className="comment-button" onClick={openCommentCard}> { <TooltipTrigger text="Leave a comment"><CommentIcon/></TooltipTrigger> } </button>
 
         <div className="thumbnail-container" onClick={() => navigate(`/v/${props.video.video_id}/c/${props.creator.ucid}`)} >
           <img className="thumbnail" src={props.video.thumbnail_url} />

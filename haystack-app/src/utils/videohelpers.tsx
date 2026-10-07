@@ -20,3 +20,10 @@ export function getDurationInSecondsFromTimecode(timecode: string): number {
   }
   return duration;
 } 
+
+export function sameVideo(
+  a: [string, string],
+  b: [string, string]
+): boolean {
+  return a[0] === b[0] && a[1] === b[1];
+}

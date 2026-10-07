@@ -1,5 +1,6 @@
 import type { VideoLabelId, VideoLabel, VideoLabelIdOrNone } from "../features/labels/labels";
 import type { CreatorFilter, WatchedFilter } from "../features/videos/VideoFilterMenu";
+import { sameVideo } from "../utils/videohelpers";
 import { AllCreators } from "./types";
 
 /* -----------------------------
@@ -175,30 +176,32 @@ function toggleVideoInPlaylist(
   videoId: [creatorId: string, videoId: string]
 ): State {
   const playlist = getPlaylist(state, playlistId);
-
   const playlists = { ...state.playlists };
 
-  // If this is an exclusive playlist, remove the video from all other exclusive playlists.
+  // If this is an exclusive playlist, remove the video
+  // from all other exclusive playlists.
   if (playlist.exclusive) {
     Object.entries(playlists).forEach(([otherPlaylistId, otherPlaylist]) => {
       if (
         otherPlaylistId !== playlistId &&
         otherPlaylist.exclusive &&
-        otherPlaylist.videoIds.includes(videoId)
+        otherPlaylist.videoIds.some(id => sameVideo(id, videoId))
       ) {
-        
         playlists[otherPlaylistId] = {
           ...otherPlaylist,
-          videoIds: otherPlaylist.videoIds.filter(id => id !== videoId),
+          videoIds: otherPlaylist.videoIds.filter(
+            id => !sameVideo(id, videoId)
+          ),
         };
       }
     });
   }
 
   const currentVideos = playlists[playlistId].videoIds;
+  const alreadyIncluded = currentVideos.some(id => sameVideo(id, videoId));
 
-  const nextVideos = currentVideos.includes(videoId)
-    ? currentVideos.filter(id => id !== videoId)
+  const nextVideos = alreadyIncluded
+    ? currentVideos.filter(id => !sameVideo(id, videoId))
     : [...currentVideos, videoId];
 
   playlists[playlistId] = {
@@ -272,15 +275,13 @@ export function reducer(state: State, action: Action): State {
 
       const current = video.videoLabelId ?? null;
 
-      // FIX: Hey sam, this produced a really frustrating bug because you
+      // TODO(Sam) This produced a really frustrating bug because you
       // were using videoLabelDef.label instead of .id
       // Can we make these types/objects little safer?
       const next =
         current === videoLabel.id
           ? null
           : videoLabel.id;
-
-      console.log(`SET_VIDEO_LABEL: ${creatorId} ${videoId} ${current} -> ${next}`);
       
       if (videoLabel.associatedPlaylistId) {
         state = toggleVideoInPlaylist(

@@ -1,0 +1,7 @@
+.video-strip {
+  flex: 1;
+  display: flex;
+  gap: 1rem;
+  padding: 16px;
+  overflow-y: visible;
+}

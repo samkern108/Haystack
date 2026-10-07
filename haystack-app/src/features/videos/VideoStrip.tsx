@@ -2,6 +2,7 @@ import { VideoCard } from "../videos/VideoCard";
 import type { State, Action } from "../../state/state";
 import { getCreatorById } from "../../utils/videohelpers";
 import '../videos/VideoCard.css'
+import '../videos/VideoStrip.css'
 
 interface VideoStripProps {
   state: State;

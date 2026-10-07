@@ -12,6 +12,8 @@ interface CommentCardProps {
   comment?: string;
 };
 
+// TODO(samkern)
+// Ugh the comment button displays behind the thumbnail. Oops.
 export function CommentCard(props: CommentCardProps) {
 
     const [commentText, setCommentText] = useState(props.comment || "");
