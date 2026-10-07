@@ -1,12 +1,12 @@
 import { VideoCard } from "../videos/VideoCard";
-import type { State, Action, PlaylistState } from "../../state/state";
+import type { AppState, Action, PlaylistState } from "../../state/state";
 import { getCreatorById } from "../../utils/videohelpers";
 import { SYSTEM_VIDEO_LABELS } from "../labels/labels";
 import './PlaylistRow.css'
 
 interface PlaylistRowProps {
   playlist: PlaylistState;
-  state: State;
+  state: AppState;
   dispatch: React.ActionDispatch<[action: Action]>;
 }
 

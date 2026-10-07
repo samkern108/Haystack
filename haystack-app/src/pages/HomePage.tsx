@@ -1,11 +1,11 @@
-import type { Action, State } from "../state/state";
+import type { Action, AppState } from "../state/state";
 import { TestButton } from "../features/ui/TestButton";
 import { AllCreators, type Creator } from "../state/types";
 import { CreatorRow } from "../features/creators/CreatorRow";
 import { useEffect, useRef, useState } from "react";
 
 interface HomePageProps {
-  state: State;
+  state: AppState;
   dispatch: React.ActionDispatch<[action: Action]>;
 }
 

@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from "react";
 
 import type { Creator } from "../../state/types";
 import { CreatorInfo } from "./CreatorInfo";
-import type { State, Action } from "../../state/state";
+import { type AppState, type Action, getCreatorState } from "../../state/state";
 import { InnertubeContext } from "../../contexts/InnertubeContext";
 import { getVideosByChannelId } from "../../services/innertube.js";
 import { VideoStrip } from "../videos/VideoStrip.js";
@@ -12,7 +12,7 @@ import { getDurationInSecondsFromTimecode } from "../../utils/videohelpers.js";
 
 interface CreatorRowProps {
   creator: Creator;
-  state: State;
+  state: AppState;
   dispatch: React.ActionDispatch<[action: Action]>;
 }
 
@@ -43,7 +43,7 @@ export function CreatorRow( props : CreatorRowProps) {
   // to avoid load calls taking SUCH a long time while dragging the
   // filter bar?
 
-  const creatorState = props.state.creatorStates[props.creator.ucid];
+  const creatorState = getCreatorState(props.state, props.creator.ucid);
 
   // TIME FILTER LOGIC & WATCHED FILTER LOGIC
   Object.values(props.creator.videos).forEach((video) => {
@@ -73,7 +73,7 @@ export function CreatorRow( props : CreatorRowProps) {
 
   return (
     <section className="creator-row">
-      <CreatorInfo creator={props.creator} state={props.state} dispatch={props.dispatch} />
+      <CreatorInfo creator={props.creator} creatorState={creatorState} dispatch={props.dispatch} />
 
       <VideoStrip
         key={props.creator.ucid}

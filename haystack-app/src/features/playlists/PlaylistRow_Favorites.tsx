@@ -1,12 +1,12 @@
 import { useMemo, useState } from "react";
-import type { State, Action } from "../../state/state";
+import type { AppState, Action } from "../../state/state";
 import { SYSTEM_VIDEO_LABELS } from "../labels/labels";
 import './PlaylistRow.css'
 import { LoveIcon, StarIcon } from "../labels/icons";
 import { VideoStrip } from "../videos/VideoStrip";
 
 interface PlaylistRow_FavoritesProps {
-  state: State;
+  state: AppState;
   dispatch: React.ActionDispatch<[action: Action]>;
 }
 

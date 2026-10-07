@@ -39,7 +39,7 @@ export interface PlaylistState {
   videoIds: [creatorId: string, videoId: string][];
 }
 
-export interface State {
+export interface AppState {
   creatorStates: Record<string, CreatorState>;
   playlistStates: Record<string, PlaylistState>;
   videoFilterStates: VideoFilterState;
@@ -124,7 +124,7 @@ function createInitialPlaylistStates(): Record<string, PlaylistState> {
 // TODO(sam)
 // Depending on how we retrieve new creators from the backend,
 // we may want to initialize differently (or repeatedly)
-export const initialState: State = {
+export const initialState: AppState = {
   creatorStates: Object.values(AllCreators).reduce((acc, creator) => {
     acc[creator.ucid] = {
       followed: false,
@@ -150,19 +150,19 @@ export const initialState: State = {
    SAFE READ HELPERS
 ------------------------------ */
 
-export function getPlaylistState(state: State, playlistId: string): PlaylistState {
+export function getPlaylistState(state: AppState, playlistId: string): PlaylistState {
   return state.playlistStates?.[playlistId] ?? {};
 }
 
-export function getCreatorState(state: State, creatorId: string): CreatorState {
+export function getCreatorState(state: AppState, creatorId: string): CreatorState {
   return state.creatorStates?.[creatorId] ?? {};
 }
 
-export function getVideoState(state: State, creatorId: string, videoId: string): VideoState | undefined {
+export function getVideoState(state: AppState, creatorId: string, videoId: string): VideoState | undefined {
   return state.creatorStates?.[creatorId]?.videoStates?.[videoId] ?? undefined;
 }
 
-export function getVideoFilterState(state: State): VideoFilterState {
+export function getVideoFilterState(state: AppState): VideoFilterState {
   return state.videoFilterStates ?? DEFAULT_VIDEO_FILTERS;
 }
 
@@ -171,10 +171,10 @@ export function getVideoFilterState(state: State): VideoFilterState {
 ------------------------------ */
 
 function toggleVideoInPlaylist(
-  state: State,
+  state: AppState,
   playlistId: string,
   videoId: [creatorId: string, videoId: string]
-): State {
+): AppState {
   const playlistState = getPlaylistState(state, playlistId);
   const playlistStates = { ...state.playlistStates };
 
@@ -219,7 +219,7 @@ function toggleVideoInPlaylist(
    REDUCER
 ------------------------------ */
 
-export function reducer(state: State, action: Action): State {
+export function reducer(state: AppState, action: Action): AppState {
   switch (action.type) {
     
     case "SET_VIDEO_FILTERS": {

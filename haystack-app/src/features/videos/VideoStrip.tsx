@@ -1,11 +1,12 @@
 import { VideoCard } from "../videos/VideoCard";
-import { type State, type Action, getVideoState } from "../../state/state";
+import { type AppState, type Action, getVideoState } from "../../state/state";
 import { getCreatorById } from "../../utils/videohelpers";
 import '../videos/VideoCard.css'
 import '../videos/VideoStrip.css'
 
+// TODO(sam): Seems overkill to pass global state here
 interface VideoStripProps {
-  state: State;
+  state: AppState;
   videoIds: [creatorId: string, videoId: string][];
   dispatch: React.ActionDispatch<[action: Action]>;
   displayCreator: boolean;

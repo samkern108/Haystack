@@ -1,10 +1,10 @@
-import type { Action, State } from "../state/state";
+import type { Action, AppState } from "../state/state";
 import { CreatorRow } from "../features/creators/CreatorRow";
 import { TestButton } from "../features/ui/TestButton";
 import { AllCreators } from "../state/types";
 
 interface CreatorsPageProps {
-  state: State;
+  state: AppState;
   dispatch: React.ActionDispatch<[action: Action]>;
 }
 

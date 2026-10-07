@@ -1,8 +1,8 @@
-import type { State } from "../state/state";
+import type { AppState } from "../state/state";
 
 const STORAGE_KEY = "creator-video-state";
 
-export function loadState(): State | null {
+export function loadState(): AppState | null {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
 
@@ -10,14 +10,14 @@ export function loadState(): State | null {
       return null;
     }
 
-    return JSON.parse(raw) as State;
+    return JSON.parse(raw) as AppState;
   } catch (err) {
     console.error("Failed to load state", err);
     return null;
   }
 }
 
-export function saveState(state: State): void {
+export function saveState(state: AppState): void {
   try {
     localStorage.setItem(
       STORAGE_KEY,

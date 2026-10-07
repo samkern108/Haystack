@@ -1,13 +1,13 @@
 import { useState } from "react";
 
-import type { Action, State } from "../state/state";
+import type { Action, AppState } from "../state/state";
 import { PlaylistRow_Favorites } from "../features/playlists/PlaylistRow_Favorites";
 import "./styles/Modal.scss";
 import "../features/ui/styles/LinedPaper.scss";
 import { PlaylistRow } from "../features/playlists/PlaylistRow";
 
 interface PlaylistsPageProps {
-  state: State;
+  state: AppState;
   dispatch: React.ActionDispatch<[action: Action]>;
 }
 

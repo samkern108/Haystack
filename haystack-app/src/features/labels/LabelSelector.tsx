@@ -1,5 +1,5 @@
-import { SYSTEM_VIDEO_LABELS, type VideoLabel, type VideoLabelIdOrNone } from "./labels";
-import type { Action, State, VideoState } from "../../state/state";
+import { SYSTEM_VIDEO_LABELS, type VideoLabel } from "./labels";
+import type { Action, VideoState } from "../../state/state";
 import type { Creator, Video } from "../../state/types";
 import { getVideoLabelIcon } from "./icons";
 import { TooltipTrigger } from "../ui/Tooltip";

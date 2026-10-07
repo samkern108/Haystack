@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import './VideoPage.css'
-import { getVideoState, type Action, type State } from "../state/state";
+import { getVideoState, type Action, type AppState } from "../state/state";
 import LabelSelector from "../features/labels/LabelSelector";
 import { getCreatorById, getVideoById } from "../utils/videohelpers";
 import { type Creator, type Video} from "../state/types";
@@ -8,7 +8,7 @@ import { VideoStrip } from "../features/videos/VideoStrip";
 import { useEffect, useRef } from "react";
 
 interface VideoPageProps {
-  state: State;
+  state: AppState;
   dispatch: React.ActionDispatch<[Action]>;
 }
 

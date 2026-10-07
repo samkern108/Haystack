@@ -1,4 +1,4 @@
-import type { State, Action } from "../../state/state";
+import type { Action, CreatorState } from "../../state/state";
 import { useDelayedHover } from "../../utils/hoverlogic";
 import type { Creator } from "../../state/types";
 import { getChannelURL } from "../../utils/videohelpers";
@@ -7,14 +7,12 @@ import "../ui/styles/LinedPaper.scss"
 
 interface CreatorInfoProps {
   creator: Creator;
-  state: State;
+  creatorState: CreatorState;
   dispatch: React.ActionDispatch<[action: Action]>;
 }
 
 export function CreatorInfo(props: CreatorInfoProps) {
   const hover = useDelayedHover(50);
-
-  const creatorState = props.state.creatorStates?.[props.creator.ucid];
 
   function handleExploreButtonClick() {
     
@@ -55,7 +53,7 @@ export function CreatorInfo(props: CreatorInfoProps) {
           <div className="creator-actions">
             
             <button className={`creator-action-button follow ${
-                creatorState.followed ? "active" : ""
+                props.creatorState.followed ? "active" : ""
               }`}
               title="Follow this creator"
               onClick={() => handleCreatorButtonClick("followed")}>
@@ -63,7 +61,7 @@ export function CreatorInfo(props: CreatorInfoProps) {
             </button>
 
             <button className={`creator-action-button favorite ${
-                creatorState.favorite ? "active" : ""
+                props.creatorState.favorite ? "active" : ""
               }`}
               title="Favorite this creator"
               onClick={() => handleCreatorButtonClick("favorite")}>
@@ -77,7 +75,7 @@ export function CreatorInfo(props: CreatorInfoProps) {
             </button>
 
             <button className={`creator-action-button donotshow ${
-                creatorState.doNotShow ? "active" : ""
+                props.creatorState.doNotShow ? "active" : ""
               }`}
               title="Do not recommend this creator"
               onClick={() => handleCreatorButtonClick("doNotShow")}>
