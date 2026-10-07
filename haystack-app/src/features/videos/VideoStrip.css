@@ -3,5 +3,7 @@
   display: flex;
   gap: 1rem;
   padding: 16px;
+  box-sizing: border-box;
   overflow-y: visible;
+  min-width: 0;
 }
