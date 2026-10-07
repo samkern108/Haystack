@@ -11,7 +11,7 @@ import { AboutUsPage } from '../pages/AboutUsPage';
 import { PlaylistsPage } from '../pages/PlaylistsPage';
 import { NavBar } from '../features/nav/NavBar';
 import { AppRoutes } from '../features/nav/routes';
-import { reducer, initialState } from '../state/state';
+import { reducer, initialState, getVideoFilterState } from '../state/state';
 import { loadState, saveState } from '../storage/storage';
 import { SearchPage } from "../pages/SearchPage";
 import { getInnertube, getDummyInnertube } from "../services/innertube.js";
@@ -46,7 +46,7 @@ export default function App() {
   return (
     <div>
       <InnertubeContext value={innertube}>
-        <NavBar state={state} dispatch={dispatch} />
+        <NavBar videoFilterState={getVideoFilterState(state)} dispatch={dispatch} />
           <Routes>
             <Route path={AppRoutes.HOME} element={<HomePage state={state} dispatch={dispatch} />} />
             <Route path={AppRoutes.CREATORS} element={<CreatorsPage state={state} dispatch={dispatch} />} />

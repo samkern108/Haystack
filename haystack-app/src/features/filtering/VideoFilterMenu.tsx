@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import "./VideoFilterMenu.scss";
 import { TimeFilterSelector } from "./TimeFilterSelector";
-import { getVideoFilterStates, type State, type VideoFilterState } from "../../state/state";
+import { type VideoFilterState } from "../../state/state";
 
 export type CreatorFilter = "followed" | "unfollowed" | "both";
 export type WatchedFilter = "yes" | "no" | "both";
@@ -13,7 +13,7 @@ export type WatchedFilter = "yes" | "no" | "both";
 // logic is coded.
 
 interface VideoFilterMenuProps {
-  state: State;
+  videoFilterState: VideoFilterState;
   dispatch: React.ActionDispatch<[
     action: { type: "SET_VIDEO_FILTERS"; filters: VideoFilterState }
   ]>;
@@ -22,13 +22,11 @@ interface VideoFilterMenuProps {
 export function VideoFilterMenu(props: VideoFilterMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const filters = getVideoFilterStates(props.state);
-
   function updateFilters(update: Partial<VideoFilterState>) {
     props.dispatch({
       type: "SET_VIDEO_FILTERS",
       filters: {
-        ...filters,
+        ...props.videoFilterState,
         ...update,
       },
     });
@@ -37,9 +35,9 @@ export function VideoFilterMenu(props: VideoFilterMenuProps) {
   function cycleCreatorFilter() {
     updateFilters({
       creator:
-        filters.creator === "both"
+        props.videoFilterState.creator === "both"
           ? "followed"
-          : filters.creator === "followed"
+          : props.videoFilterState.creator === "followed"
             ? "unfollowed"
             : "both",
     });
@@ -48,9 +46,9 @@ export function VideoFilterMenu(props: VideoFilterMenuProps) {
   function cycleWatchedFilter() {
     updateFilters({
       watched:
-        filters.watched === "both"
+        props.videoFilterState.watched === "both"
           ? "yes"
-          : filters.watched === "yes"
+          : props.videoFilterState.watched === "yes"
             ? "no"
             : "both",
     });
@@ -74,7 +72,7 @@ export function VideoFilterMenu(props: VideoFilterMenuProps) {
               className="video-filter-toggle"
               onClick={cycleCreatorFilter}
             >
-              {filters.creator}
+              {props.videoFilterState.creator}
             </button>
           </div>
 
@@ -85,7 +83,7 @@ export function VideoFilterMenu(props: VideoFilterMenuProps) {
               className="video-filter-toggle"
               onClick={cycleWatchedFilter}
             >
-              {filters.watched}
+              {props.videoFilterState.watched}
             </button>
           </div>
 
@@ -93,8 +91,8 @@ export function VideoFilterMenu(props: VideoFilterMenuProps) {
             <span className="video-filter-label">Time</span>
 
             <TimeFilterSelector
-              minTime={filters.minTime}
-              maxTime={filters.maxTime}
+              minTime={props.videoFilterState.minTime}
+              maxTime={props.videoFilterState.maxTime}
               onMinTimeChange={(minTime) =>
                 updateFilters({ minTime })
               }

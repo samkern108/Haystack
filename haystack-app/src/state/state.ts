@@ -162,7 +162,7 @@ export function getVideoState(state: State, creatorId: string, videoId: string):
   return state.creatorStates?.[creatorId]?.videoStates?.[videoId] ?? undefined;
 }
 
-export function getVideoFilterStates(state: State): VideoFilterState {
+export function getVideoFilterState(state: State): VideoFilterState {
   return state.videoFilterStates ?? DEFAULT_VIDEO_FILTERS;
 }
 
