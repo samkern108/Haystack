@@ -1,8 +1,8 @@
 import "../pages/styles/root.css";
 import "../pages/styles/colors.css";
 
-import { useState, useEffect, useReducer } from 'react';
-import { Routes, Route } from "react-router-dom";
+import { useState, useEffect, useReducer, useLayoutEffect } from 'react';
+import { Routes, Route, useLocation } from "react-router-dom";
 
 import { VideoPage } from '../pages/VideoPage';
 import { SubmitACreatorPage } from '../pages/SubmitACreatorPage'
@@ -43,6 +43,13 @@ export default function App() {
     initInnertube();
   }, []);
 
+    const location = useLocation();
+
+    // scroll to top of page after a page transition.
+    useLayoutEffect(() => {
+        document.documentElement.scrollTo({ top:0, left:0, behavior: "instant" });
+    }, [location.pathname]);
+
   return (
     <div>
       <InnertubeContext value={innertube}>
@@ -56,7 +63,7 @@ export default function App() {
             <Route path={AppRoutes.SUBMIT_A_CREATOR} element={<SubmitACreatorPage />} />
             <Route path={AppRoutes.SEARCH} element={<SearchPage/>} />
             <Route path={AppRoutes.USER_PROFILE} element={<UserProfilePage/>} />
-          </Routes>
+          </Routes> 
         </InnertubeContext>
       </div>
   );
