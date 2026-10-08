@@ -24,7 +24,9 @@ export function NavBar(props: NavBarProps) {
 
   return (
     <div className="nav-bar">
-      <h1>Haystack</h1>
+      <NavLink to="/" end className={({ isActive }) => isActive ? "active" : ""}>
+        <h1>Haystack</h1>
+      </NavLink>
 
       <div className="buttons-bar">
         <form onSubmit={handleSearch}>
@@ -35,10 +37,8 @@ export function NavBar(props: NavBarProps) {
             onChange={(e) => setQuery(e.target.value)}
           />
         </form>
-
-        <NavLink to="/" end className={({ isActive }) => isActive ? "active" : ""}>
-          Home
-        </NavLink>
+        
+        <VideoFilterMenu videoFilterState={props.videoFilterState} dispatch={props.dispatch} />
 
         <NavLink to="/playlists" className={({ isActive }) => isActive ? "active" : ""}>
           Playlists
@@ -51,8 +51,6 @@ export function NavBar(props: NavBarProps) {
         <NavLink to="/submitacreator" className={({ isActive }) => isActive ? "active" : ""}>
           Add A Creator
         </NavLink>
-
-        <VideoFilterMenu videoFilterState={props.videoFilterState} dispatch={props.dispatch} />
 
         <NavLink
           to="/profile"

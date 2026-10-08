@@ -12,8 +12,7 @@ interface HomePageProps {
 export function HomePage(props: HomePageProps) {
 
   // SCROLL LOGIC
-  // This effect loads more creators when the user
-  // scrolls near the bottom of the page.
+  // Load more creators when the user scrolls near the end of the page.
   const loadThreshold = 0.9;
   const [loadAmount, setLoadAmount] = useState(10);
   const lastLoadHeight = useRef(0);
