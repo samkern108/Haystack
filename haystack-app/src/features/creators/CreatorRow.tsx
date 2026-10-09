@@ -8,7 +8,7 @@ import { getVideosByChannelId } from "../../services/innertube.js";
 import { VideoStrip } from "../videos/VideoStrip.js";
 import './CreatorRow.css'
 import '../videos/VideoCard.css'
-import { getDurationInSecondsFromTimecode } from "../../utils/videohelpers.js";
+import { filterVideosForCreator } from "../../utils/videohelpers.js";
 
 interface CreatorRowProps {
   creator: Creator;
@@ -17,9 +17,11 @@ interface CreatorRowProps {
 }
 
 export function CreatorRow( props : CreatorRowProps) {
-  const innertube = useContext(InnertubeContext);
-  const [videos, setVideos] = useState([]);
   const filters = props.state.videoFilterStates;
+
+  /*const innertube = useContext(InnertubeContext);
+  const [videos, setVideos] = useState([]);
+  
 
   useEffect(() => {
     // console.log("calling effect - " + props.creator.ucid)
@@ -35,41 +37,15 @@ export function CreatorRow( props : CreatorRowProps) {
 
 	  fetchVideos();
     }
-  }, [videos, innertube]);
+  }, [videos, innertube]);*/
 
-  let videoIds = [] as [creatorId: string, videoId: string][];
-
-  // TODO(samkern): Is there a better way to do this
-  // to avoid load calls taking SUCH a long time while dragging the
-  // filter bar?
-
+  // TODO(samkern): Is there a better way to do this to avoid 
+  // load calls taking a long time while dragging the filter bar?
   const creatorState = getCreatorState(props.state, props.creator.ucid);
-
-  // TIME FILTER LOGIC & WATCHED FILTER LOGIC
-  Object.values(props.creator.videos).forEach((video) => {
-    // TODO(samkern)
-    // Put this in a helper function in videoHelpers that also checks
-    // a "manualWatchTriggered" flag
-    const watched = creatorState.videoStates[video.video_id].historicalMaxWatchPercentage > .9;
-    console.log('watchpercentage ' + creatorState.videoStates[video.video_id].historicalMaxWatchPercentage);
-
-
-    // WATCHED
-    if ((filters.watched === 'no' && watched) || (filters.watched === 'yes' && !watched)) {
-      return;
-    }
-
-    // TIME
-    const duration = getDurationInSecondsFromTimecode(video.timecode);
-    if (duration <= (filters.maxTime * 60) && duration >= (filters.minTime * 60)) {
-      videoIds.push([props.creator.ucid, video.video_id]);
-    }
-  });
+  const videoIds = filterVideosForCreator(props.creator.ucid, creatorState, filters, props.creator.videos);
 
   // If all the videos have been filtered out... don't show the creator row lol
-  if(videoIds.length === 0) {
-    return <></>
-  }
+  if(videoIds.length === 0) return <></>
 
   return (
     <section className="creator-row">

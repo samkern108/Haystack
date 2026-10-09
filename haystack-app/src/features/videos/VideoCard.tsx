@@ -8,9 +8,10 @@ import { SYSTEM_VIDEO_LABELS, type VideoLabel } from "../labels/labels";
 import { CommentIcon, getVideoLabelIcon } from "../labels/icons";
 import { CommentCard } from '../comments/CommentCard';
 import { TooltipTrigger } from "../ui/Tooltip";
-import { getChannelURL } from "../../utils/videohelpers";
+import { getChannelURL } from "../../utils/creatorhelpers";
 import '../creators/CreatorRow.css'
 import "./VideoCard.css"
+import './VideoTags.css'
 import "../labels/Labels.scss"
 
 interface VideoCardProps {
@@ -19,6 +20,12 @@ interface VideoCardProps {
   videoState: VideoState;
   displayCreator: boolean;
   dispatch: React.ActionDispatch<[action: Action]>;
+}
+
+interface VideoTag {
+  id: string,
+  name: string,
+  color: string,
 }
 
 export function VideoCard( props : VideoCardProps) {
@@ -38,6 +45,12 @@ export function VideoCard( props : VideoCardProps) {
   function closeCommentCard() {
     setCommentCardOpen(false);
   }
+
+  const tags = [
+    {id: 'hi', name: 'games', color: '#000000'},
+    {id: 'hi2', name: 'whatever', color: '#444488'},
+    {id: 'hi3', name: 'World of Warcraft', color: '#0b4d23'},
+    {id: 'hi3', name: 'Backrooms', color: '#4d0b1c'},];
 
   function renderCreatorRow(props: VideoCardProps) {
     return (
@@ -84,6 +97,18 @@ export function VideoCard( props : VideoCardProps) {
 
         <strong className="video-title">{props.video.title}</strong>
         {props.displayCreator ? renderCreatorRow(props) : <></>}
+
+        <div className="video-tags">
+          {tags.map((tag) => (
+            <div
+              key={tag.id}
+              className="video-tag"
+              style={{ backgroundColor: tag.color, }}
+            >
+              {tag.name}
+            </div>
+          ))}
+        </div>
       </div>
     );
   }

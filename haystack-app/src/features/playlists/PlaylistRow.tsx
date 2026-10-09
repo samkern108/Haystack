@@ -1,6 +1,6 @@
 import { VideoCard } from "../videos/VideoCard";
 import type { AppState, Action, PlaylistState } from "../../state/state";
-import { getCreatorById } from "../../utils/videohelpers";
+import { getCreatorById } from "../../utils/creatorhelpers";
 import { SYSTEM_VIDEO_LABELS } from "../labels/labels";
 import './PlaylistRow.css'
 

@@ -2,7 +2,8 @@ import { useParams } from "react-router-dom";
 import './VideoPage.css'
 import { getVideoState, type Action, type AppState } from "../state/state";
 import LabelSelector from "../features/labels/LabelSelector";
-import { getCreatorById, getVideoById } from "../utils/videohelpers";
+import { getVideoById } from "../utils/videohelpers";
+import { getCreatorById } from "../utils/creatorhelpers";
 import { type Creator, type Video} from "../state/types";
 import { VideoStrip } from "../features/videos/VideoStrip";
 import { useEffect, useRef } from "react";

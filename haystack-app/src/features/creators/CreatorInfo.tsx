@@ -1,7 +1,7 @@
 import type { Action, CreatorState } from "../../state/state";
 import { useDelayedHover } from "../../utils/hoverlogic";
 import type { Creator } from "../../state/types";
-import { getChannelURL } from "../../utils/videohelpers";
+import { getChannelURL } from "../../utils/creatorhelpers";
 import "./CreatorRow.css"
 import "../ui/styles/LinedPaper.scss"
 

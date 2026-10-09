@@ -1,6 +1,6 @@
 import { VideoCard } from "../videos/VideoCard";
 import { type AppState, type Action, getVideoState } from "../../state/state";
-import { getCreatorById } from "../../utils/videohelpers";
+import { getCreatorById } from "../../utils/creatorhelpers";
 import '../videos/VideoCard.css'
 import '../videos/VideoStrip.css'
 

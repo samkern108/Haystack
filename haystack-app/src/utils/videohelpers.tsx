@@ -1,15 +1,33 @@
-import { AllCreators, type Creator, type Video } from "../state/types";
+import type { CreatorState, VideoFilterState } from "../state/state";
+import { AllCreators, type Video } from "../state/types";
 
 export function getVideoById(creatorId: string, videoId: string): Video {
   return AllCreators[creatorId]?.videos?.[videoId];
 }
 
-export function getCreatorById(creatorId: string): Creator {
-  return AllCreators[creatorId];
-}
+// The way we're returning data RIGHT NOW, 
+// it is most economical to filter videos *one creator at a time*
+export function filterVideosForCreator(creatorId: string, creatorState: CreatorState, filters: VideoFilterState, inputVideoIds: Record<string, Video>, maxResultsPerCreator?: number) {
+  let outputVideoIds = [] as [creatorId: string, videoId: string][];
+  Object.values(inputVideoIds).forEach((video) => {
+    if(maxResultsPerCreator && outputVideoIds.length >= maxResultsPerCreator) return;
+    // TODO(samkern)
+    // Put this in a helper function in videoHelpers that also checks a "manualWatchTriggered" flag
+    const watched = creatorState.videoStates[video.video_id].historicalMaxWatchPercentage > .9;
+    console.log('watchpercentage ' + creatorState.videoStates[video.video_id].historicalMaxWatchPercentage);
 
-export function getChannelURL(creatorId: string): string {
-  return ("https://www.youtube.com/channel/" + creatorId);
+    // WATCHED
+    if ((filters.watched === 'no' && watched) || (filters.watched === 'yes' && !watched)) {
+      return;
+    }
+
+    // TIME
+    const duration = getDurationInSecondsFromTimecode(video.timecode);
+    if (duration <= (filters.maxTime * 60) && duration >= (filters.minTime * 60)) {
+      outputVideoIds.push([creatorId, video.video_id]);
+    }
+  })
+  return outputVideoIds;
 }
 
 export function getDurationInSecondsFromTimecode(timecode: string): number {
