@@ -2,10 +2,11 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import './NavBar.scss';
 import { VideoFilterMenu } from "../filtering/VideoFilterMenu";
-import { type Action, type VideoFilterState } from "../../state/state";
+import { type Action, type VideoFilterState, type VideoTagState } from "../../state/state";
 
 interface NavBarProps {
   videoFilterState: VideoFilterState;
+  videoTagState: VideoTagState;
   dispatch: React.ActionDispatch<[action: Action]>;
 }
 
@@ -38,7 +39,7 @@ export function NavBar(props: NavBarProps) {
           />
         </form>
         
-        <VideoFilterMenu videoFilterState={props.videoFilterState} dispatch={props.dispatch} />
+        <VideoFilterMenu videoFilterState={props.videoFilterState} videoTagState={props.videoTagState} dispatch={props.dispatch} />
 
         <NavLink to="/playlists" className={({ isActive }) => isActive ? "active" : ""}>
           Playlists

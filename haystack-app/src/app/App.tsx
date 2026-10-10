@@ -53,7 +53,7 @@ export default function App() {
   return (
     <div>
       <InnertubeContext value={innertube}>
-        <NavBar videoFilterState={getVideoFilterState(state)} dispatch={dispatch} />
+        <NavBar videoFilterState={getVideoFilterState(state)} videoTagState={state.videoTagState} dispatch={dispatch} />
           <Routes>
             <Route path={AppRoutes.HOME} element={<HomePage state={state} dispatch={dispatch} />} />
             <Route path={AppRoutes.CREATORS} element={<CreatorsPage state={state} dispatch={dispatch} />} />

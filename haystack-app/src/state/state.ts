@@ -1,7 +1,7 @@
 import type { VideoLabelId, VideoLabel, VideoLabelIdOrNone } from "../features/labels/labels";
 import type { CreatorFilter, WatchedFilter } from "../features/filtering/VideoFilterMenu";
 import { sameVideo } from "../utils/videohelpers";
-import { AllCreators } from "./types";
+import { AllCreators, type VideoTag } from "./types";
 
 /* -----------------------------
    STATE
@@ -28,6 +28,16 @@ export interface VideoFilterState {
   watched: WatchedFilter;
   minTime: number;
   maxTime: number;
+  includeTags: string[];
+  excludeTags: string[];
+}
+
+// TODO(Sam): For now, I'm putting tags in here,
+// but I need to talk to Scott about how we store/load ALL community-submitted info.
+export interface VideoTagState {
+  allTags: Record<string, VideoTag>;
+  // videoId, videoTagName[]
+  allVideoTags: Record<string, string[]>;
 }
 
 export interface PlaylistState {
@@ -42,7 +52,10 @@ export interface PlaylistState {
 export interface AppState {
   creatorStates: Record<string, CreatorState>;
   playlistStates: Record<string, PlaylistState>;
+
   videoFilterStates: VideoFilterState;
+
+  videoTagState: VideoTagState;
 }
 
 /* -----------------------------
@@ -53,6 +66,15 @@ export type Action =
   | {
       type: "SET_VIDEO_FILTERS";
       filters: VideoFilterState;
+    }
+  | {
+      type: "ADD_NEW_VIDEO_TAG";
+      tagName: string;
+    }
+  | {
+      type: "UPDATE_TAGS_FOR_VIDEO";
+      videoId: string;
+      tagName: string;
     }
   | {
       type: "TOGGLE_CREATOR_FLAG";
@@ -93,7 +115,14 @@ export const DEFAULT_VIDEO_FILTERS: VideoFilterState = {
   watched: "both",
   minTime: 0,
   maxTime: 240,
+  includeTags: [],
+  excludeTags: [],
 };
+
+export const DEFAULT_VIDEO_TAGS: VideoTagState = {
+  allVideoTags: {},
+  allTags: {},
+}
 
 function createInitialPlaylistStates(): Record<string, PlaylistState> {
   const initialPlaylists = {} as Record<string, PlaylistState>;
@@ -144,6 +173,7 @@ export const initialState: AppState = {
   }, {} as Record<string, CreatorState>),
   playlistStates: createInitialPlaylistStates(),
   videoFilterStates: DEFAULT_VIDEO_FILTERS,
+  videoTagState: DEFAULT_VIDEO_TAGS,
 };
 
 /* -----------------------------
@@ -164,6 +194,22 @@ export function getVideoState(state: AppState, creatorId: string, videoId: strin
 
 export function getVideoFilterState(state: AppState): VideoFilterState {
   return state.videoFilterStates ?? DEFAULT_VIDEO_FILTERS;
+}
+
+export function getTagByName(
+  tagName: string,
+  tagsState: VideoTagState
+): VideoTag | undefined {
+  return tagsState.allTags[tagName];
+}
+
+export function getTagsForVideo(state: AppState, videoId: string): VideoTag[] {
+  const tagNames = state.videoTagState.allVideoTags?[videoId] : [];
+  const videoTags = tagNames.flatMap(tagName => {
+    const tag = state.videoTagState.allTags[tagName];
+    return tag ? [tag] : [];
+  });  
+  return videoTags;
 }
 
 /* -----------------------------
@@ -226,6 +272,51 @@ export function reducer(state: AppState, action: Action): AppState {
       return {
         ...state,
         videoFilterStates: action.filters
+      };
+    }
+
+    case "ADD_NEW_VIDEO_TAG": {
+      const { tagName } = action;
+
+      // Don't overwrite an existing tag.
+      if (state.videoTagState.allTags[tagName]) {
+        return state;
+      }
+
+      const randomColor = `hsl(${Math.floor(Math.random() * 360)}, 70%, 75%)`;
+
+      return {
+        ...state,
+        videoTagState: {
+          ...state.videoTagState,
+          allTags: {
+            ...state.videoTagState.allTags,
+            [tagName]: {
+              name: tagName,
+              color: randomColor,
+            },
+          },
+        },
+      };
+    }
+
+    case "UPDATE_TAGS_FOR_VIDEO": {
+      const { videoId, tagName } = action;
+      const currentTags = state.videoTagState.allVideoTags[videoId] ?? [];
+
+      const updatedTags = currentTags.includes(tagName)
+        ? currentTags.filter((tag) => tag !== tagName)
+        : [...currentTags, tagName];
+
+      return {
+        ...state,
+        videoTagState: {
+          ...state.videoTagState,
+          allVideoTags: {
+            ...state.videoTagState.allVideoTags,
+            [videoId]: updatedTags,
+          },
+        },
       };
     }
 

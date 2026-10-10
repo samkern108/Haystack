@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate, type NavigateFunction } from "react-router-dom";
 import LabelSelector from "../labels/LabelSelector";
-import type { Creator, Video } from "../../state/types";
-import { type VideoState, type Action } from "../../state/state";
+import type { Creator, Video, VideoTag } from "../../state/types";
+import { type VideoState, type Action, type VideoFilterState } from "../../state/state";
 import { useDelayedHover } from "../../utils/hoverlogic";
 import { SYSTEM_VIDEO_LABELS, type VideoLabel } from "../labels/labels";
 import { CommentIcon, getVideoLabelIcon } from "../labels/icons";
@@ -13,19 +13,16 @@ import '../creators/CreatorRow.css'
 import "./VideoCard.css"
 import './VideoTags.css'
 import "../labels/Labels.scss"
+import { VideoTags } from "./VideoTags";
 
 interface VideoCardProps {
   creator: Creator;
   video: Video;
   videoState: VideoState;
+  videoFilterState: VideoFilterState;
+  videoTags: VideoTag[];
   displayCreator: boolean;
   dispatch: React.ActionDispatch<[action: Action]>;
-}
-
-interface VideoTag {
-  id: string,
-  name: string,
-  color: string,
 }
 
 export function VideoCard( props : VideoCardProps) {
@@ -46,11 +43,7 @@ export function VideoCard( props : VideoCardProps) {
     setCommentCardOpen(false);
   }
 
-  const tags = [
-    {id: 'hi', name: 'games', color: '#000000'},
-    {id: 'hi2', name: 'whatever', color: '#444488'},
-    {id: 'hi3', name: 'World of Warcraft', color: '#0b4d23'},
-    {id: 'hi3', name: 'Backrooms', color: '#4d0b1c'},];
+  const tags = props.videoTags;
 
   function renderCreatorRow(props: VideoCardProps) {
     return (
@@ -98,17 +91,7 @@ export function VideoCard( props : VideoCardProps) {
         <strong className="video-title">{props.video.title}</strong>
         {props.displayCreator ? renderCreatorRow(props) : <></>}
 
-        <div className="video-tags">
-          {tags.map((tag) => (
-            <div
-              key={tag.id}
-              className="video-tag"
-              style={{ backgroundColor: tag.color, }}
-            >
-              {tag.name}
-            </div>
-          ))}
-        </div>
+        <VideoTags videoId={props.video.video_id} tags={tags} dispatch={props.dispatch}/>
       </div>
     );
   }

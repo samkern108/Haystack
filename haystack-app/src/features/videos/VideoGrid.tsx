@@ -1,5 +1,5 @@
 import { VideoCard } from "./VideoCard";
-import { type AppState, type Action, getVideoState } from "../../state/state";
+import { type AppState, type Action, getVideoState, getTagsForVideo } from "../../state/state";
 import { getCreatorById } from "../../utils/creatorhelpers";
 import '../videos/VideoCard.css'
 import '../videos/VideoGrid.css'
@@ -47,6 +47,8 @@ export function VideoGrid( props : VideoGridProps) {
                     creator={creator}
                     video={video}
                     videoState={videoState}
+                    videoFilterState={props.state.videoFilterStates}
+                    videoTags={getTagsForVideo(props.state, video.video_id)}
                     displayCreator={props.displayCreator}
                     dispatch={props.dispatch}
                 />

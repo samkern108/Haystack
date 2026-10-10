@@ -22,12 +22,15 @@
 }
 
 .video-filter-row {
-  display: flex;
   align-items: center;
   justify-content: space-between;
 
   gap: 24px;
   margin-bottom: 12px;
+
+  .inline {
+    display: flex;
+  }
 }
 
 .video-filter-label {
@@ -40,7 +43,6 @@
 
   cursor: pointer;
 }
-
 
 
 

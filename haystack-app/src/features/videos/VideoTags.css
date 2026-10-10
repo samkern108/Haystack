@@ -16,3 +16,38 @@
   line-height: 1.2;
   overflow-wrap: anywhere;
 }
+
+.video-tag-add {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 1px dashed #999;
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.video-tag-add:hover {
+  background: #eee;
+}
+
+.video-tag-input {
+  box-sizing: border-box;
+  width: 110px;
+  min-width: 0;
+  padding: 4px 8px;
+  border: 1px solid #999;
+  border-radius: 999px;
+  background: white;
+  color: #222;
+  font: inherit;
+  font-size: 0.75rem;
+  outline-offset: 2px;
+}

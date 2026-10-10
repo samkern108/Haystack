@@ -20,6 +20,11 @@ export interface Video {
   timecode: string;
 }
 
+export interface VideoTag {
+  name: string,
+  color: string,
+}
+
 export type Creators = Record<string, Creator>;
 
 // TODO(Sam)
