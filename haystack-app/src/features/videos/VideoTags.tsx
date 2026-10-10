@@ -14,7 +14,6 @@ export function VideoTags(props: VideoTagsProps) {
 
   useEffect(() => {
     if (isAdding) inputRef.current?.focus();
-
   }, [isAdding]);
 
   function commitTag() {
@@ -22,14 +21,13 @@ export function VideoTags(props: VideoTagsProps) {
 
     if (tagName) {
         props.dispatch({
-        type: "ADD_NEW_VIDEO_TAG",
-        tagName,
+            type: "ADD_NEW_VIDEO_TAG",
+            tagName,
         });
-
         props.dispatch({
-        type: "UPDATE_TAGS_FOR_VIDEO",
-        videoId: props.videoId,
-        tagName,
+            type: "UPDATE_TAGS_FOR_VIDEO",
+            videoId: props.videoId,
+            tagName,
         });
     }
 
@@ -43,6 +41,8 @@ export function VideoTags(props: VideoTagsProps) {
     if (inputRef.current) inputRef.current.value = "";
     setIsAdding(false);
   }
+
+  console.log('tags ' + props.tags.length);
 
   return (
     <div className="video-tags">

@@ -204,11 +204,13 @@ export function getTagByName(
 }
 
 export function getTagsForVideo(state: AppState, videoId: string): VideoTag[] {
-  const tagNames = state.videoTagState.allVideoTags?[videoId] : [];
+  const tagNames = state.videoTagState.allVideoTags?.[videoId] ?? [];
   const videoTags = tagNames.flatMap(tagName => {
     const tag = state.videoTagState.allTags[tagName];
+    console.log('iterating tags: ' + tagName);
     return tag ? [tag] : [];
   });  
+  // console.log("Retrieving tags: " + tagNames);
   return videoTags;
 }
 
