@@ -1,12 +1,13 @@
 import { useParams } from "react-router-dom";
 import './VideoPage.css'
-import { getVideoState, type Action, type AppState } from "../state/state";
+import { getTagsForVideo, getVideoState, type Action, type AppState } from "../state/state";
 import LabelSelector from "../features/labels/LabelSelector";
 import { getVideoById } from "../utils/videohelpers";
 import { getCreatorById } from "../utils/creatorhelpers";
 import { type Creator, type Video} from "../state/types";
 import { VideoStrip } from "../features/videos/VideoStrip";
 import { useEffect, useRef } from "react";
+import { VideoTags } from "../features/videos/VideoTags";
 
 interface VideoPageProps {
   state: AppState;
@@ -183,9 +184,11 @@ export function VideoPage(props: VideoPageProps) {
         </a>
       </section>
 
+      <VideoTags videoId={video.video_id} tags={getTagsForVideo(props.state, video.video_id)} dispatch={props.dispatch}/>
+
       { renderOtherVideosFromCreator(creator, video.video_id, props) }
     </div>
   );
 }
 
-// TODO(sam): Don't add videos with an X to the recommended videos.
+// TODO(sam) Finish & test the video tags here.
