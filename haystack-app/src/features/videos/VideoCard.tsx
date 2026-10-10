@@ -88,7 +88,7 @@ export function VideoCard( props : VideoCardProps) {
           <span className="video-duration"> {props.video.timecode} </span>
         </div>
 
-        <strong className="video-title">{props.video.title}</strong>
+        <strong className="video-title clamped">{props.video.title}</strong>
         {props.displayCreator ? renderCreatorRow(props) : <></>}
 
         <VideoTags videoId={props.video.video_id} tags={tags} dispatch={props.dispatch}/>
@@ -114,7 +114,7 @@ export function VideoCard( props : VideoCardProps) {
         <span className="video-duration"> {props.video.timecode} </span>
       </div>
 
-      <p className="video-title">{props.video.title}</p>
+      <p className="video-title clamped">{props.video.title}</p>
       {props.displayCreator ? renderCreatorRow(props) : <></>}
     </div>
 

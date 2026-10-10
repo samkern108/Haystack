@@ -43,6 +43,7 @@ export function HomePage(props: HomePageProps) {
           getCreatorState(props.state, creator.ucid),
           filters,
           creator.videos,
+          props.state.videoTagState,
           1
         )
       );

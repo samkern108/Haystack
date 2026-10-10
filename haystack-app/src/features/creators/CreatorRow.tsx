@@ -42,7 +42,7 @@ export function CreatorRow( props : CreatorRowProps) {
   // TODO(samkern): Is there a better way to do this to avoid 
   // load calls taking a long time while dragging the filter bar?
   const creatorState = getCreatorState(props.state, props.creator.ucid);
-  const videoIds = filterVideosForCreator(props.creator.ucid, creatorState, filters, props.creator.videos);
+  const videoIds = filterVideosForCreator(props.creator.ucid, creatorState, filters, props.creator.videos, props.state.videoTagState);
 
   // If all the videos have been filtered out... don't show the creator row lol
   if(videoIds.length === 0) return <></>

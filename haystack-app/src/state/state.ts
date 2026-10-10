@@ -111,8 +111,8 @@ export type Action =
 ------------------------------ */
 
 export const DEFAULT_VIDEO_FILTERS: VideoFilterState = {
-  creator: "both",
-  watched: "both",
+  creator: "all",
+  watched: "all",
   minTime: 0,
   maxTime: 240,
   includeTags: [],
@@ -207,11 +207,18 @@ export function getTagsForVideo(state: AppState, videoId: string): VideoTag[] {
   const tagNames = state.videoTagState.allVideoTags?.[videoId] ?? [];
   const videoTags = tagNames.flatMap(tagName => {
     const tag = state.videoTagState.allTags[tagName];
-    console.log('iterating tags: ' + tagName);
     return tag ? [tag] : [];
   });  
-  // console.log("Retrieving tags: " + tagNames);
   return videoTags;
+}
+
+export function getVideoCountForTag(
+  tagName: string,
+  tagsState: VideoTagState
+): number {
+  return Object.values(tagsState.allVideoTags).filter((tagNames) =>
+    tagNames.includes(tagName)
+  ).length;
 }
 
 /* -----------------------------

@@ -4,7 +4,6 @@ import "./VideoFilterMenu.scss";
 import { TimeFilterSelector } from "./TimeFilterSelector";
 import { type VideoFilterState, type VideoTagState } from "../../state/state";
 import { TagFilterSelector } from "./TagFilterSelector";
-import type { VideoTag } from "../../state/types";
 
 export type CreatorFilter = "followed" | "unfollowed" | "all";
 export type WatchedFilter = "yes" | "no" | "all";
