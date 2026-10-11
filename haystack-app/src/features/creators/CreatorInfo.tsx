@@ -32,7 +32,11 @@ export function CreatorInfo(props: CreatorInfoProps) {
       onPointerEnter={hover.onPointerEnter}
       onPointerLeave={hover.onPointerLeave}
     >
-      <img className="creator-avatar" src={props.creator.avatar.url} alt={props.creator.name} />
+      <img className="creator-avatar" 
+        src={props.creator.avatar.url} 
+        alt={props.creator.name} 
+        loading="lazy" />
+
       <h2>{props.creator.name}</h2>
 
       {hover.hovered && (
@@ -46,6 +50,7 @@ export function CreatorInfo(props: CreatorInfoProps) {
               className="creator-avatar"
               src={props.creator.avatar.url}
               alt={props.creator.name}
+              loading="lazy"
             />
             <h2>{props.creator.name}</h2>
           </a>
