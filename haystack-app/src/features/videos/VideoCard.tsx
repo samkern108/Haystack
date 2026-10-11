@@ -83,7 +83,9 @@ export function VideoCard( props : VideoCardProps) {
         <button className="comment-button" onClick={openCommentCard}> { <TooltipTrigger text="Leave a comment"><CommentIcon/></TooltipTrigger> } </button>
 
         <div className="thumbnail-container" onClick={() => navigate(`/v/${props.video.video_id}/c/${props.creator.ucid}`)} >
-          <img className="thumbnail" src={props.video.thumbnail_url} />
+          <img className="thumbnail" 
+            src={props.video.thumbnail_url} 
+            loading="lazy"/>
 
           <span className="video-duration"> {props.video.timecode} </span>
         </div>
@@ -109,7 +111,9 @@ export function VideoCard( props : VideoCardProps) {
     <div className={hover.hovered ? "hidden" : ""}>
       
       <div className="thumbnail-container">
-        <img className="thumbnail" src={props.video.thumbnail_url} />
+        <img className="thumbnail" 
+          src={props.video.thumbnail_url}
+          loading="lazy" />
 
         <span className="video-duration"> {props.video.timecode} </span>
       </div>

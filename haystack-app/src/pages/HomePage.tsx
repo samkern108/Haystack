@@ -16,7 +16,7 @@ export function HomePage(props: HomePageProps) {
 
   // SCROLL LOGIC
   // Load more creators when the user scrolls near the end of the page.
-  const loadThreshold = 0.9;
+  const loadThreshold = 0.8;
   const [loadAmount, setLoadAmount] = useState(10);
   const lastLoadHeight = useRef(0);
 

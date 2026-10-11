@@ -32,6 +32,11 @@ export interface VideoFilterState {
   excludeTags: string[];
 }
 
+// TODO(Sam): Should creator tags be different from video tags?
+// etc, comedy vs comedian?
+
+// TODO(Sam): Shouldn't be called VideoTagState since we have Creators now
+
 // TODO(Sam): For now, I'm putting tags in here,
 // but I need to talk to Scott about how we store/load ALL community-submitted info.
 export interface VideoTagState {
@@ -196,10 +201,7 @@ export function getVideoFilterState(state: AppState): VideoFilterState {
   return state.videoFilterStates ?? DEFAULT_VIDEO_FILTERS;
 }
 
-export function getTagByName(
-  tagName: string,
-  tagsState: VideoTagState
-): VideoTag | undefined {
+export function getTagByName(tagName: string, tagsState: VideoTagState): VideoTag | undefined {
   return tagsState.allTags[tagName];
 }
 
@@ -212,10 +214,7 @@ export function getTagsForVideo(state: AppState, videoId: string): VideoTag[] {
   return videoTags;
 }
 
-export function getVideoCountForTag(
-  tagName: string,
-  tagsState: VideoTagState
-): number {
+export function getVideoCountForTag(tagName: string, tagsState: VideoTagState): number {
   return Object.values(tagsState.allVideoTags).filter((tagNames) =>
     tagNames.includes(tagName)
   ).length;

@@ -8,6 +8,11 @@ interface VideoTagsProps {
   dispatch: React.ActionDispatch<[action: Action]>;
 }
 
+// TODO(sam)
+// Add an "x" button to the tag to contest the tag?
+// Or should that need to be done on the video page?
+// Click the tag to add it to the sort filters?
+
 export function VideoTags(props: VideoTagsProps) {
   const [isAdding, setIsAdding] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
