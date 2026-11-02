@@ -1,5 +1,5 @@
 import type { VideoLabelId, VideoLabel, VideoLabelIdOrNone } from "../features/labels/labels";
-import type { CreatorFilter, WatchedFilter } from "../features/filtering/VideoFilterMenu";
+import type { CreatorFilter, InWatchLaterFilter, WatchedFilter } from "../features/filtering/VideoFilterMenu";
 import { sameVideo } from "../utils/videohelpers";
 import { AllCreators, type VideoTag } from "./types";
 
@@ -30,6 +30,7 @@ export interface VideoFilterState {
   maxTime: number;
   includeTags: string[];
   excludeTags: string[];
+  inWatchLater?: InWatchLaterFilter;
 }
 
 // TODO(Sam): Should creator tags be different from video tags?

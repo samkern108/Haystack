@@ -4,9 +4,11 @@ import "./VideoFilterMenu.scss";
 import { TimeFilterSelector } from "./TimeFilterSelector";
 import { type VideoFilterState, type VideoTagState } from "../../state/state";
 import { TagFilterSelector } from "./TagFilterSelector";
+import { getVideoLabelIcon } from "../labels/icons";
 
 export type CreatorFilter = "followed" | "unfollowed" | "all";
 export type WatchedFilter = "yes" | "no" | "all";
+export type InWatchLaterFilter = "yes" | "no" | "both";
 
 // TODO(Sam):
 // there's a bug here I don't wanna fix right now :(
@@ -53,6 +55,17 @@ export function VideoFilterMenu(props: VideoFilterMenuProps) {
           : props.videoFilterState.watched === "yes"
             ? "no"
             : "all",
+    });
+  }
+
+  function toggleWatchLaterFilter(): void {
+    updateFilters({
+      inWatchLater:
+        props.videoFilterState.inWatchLater === "both"
+          ? "yes"
+          : props.videoFilterState.inWatchLater === "yes"
+            ? "no"
+            : "both",
     });
   }
 
@@ -117,6 +130,19 @@ export function VideoFilterMenu(props: VideoFilterMenuProps) {
               onTagsChanged={(tags: string[]) => updateFilters({ excludeTags: tags })}
               selectedTagNames={props.videoFilterState.excludeTags} 
               tagsState={props.videoTagState} />
+          </div>
+
+          <div className="video-filter-row">
+            <button
+              key={"watchlater"}
+              type="button"
+              className={`label-selector-button ${"watchlater"} ${
+                true ? "active" : ""
+              }`}
+              onClick={() => toggleWatchLaterFilter()}
+            >
+              { getVideoLabelIcon("watchlater", "label-icon") }
+            </button>
           </div>
         </div>
       )}

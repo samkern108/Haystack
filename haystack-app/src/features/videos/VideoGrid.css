@@ -2,3 +2,7 @@
   display: grid;
   gap: 1rem;
 }
+
+.video-grid-container {
+  margin: 12px;
+}

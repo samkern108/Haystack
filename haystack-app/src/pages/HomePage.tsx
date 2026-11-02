@@ -6,6 +6,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { filterVideosForCreator } from "../utils/videohelpers";
 import { VideoGrid } from "../features/videos/VideoGrid";
 import { shuffleCreators } from "../utils/creatorhelpers";
+import "../features/videos/VideoGrid.css";
 
 interface HomePageProps {
   state: AppState;
@@ -22,6 +23,8 @@ export function HomePage(props: HomePageProps) {
 
   const filters = getVideoFilterState(props.state);
 
+  // TODO(sam): Refresh in place when filters change.
+
   // Remove creators based on the user's defined filters.
   // Also, pre-shuffle the creators so we don't always show them in the same order.
   const creatorsList: Creator[] = useMemo(
@@ -29,6 +32,7 @@ export function HomePage(props: HomePageProps) {
       const creatorState = props.state.creatorStates[creator.ucid];
       if (props.state.videoFilterStates.creator === "unfollowed") return !creatorState.followed;
       if (props.state.videoFilterStates.creator === "followed") return creatorState.followed;
+      console.log("running filter for creator " + creator.name);
 
       return true;
   }), []); // TODO(sam): Are there any instances on which this should recompute?
@@ -71,6 +75,8 @@ export function HomePage(props: HomePageProps) {
     );
   }
 
+  const maxColumns = 4;
+  const maxRows = 3;
   // TODO(Sam): Is there a way to cut down on the load time?
   // More economical: presorting? or... recognizing when to STOP?
 
@@ -86,8 +92,8 @@ export function HomePage(props: HomePageProps) {
               dispatch={props.dispatch} 
               videoIds={videoIds} 
               displayCreator={true}
-              maxColumns={4}
-              maxRows={4}
+              maxColumns={maxColumns}
+              maxRows={maxRows}
             />
         )
   }
@@ -122,7 +128,9 @@ export function HomePage(props: HomePageProps) {
   }
 
   return (
-    <div style={{marginTop: 24}}>
+    <div className="video-grid-container" 
+      // Minwidth calculation to prevent videos from displaying over each other on smaller window sizes.
+      style={{ minWidth: `calc(${maxColumns} * (10px + var(--video-card-width)))` }}>
       { renderVideoGrid() }
     </div>
   );

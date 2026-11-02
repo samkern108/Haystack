@@ -2,9 +2,14 @@
    VIDEO CARD LAYOUT
 ========================= */
 
+/* TODO(sam) Add this to a general styles css file */
+:root {
+  --video-card-width: 300px;
+}
+
 .video-card {
-  flex: 0 0 300px;
-  width: 300px;
+  flex: 0 0 var(--video-card-width);
+  width: var(--video-card-width);
 
   position: relative;
   overflow: visible;
