@@ -47,6 +47,14 @@ export function CommentIcon(props: SVGProps<SVGSVGElement>) {
   );
 }
 
+export function BookmarkIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...props} fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+      <path d="M16 8H48V52L32 40L16 52V8Z" />
+    </svg>
+  );
+}
+
 export function getVideoLabelIcon(id: string, className?: string): import("react").ReactNode {
     switch (id) {
         case "love":
@@ -55,6 +63,8 @@ export function getVideoLabelIcon(id: string, className?: string): import("react
             return <StarIcon className={className}/>;
         case "x":
             return <XIcon className={className}/>;
+        case "watchlater":
+            return <BookmarkIcon className={className}/>;
         default:
             return <StarIcon className={className}/>;
     }

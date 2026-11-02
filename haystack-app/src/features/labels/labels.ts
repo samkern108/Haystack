@@ -1,4 +1,4 @@
-export type SystemVideoLabelId = "love" | "star" | "x";
+export type SystemVideoLabelId = "love" | "star" | "x" | "watchlater";
 export type VideoLabelId = SystemVideoLabelId; // TODO - This should be SystemVideoLabel | UserVideoLabel, but we don't have user video labels yet.
 export type VideoLabelIdOrNone = VideoLabelId | null | undefined;
 
@@ -32,6 +32,13 @@ export const SYSTEM_VIDEO_LABELS: VideoLabel[] = [
     color: "var(--color-x)",
     description: "Do not recommend"
   },
+  {
+    id: "watchlater",
+    label: "Watch Later",
+    associatedPlaylistId: "watchlater",
+    color: "var(--color-watchlater)",
+    description: "Watch later"
+  }
 ];
 
 export const findVideoLabelById = (id: VideoLabelId): VideoLabel | undefined => {

@@ -152,6 +152,13 @@ function createInitialPlaylistStates(): Record<string, PlaylistState> {
     exclusive: true,
     videoIds: []
   };
+  initialPlaylists['watchlater'] = {
+    id: 'watchlater',
+    name: 'Watch Later',
+    videoLabelId: "watchlater",
+    exclusive: false,
+    videoIds: []
+  };
   return initialPlaylists;
 }
 
