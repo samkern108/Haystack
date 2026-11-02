@@ -26,6 +26,8 @@ export function CreatorInfo(props: CreatorInfoProps) {
     });
   }
 
+  console.log('loading creator ' + props.creator.ucid);
+
   return (
     <div
       className="creator-info"

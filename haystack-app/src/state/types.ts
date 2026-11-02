@@ -18,6 +18,7 @@ export interface Video {
   title: string;
   thumbnail_url: string;
   timecode: string;
+  release_date: string;
 }
 
 export interface VideoTag {

@@ -7,6 +7,10 @@ import { BrowserRouter } from 'react-router-dom'
 
 import App from './App.tsx'
 
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/avatar-sw.js");
+}
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>

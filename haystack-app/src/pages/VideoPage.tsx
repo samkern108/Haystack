@@ -163,6 +163,7 @@ export function VideoPage(props: VideoPageProps) {
 
       <section id="video-header">
         <h1>{video.title}</h1>
+        <h1>{video.release_date}</h1>
         <div className="video-actions">
           <LabelSelector
             video={video}

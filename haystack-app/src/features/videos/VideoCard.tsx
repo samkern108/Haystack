@@ -14,6 +14,7 @@ import "./VideoCard.css"
 import './VideoTags.css'
 import "../labels/Labels.scss"
 import { VideoTags } from "./VideoTags";
+import { CreatorAvatar } from "../creators/CreatorAvatar";
 
 interface VideoCardProps {
   creator: Creator;
@@ -54,7 +55,7 @@ export function VideoCard( props : VideoCardProps) {
         rel="noopener noreferrer"
       >
           <p>{'by'}</p>
-          <img className="creator-avatar" src={props.creator.avatar.url} alt={props.creator.name} />   
+          <CreatorAvatar url={props.creator.avatar.url} name={props.creator.name} />
           <p>{props.creator.name}</p>
       </a>
     );

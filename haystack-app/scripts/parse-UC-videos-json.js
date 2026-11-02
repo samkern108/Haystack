@@ -40,7 +40,8 @@ for (const file of files) {
       video_id: item.content_id,
       title: item.metadata?.title?.text,
       thumbnail_url: thumbnailUrl,
-      timecode: item.content_image?.overlays?.[0]?.badges?.[0]?.text
+      timecode: item.content_image?.overlays?.[0]?.badges?.[0]?.text,
+      release_date: item.metadata.metadata.metadata_rows[0].metadata_parts[1]?.text.text
     };
   }
 }
