@@ -56,10 +56,10 @@
   background:
     repeating-linear-gradient(
       to bottom,
-      #fff 0,
-      #fff calc(1lh - 1px),
-      #d3d3d3 calc(1lh - 1px),
-      #d3d3d3 1lh
+      var(--color-background) 0,
+      var(--color-background) calc(1lh - 1px),
+      var(--color-background-emphasis) calc(1lh - 1px),
+      var(--color-background-emphasis) 1lh
     );
 
   background-position-y: 0.8rem;

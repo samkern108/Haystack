@@ -10,7 +10,7 @@
   margin-bottom: 24px;
 
   background: var(--color-background-navbar);
-  border-bottom: 1px solid rgba(0,0,0,.08);
+  border-bottom: 1px solid var(--color-shadow);
   box-shadow:0 3px 12px rgba(0,0,0,.06);
 }
 
@@ -34,7 +34,7 @@
 
 
 .nav-bar a {
-  background: #fffdf9;
+  background: var(--color-button-background);
   border-radius: 6px;
   padding: .6rem 1rem;
   transition: .15s;
@@ -64,7 +64,7 @@
 }
 
 .buttons-bar a.active  {
-  color:white;
+  color: var(--color-button);
   font-weight: 600;
   background-color: var(--color-accent);
 }

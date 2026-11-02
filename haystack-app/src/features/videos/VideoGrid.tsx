@@ -15,6 +15,9 @@ interface VideoGridProps {
   maxRows: number;
 }
 
+// TODO(sam): If a user presses "x" on a video, it should be removed from the grid.
+// it should not be replaced by a video from the same creator.
+
 export function VideoGrid( props : VideoGridProps) {
     return (
         <div className="video-grid"

@@ -102,7 +102,7 @@ export function VideoCard( props : VideoCardProps) {
   return (
     <div
       className="video-card"
-      style={{backgroundColor: `color-mix(in srgb, ${videoLabel?.color} 5%, #ede7d9)`,
+      style={{backgroundColor: `color-mix(in srgb, ${videoLabel?.color} 5%, var(--color-video-card-background))`,
     
       borderColor: `color-mix(in srgb, ${videoLabel?.color} 40%, transparent)`}}
       onPointerEnter={hover.onPointerEnter}

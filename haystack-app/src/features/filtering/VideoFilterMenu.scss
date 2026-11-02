@@ -72,7 +72,7 @@
 
   height: 4px;
 
-  background: #aaa;
+  background: var(--color-background-emphasis);
   border-radius: 2px;
 
   transform: translateY(-50%);
@@ -123,9 +123,9 @@
 
   margin-top: -6px;
 
-  border: 2px solid black;
+  border: var(--color-border) 2px solid;
   border-radius: 50%;
-  background: white;
+  background: var(--color-background);
 
   cursor: grab;
   pointer-events: auto;
@@ -140,10 +140,10 @@
   width: 16px;
   height: 16px;
 
-  border: 2px solid black;
+  border: var(--color-border) 2px solid;
   border-radius: 50%;
 
-  background: white;
+  background: var(--color-background);
 
   cursor: grab;
   pointer-events: auto;
@@ -197,7 +197,7 @@
   border: 1px solid #999;
   border-radius: 6px;
   background: white;
-  color: #222;
+  color: var(--color-text);
   font: inherit;
   font-size: 0.8rem;
 }
@@ -217,7 +217,7 @@
   border: 1px solid #ddd;
   border-radius: 8px;
   background: white;
-  color: #222;
+  color: var(--color-text);
   box-shadow: 0 4px 12px rgb(0 0 0 / 18%);
 }
 
@@ -239,7 +239,7 @@
 
 .tag-suggestion:hover,
 .tag-suggestion.active {
-  background: #eee;
+  background: var(--color-background);
 }
 
 .tag-suggestion-color {
@@ -251,13 +251,13 @@
 
 .tag-suggestions-empty {
   padding: 10px 8px;
-  color: #777;
+  color: var(--color-text-muted);
   font-size: 0.8rem;
 }
 
 .tag-suggestion-count {
   margin-left: auto;
-  color: #777;
+  color: var(--color-text-muted);
   font-size: 0.75rem;
   font-variant-numeric: tabular-nums;
 }

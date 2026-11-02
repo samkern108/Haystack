@@ -1,38 +1,81 @@
 :root {
+  color-scheme: light;
+
+  /* Backgrounds */
   --color-background: #F7F4EE;
+  --color-background-emphasis: #aaa;
   --color-background-navbar: #faf8f2;
 
+  /* Inputs */
+  --color-input: #fffdf9;
+  --color-input-border: #c8c3b8;
+  --color-input-text: #222;
+
+  /* Buttons */
+  --color-button: white;
   
+  /* Surfaces & brand colors */
   --color-surface: #FFFFFF;
   --color-primary: #1E2A2A;
   --color-secondary: #40513B;
   --color-accent: #D97745;
-  --color-gold: #E8C547;
+
+  /* Text */
   --color-text: #202020;
-  --color-muted: #6B6B63;
+  --color-text-muted: #6B7280;
+  --color-text-light: white;
 
-  --color-radius: 18px;
-  --color-shadow: 0 8px 30px rgba(30, 42, 42, 0.08);
-
+  /* Borders & shadows */
   --color-border: #2d2d2d;
 
+  /* Video cards */
+  --color-video-card-background: #ede7d9;
+
+  /* Video duration badges */
+  --color-video-duration: white;
+
+  /* Colors consistent across themes */
   --color-love: #c46180;
   --color-x: #ef4444;
   --color-star: #facc15;
   --color-watchlater: #4290e9;
-
   --color-comment: #4290e9;
 }
 
 [data-theme="dark"] {
-  --color-background: #121212;
-  --color-surface: #1e1e1e;
+  color-scheme: dark;
 
-  --color-primary: #4f46e5;
-  --color-primary-hover: #4338ca;
+  /* Backgrounds */
+  --color-background: #171D23;
+  --color-background-emphasis: #394550;
+  --color-background-navbar: #202932;
 
-  --color-text: #ffffff;
-  --color-text-muted: #a1a1aa;
+  /* Inputs */
+  --color-input: #29343D;
+  --color-input-border: #52606B;
+  --color-input-text: #E8EDF0;
 
-  --color-border: #2d2d2d;
+  /* Buttons */
+  --color-button: #35434E;
+
+  /* Surfaces & brand colors */
+  --color-surface: #242E37;
+  --color-primary: #A8BFCC;
+  --color-secondary: #8FA99B;
+  --color-accent: #E38A5C;
+
+  /* Text */
+  --color-text: #E8EDF0;
+  --color-text-muted: #A0ADB8;
+  --color-text-light: #FFFFFF;
+
+  /* Borders & shadows */
+  --color-border: #46535D;
+  --color-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+
+  /* Video cards */
+  --color-video-card-background: #29343D;
+
+  /* Video duration badges */
+  --color-video-duration: #FFFFFF;
 }

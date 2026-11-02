@@ -14,7 +14,7 @@
   background: none;
   font-size: 14px;
 
-  background-color: #ede7d9;
+  background-color: var(--color-video-card-background);
   padding: 8px;
   border-radius: 12px;
 
@@ -46,7 +46,7 @@
   right: 6px;
 
   background: rgba(0, 0, 0, 0.8);
-  color: white;
+  color: var(--color-video-duration);
 
   padding: 2px 4px;
   border-radius: 3px;
@@ -99,7 +99,7 @@
 
   background: repeating-linear-gradient(
 		var(--color-surface) 0 calc(1.2rem - 1px),
-		#eecfd7 0 1.2rem
+		var(--color-background-emphasis) 0 1.2rem
 	);
 
   border-radius: 10px;

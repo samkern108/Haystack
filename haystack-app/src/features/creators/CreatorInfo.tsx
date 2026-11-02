@@ -5,6 +5,8 @@ import { getChannelURL } from "../../utils/creatorhelpers";
 import "./CreatorRow.css"
 import "../ui/styles/LinedPaper.scss"
 
+// TODO(sam): Add a little heart / star / x to the side of a creator's name!
+
 interface CreatorInfoProps {
   creator: Creator;
   creatorState: CreatorState;

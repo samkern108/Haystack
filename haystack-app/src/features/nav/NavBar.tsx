@@ -1,8 +1,10 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import './NavBar.scss';
 import { VideoFilterMenu } from "../filtering/VideoFilterMenu";
 import { type Action, type VideoFilterState, type VideoTagState } from "../../state/state";
+import { useTheme } from "../../hooks/useTheme";
+
+import './NavBar.scss';
 
 interface NavBarProps {
   videoFilterState: VideoFilterState;
@@ -14,6 +16,7 @@ export function NavBar(props: NavBarProps) {
 
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
+  const { theme, toggleTheme } = useTheme();
 
   function handleSearch(event: React.FormEvent) {
     event.preventDefault();
@@ -52,6 +55,12 @@ export function NavBar(props: NavBarProps) {
         <NavLink to="/submitacreator" className={({ isActive }) => isActive ? "active" : ""}>
           Add A Creator
         </NavLink>
+
+        <div className="app">
+          <button onClick={toggleTheme}>
+            {theme === "light" ? "Light" : "Dark"}
+          </button>
+        </div>
 
         <NavLink
           to="/profile"
