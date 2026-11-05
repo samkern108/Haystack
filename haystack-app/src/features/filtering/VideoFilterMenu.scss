@@ -261,3 +261,26 @@
   font-size: 0.75rem;
   font-variant-numeric: tabular-nums;
 }
+
+
+
+.watch-later-filter {
+  background: none;
+  width: 36px;
+  height: 36px;
+  padding: 0px;
+}
+
+.watch-later-filter.inactive svg {
+  fill: black;
+}
+
+.watch-later-filter.active svg {
+  fill: red;
+}
+
+.watch-later-filter svg {
+  width: 100%;
+  height: 100%;
+  fill: var(--color-watchlater);
+}

@@ -2,8 +2,8 @@ import { getCreatorState, getVideoFilterState, type Action, type AppState } from
 import { TestButton } from "../features/ui/TestButton";
 import { AllCreators, type Creator } from "../state/types";
 import { CreatorRow } from "../features/creators/CreatorRow";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { filterVideosForCreator } from "../utils/videohelpers";
+import { use, useEffect, useMemo, useRef, useState } from "react";
+import { filterVideosForCreator, filterVideosFromPlaylist } from "../utils/videohelpers";
 import { VideoGrid } from "../features/videos/VideoGrid";
 import { shuffleCreators } from "../utils/creatorhelpers";
 import "../features/videos/VideoGrid.css";
@@ -37,7 +37,19 @@ export function HomePage(props: HomePageProps) {
       return true;
   }), []); // TODO(sam): Are there any instances on which this should recompute?
 
-  const videoIds = useMemo(() => {
+  const videoIdsFromPlaylist = useMemo(() => {
+    const playlistVideoIds = props.state.playlistStates["watchlater"]?.videoIds || [];
+    const filteredVideoIds = filterVideosFromPlaylist(
+      playlistVideoIds,
+      props.state.creatorStates,
+      filters,
+      props.state.videoTagState
+    );
+
+    return filteredVideoIds;
+  }, [props.state.playlistStates.videoIds, props.state.creatorStates, filters, props.state.videoTagState]);
+
+  const videoIdsFromAllCreators = useMemo(() => {
     let ids = [] as [creatorId: string, videoId: string][];
 
     creatorsList.forEach((creator) => {
@@ -85,6 +97,9 @@ export function HomePage(props: HomePageProps) {
  
   // TODO(Sam): We should only need to do this once, when filters are updated, correct?
   function renderVideoGrid() {
+
+    const videoIds = filters.inWatchLater ? videoIdsFromPlaylist : videoIdsFromAllCreators;
+
     return (
             <VideoGrid
               key={'video-grid'}

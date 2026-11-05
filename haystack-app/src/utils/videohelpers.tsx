@@ -78,9 +78,7 @@ export function filterVideosForCreator(
     if (
       (filters.watched === "no" && watched) ||
       (filters.watched === "yes" && !watched)
-    ) {
-      continue;
-    }
+    ) continue;
 
     // TIME
     const duration = getDurationInSecondsFromTimecode(video.timecode);
@@ -88,9 +86,7 @@ export function filterVideosForCreator(
     if (
       duration >= filters.minTime * 60 &&
       duration <= filters.maxTime * 60
-    ) {
-      outputVideoIds.push([creatorId, videoId]);
-    }
+    ) { outputVideoIds.push([creatorId, videoId]); }
   }
 
   // EXCLUDE TAGS: remove matching videos after the other filters.
@@ -111,6 +107,65 @@ export function filterVideosForCreator(
     ? finalResults.slice(0, maxResultsPerCreator)
     : finalResults;
 }
+
+export function filterVideosFromPlaylist(
+  playlistVideoIds: [string, string][],
+  creatorStates: Record<string, CreatorState>,
+  filters: VideoFilterState,
+  tagState: VideoTagState,
+  maxResults?: number
+): [string, string][] {
+
+  const results: [string, string][] = [];
+
+  for (const [creatorId, videoId] of playlistVideoIds) {
+    const video = getVideoById(creatorId, videoId);
+    if (!video) continue;
+
+    const videoState = creatorStates[creatorId]?.videoStates[videoId];
+
+    // INCLUDE TAGS
+    const videoTags = tagState.allVideoTags[videoId] ?? [];
+
+    if (
+      filters.includeTags.length > 0 &&
+      !filters.includeTags.some((tag) => videoTags.includes(tag))
+    ) continue;
+
+    // EXCLUDE TAGS
+    if (
+      filters.excludeTags.some((tag) => videoTags.includes(tag))
+    ) continue;
+
+    // WATCHED
+    const watched =
+      (videoState?.historicalMaxWatchPercentage ?? 0) > 0.9;
+
+    if (
+      (filters.watched === "no" && watched) ||
+      (filters.watched === "yes" && !watched)
+    ) continue;
+
+    // DURATION
+    const duration = getDurationInSecondsFromTimecode(video.timecode);
+
+    if (
+      duration < filters.minTime * 60 ||
+      duration > filters.maxTime * 60
+    ) continue;
+
+    results.push([creatorId, videoId]);
+
+    // Stop as soon as we have enough results
+    if (maxResults !== undefined && results.length >= maxResults) {
+      break;
+    }
+  }
+
+  return results;
+}
+
+
 
 export function getDurationInSecondsFromTimecode(timecode: string): number {
   const parts = timecode.split(":").map(Number);

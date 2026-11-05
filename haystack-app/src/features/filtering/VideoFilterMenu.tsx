@@ -136,8 +136,9 @@ export function VideoFilterMenu(props: VideoFilterMenuProps) {
             <button
               key={"watchlater"}
               type="button"
-              className={`label-selector-button ${"watchlater"} ${
-                true ? "active" : ""
+              className={`watch-later-filter ${
+                props.videoFilterState.inWatchLater === "yes" ? "active" : 
+                props.videoFilterState.inWatchLater === "no" ? "inactive" : ""
               }`}
               onClick={() => toggleWatchLaterFilter()}
             >
