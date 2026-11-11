@@ -21,6 +21,28 @@
   z-index: 100;
 }
 
+.playlist-menu {
+  left: 0;
+  right: auto;
+}
+
+.love-playlist-filter {
+  background: none;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+
+  svg {
+    width: 100%;
+    height: 100%;
+    fill: var(--color-text-muted);
+  }
+
+  &.active svg {
+    fill: var(--color-love);
+  }
+}
+
 .video-filter-row {
   align-items: center;
   justify-content: space-between;
@@ -272,11 +294,11 @@
 }
 
 .watch-later-filter.inactive svg {
-  fill: black;
+  fill: var(--color-text-muted);
 }
 
 .watch-later-filter.active svg {
-  fill: red;
+  fill: var(--color-watchlater);
 }
 
 .watch-later-filter svg {

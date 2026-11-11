@@ -38,7 +38,19 @@ export function HomePage(props: HomePageProps) {
   }), []); // TODO(sam): Are there any instances on which this should recompute?
 
   const videoIdsFromPlaylist = useMemo(() => {
-    const playlistVideoIds = props.state.playlistStates["watchlater"]?.videoIds || [];
+    const selectedPlaylistIds = [
+      ...(filters.inWatchLater ? ["watchlater"] : []),
+      ...(filters.inLove ? ["love"] : []),
+    ];
+    const seen = new Set<string>();
+    const playlistVideoIds = selectedPlaylistIds
+      .flatMap((id) => props.state.playlistStates[id]?.videoIds ?? [])
+      .filter(([creatorId, videoId]) => {
+        const key = JSON.stringify([creatorId, videoId]);
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
     const filteredVideoIds = filterVideosFromPlaylist(
       playlistVideoIds,
       props.state.creatorStates,
@@ -47,7 +59,7 @@ export function HomePage(props: HomePageProps) {
     );
 
     return filteredVideoIds;
-  }, [props.state.playlistStates.videoIds, props.state.creatorStates, filters, props.state.videoTagState]);
+  }, [props.state.playlistStates, props.state.creatorStates, filters, props.state.videoTagState]);
 
   const videoIdsFromAllCreators = useMemo(() => {
     let ids = [] as [creatorId: string, videoId: string][];
@@ -98,7 +110,9 @@ export function HomePage(props: HomePageProps) {
   // TODO(Sam): We should only need to do this once, when filters are updated, correct?
   function renderVideoGrid() {
 
-    const videoIds = filters.inWatchLater ? videoIdsFromPlaylist : videoIdsFromAllCreators;
+    const hasPlaylistFilter = filters.inWatchLater || filters.inLove;
+    const videoIds = hasPlaylistFilter ? videoIdsFromPlaylist : videoIdsFromAllCreators;
+    console.log(hasPlaylistFilter ? "Rendering videos from playlist" : "Rendering videos from all creators");
 
     return (
             <VideoGrid

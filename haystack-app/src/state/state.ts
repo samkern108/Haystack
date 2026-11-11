@@ -1,5 +1,5 @@
 import type { VideoLabelId, VideoLabel, VideoLabelIdOrNone } from "../features/labels/labels";
-import type { CreatorFilter, InWatchLaterFilter, WatchedFilter } from "../features/filtering/VideoFilterMenu";
+import type { CreatorFilter, WatchedFilter } from "../features/filtering/VideoFilterMenu";
 import { sameVideo } from "../utils/videohelpers";
 import { AllCreators, type VideoTag } from "./types";
 
@@ -30,7 +30,8 @@ export interface VideoFilterState {
   maxTime: number;
   includeTags: string[];
   excludeTags: string[];
-  inWatchLater?: InWatchLaterFilter;
+  inWatchLater: boolean;
+  inLove: boolean;
 }
 
 // TODO(Sam): Should creator tags be different from video tags?
@@ -41,9 +42,8 @@ export interface VideoFilterState {
 // TODO(Sam): For now, I'm putting tags in here,
 // but I need to talk to Scott about how we store/load ALL community-submitted info.
 export interface VideoTagState {
-  allTags: Record<string, VideoTag>;
-  // videoId, videoTagName[]
-  allVideoTags: Record<string, string[]>;
+  allTags: Record<string, VideoTag>; 
+  allVideoTags: Record<string, string[]>; // videoId, videoTagName[]
 }
 
 export interface PlaylistState {
@@ -123,6 +123,8 @@ export const DEFAULT_VIDEO_FILTERS: VideoFilterState = {
   maxTime: 240,
   includeTags: [],
   excludeTags: [],
+  inWatchLater: false,
+  inLove: false,
 };
 
 export const DEFAULT_VIDEO_TAGS: VideoTagState = {

@@ -4,11 +4,9 @@ import "./VideoFilterMenu.scss";
 import { TimeFilterSelector } from "./TimeFilterSelector";
 import { type VideoFilterState, type VideoTagState } from "../../state/state";
 import { TagFilterSelector } from "./TagFilterSelector";
-import { getVideoLabelIcon } from "../labels/icons";
 
 export type CreatorFilter = "followed" | "unfollowed" | "all";
 export type WatchedFilter = "yes" | "no" | "all";
-export type InWatchLaterFilter = "yes" | "no" | "both";
 
 // TODO(Sam):
 // there's a bug here I don't wanna fix right now :(
@@ -58,24 +56,13 @@ export function VideoFilterMenu(props: VideoFilterMenuProps) {
     });
   }
 
-  function toggleWatchLaterFilter(): void {
-    updateFilters({
-      inWatchLater:
-        props.videoFilterState.inWatchLater === "both"
-          ? "yes"
-          : props.videoFilterState.inWatchLater === "yes"
-            ? "no"
-            : "both",
-    });
-  }
-
   return (
     <div className="video-filter">
       <button
         className="video-filter-button"
         onClick={() => setIsOpen(!isOpen)}
       >
-        {isOpen ? "Close Filters" : "Open Filters"}
+        {isOpen ? "▲ Filters" : "▼ Filters"}
       </button>
 
       {isOpen && (
@@ -130,20 +117,6 @@ export function VideoFilterMenu(props: VideoFilterMenuProps) {
               onTagsChanged={(tags: string[]) => updateFilters({ excludeTags: tags })}
               selectedTagNames={props.videoFilterState.excludeTags} 
               tagsState={props.videoTagState} />
-          </div>
-
-          <div className="video-filter-row">
-            <button
-              key={"watchlater"}
-              type="button"
-              className={`watch-later-filter ${
-                props.videoFilterState.inWatchLater === "yes" ? "active" : 
-                props.videoFilterState.inWatchLater === "no" ? "inactive" : ""
-              }`}
-              onClick={() => toggleWatchLaterFilter()}
-            >
-              { getVideoLabelIcon("watchlater", "label-icon") }
-            </button>
           </div>
         </div>
       )}

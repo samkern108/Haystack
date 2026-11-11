@@ -1,4 +1,4 @@
-import type { CreatorState, VideoFilterState, VideoTagState } from "../state/state";
+import type { CreatorState, PlaylistState, VideoFilterState, VideoTagState } from "../state/state";
 import { AllCreators, type Video } from "../state/types";
 
 export function getVideoById(creatorId: string, videoId: string): Video {

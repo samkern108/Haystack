@@ -5,6 +5,7 @@ import { type Action, type VideoFilterState, type VideoTagState } from "../../st
 import { useTheme } from "../../hooks/useTheme";
 
 import './NavBar.scss';
+import { PlaylistMenu } from "../filtering/PlaylistMenu";
 
 interface NavBarProps {
   videoFilterState: VideoFilterState;
@@ -43,6 +44,8 @@ export function NavBar(props: NavBarProps) {
         </form>
         
         <VideoFilterMenu videoFilterState={props.videoFilterState} videoTagState={props.videoTagState} dispatch={props.dispatch} />
+
+        <PlaylistMenu videoFilterState={props.videoFilterState} dispatch={props.dispatch} />
 
         <NavLink to="/playlists" className={({ isActive }) => isActive ? "active" : ""}>
           Playlists
