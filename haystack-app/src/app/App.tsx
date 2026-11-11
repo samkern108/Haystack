@@ -8,7 +8,6 @@ import { VideoPage } from '../pages/VideoPage';
 import { SubmitACreatorPage } from '../pages/SubmitACreatorPage'
 import { HomePage } from '../pages/HomePage';
 import { AboutUsPage } from '../pages/AboutUsPage';
-import { PlaylistsPage } from '../pages/PlaylistsPage';
 import { NavBar } from '../features/nav/NavBar';
 import { AppRoutes } from '../features/nav/routes';
 import { reducer, initialState, getVideoFilterState } from '../state/state';
@@ -54,14 +53,13 @@ export default function App() {
   return (
     <div>
       <InnertubeContext value={innertube}>
-        <NavBar videoFilterState={getVideoFilterState(state)} videoTagState={state.videoTagState} creatorStates={state.creatorStates} dispatch={dispatch} />
+        <NavBar filterPresets={state.filterPresets ?? []} activeFilterPresetId={state.activeFilterPresetId} videoFilterState={getVideoFilterState(state)} videoTagState={state.videoTagState} creatorStates={state.creatorStates} dispatch={dispatch} />
           <Routes>
             <Route path={AppRoutes.HOME} element={<HomePage state={state} dispatch={dispatch} />} />
             <Route path={AppRoutes.CREATORS} element={<CreatorsPage state={state} dispatch={dispatch} />} />
             <Route path={AppRoutes.CREATOR} element={<CreatorPage state={state} dispatch={dispatch} />} />
             <Route path={AppRoutes.VIDEO} element={<VideoPage state={state} dispatch={dispatch} />} />
             <Route path={AppRoutes.ABOUT} element={<AboutUsPage />} />
-            <Route path={AppRoutes.PLAYLISTS} element={<PlaylistsPage state={state} dispatch={dispatch} />} />
             <Route path={AppRoutes.SUBMIT_A_CREATOR} element={<SubmitACreatorPage />} />
             <Route path={AppRoutes.SEARCH} element={<SearchPage/>} />
             <Route path={AppRoutes.USER_PROFILE} element={<UserProfilePage/>} />

@@ -37,6 +37,26 @@ export interface VideoFilterState {
   inLove: boolean;
 }
 
+export type FilterPresetValues = Pick<VideoFilterState,
+  "creator" | "watched" | "minTime" | "maxTime" | "includeTags" | "excludeTags">;
+
+export interface FilterPreset {
+  id: string;
+  name: string;
+  filters: FilterPresetValues;
+}
+
+function presetValues(filters: VideoFilterState): FilterPresetValues {
+  return {
+    creator: filters.creator,
+    watched: filters.watched,
+    minTime: filters.minTime,
+    maxTime: filters.maxTime,
+    includeTags: [...filters.includeTags],
+    excludeTags: [...filters.excludeTags],
+  };
+}
+
 // TODO(Sam): Should creator tags be different from video tags?
 // etc, comedy vs comedian?
 
@@ -59,6 +79,8 @@ export interface PlaylistState {
 }
 
 export interface AppState {
+  filterPresets?: FilterPreset[];
+  activeFilterPresetId?: string;
   creatorStates: Record<string, CreatorState>;
   playlistStates: Record<string, PlaylistState>;
 
@@ -72,6 +94,8 @@ export interface AppState {
 ------------------------------ */
 
 export type Action =
+  | { type: "SAVE_FILTER_PRESET"; id: string; name: string }
+  | { type: "TOGGLE_FILTER_PRESET"; id: string }
   | {
       type: "TOGGLE_CREATOR_TAG_EXCEPTION";
       creatorId: string;
@@ -100,12 +124,6 @@ export type Action =
       type: "TOGGLE_CREATOR_FLAG";
       creatorId: string;
       field: "followed" | "favorite" | "doNotShow";
-    }
-  |
-    {
-      type: "CREATE_NEW_PLAYLIST";
-      playlistId: string;
-      playlistName: string;
     }
   | {
       type: "SET_VIDEO_LABEL";
@@ -201,6 +219,7 @@ export const initialState: AppState = {
     return acc;
   }, {} as Record<string, CreatorState>),
   playlistStates: createInitialPlaylistStates(),
+  filterPresets: [],
   videoFilterStates: DEFAULT_VIDEO_FILTERS,
   videoTagState: DEFAULT_VIDEO_TAGS,
 };
@@ -377,9 +396,41 @@ export function reducer(state: AppState, action: Action): AppState {
       };
     }
     
-    case "SET_VIDEO_FILTERS": {
+    case "SAVE_FILTER_PRESET": {
+      const name = action.name.trim();
+      if (!name) return state;
       return {
         ...state,
+        filterPresets: [...(state.filterPresets ?? []), {
+          id: action.id, name, filters: presetValues(getVideoFilterState(state)),
+        }],
+        activeFilterPresetId: action.id,
+      };
+    }
+
+    case "TOGGLE_FILTER_PRESET": {
+      const preset = state.filterPresets?.find((item) => item.id === action.id);
+      if (!preset) return state;
+      const deactivating = state.activeFilterPresetId === action.id;
+      return {
+        ...state,
+        activeFilterPresetId: deactivating ? undefined : preset.id,
+        videoFilterStates: {
+          ...getVideoFilterState(state),
+          ...presetValues(deactivating ? DEFAULT_VIDEO_FILTERS : {
+            ...getVideoFilterState(state), ...preset.filters,
+          }),
+        },
+      };
+    }
+
+    case "SET_VIDEO_FILTERS": {
+      const activePreset = state.filterPresets?.find((item) => item.id === state.activeFilterPresetId);
+      return {
+        ...state,
+        activeFilterPresetId: activePreset
+          && JSON.stringify(presetValues(action.filters)) === JSON.stringify(activePreset.filters)
+          ? activePreset.id : undefined,
         videoFilterStates: action.filters
       };
     }
@@ -443,26 +494,6 @@ export function reducer(state: AppState, action: Action): AppState {
             [field]: !creator[field]
           }
         }
-      };
-    }
-
-    case "CREATE_NEW_PLAYLIST": {
-      const { playlistId, playlistName } = action;
-      const playlist = 
-      { id: playlistId, 
-        name: playlistName,
-        description: "",
-        videoLabelId: "x",
-        videoIds: [],
-        systemDefault: false,
-
-      } as PlaylistState;
-      return {
-        ...state,
-        playlistStates: {
-          ...state.playlistStates,
-          [playlistId]: playlist,
-        },
       };
     }
 

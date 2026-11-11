@@ -1,13 +1,15 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { VideoFilterMenu } from "../filtering/VideoFilterMenu";
-import { type Action, type CreatorState, type VideoFilterState, type VideoTagState } from "../../state/state";
+import { type Action, type FilterPreset, type CreatorState, type VideoFilterState, type VideoTagState } from "../../state/state";
 import { useTheme } from "../../hooks/useTheme";
 
 import './NavBar.scss';
 import { PlaylistMenu } from "../filtering/PlaylistMenu";
 
 interface NavBarProps {
+  filterPresets: FilterPreset[];
+  activeFilterPresetId?: string;
   videoFilterState: VideoFilterState;
   videoTagState: VideoTagState;
   creatorStates: Record<string, CreatorState>;
@@ -44,13 +46,10 @@ export function NavBar(props: NavBarProps) {
           />
         </form>
         
-        <VideoFilterMenu videoFilterState={props.videoFilterState} videoTagState={props.videoTagState} creatorStates={props.creatorStates} dispatch={props.dispatch} />
+        <VideoFilterMenu filterPresets={props.filterPresets} activeFilterPresetId={props.activeFilterPresetId} videoFilterState={props.videoFilterState} videoTagState={props.videoTagState} creatorStates={props.creatorStates} dispatch={props.dispatch} />
 
         <PlaylistMenu videoFilterState={props.videoFilterState} dispatch={props.dispatch} />
 
-        <NavLink to="/playlists" className={({ isActive }) => isActive ? "active" : ""}>
-          Playlists
-        </NavLink>
 
         <NavLink to="/about" className={({ isActive }) => isActive ? "active" : ""}>
           About Us
