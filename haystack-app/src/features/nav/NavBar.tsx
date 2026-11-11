@@ -1,7 +1,7 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { VideoFilterMenu } from "../filtering/VideoFilterMenu";
-import { type Action, type VideoFilterState, type VideoTagState } from "../../state/state";
+import { type Action, type CreatorState, type VideoFilterState, type VideoTagState } from "../../state/state";
 import { useTheme } from "../../hooks/useTheme";
 
 import './NavBar.scss';
@@ -10,6 +10,7 @@ import { PlaylistMenu } from "../filtering/PlaylistMenu";
 interface NavBarProps {
   videoFilterState: VideoFilterState;
   videoTagState: VideoTagState;
+  creatorStates: Record<string, CreatorState>;
   dispatch: React.ActionDispatch<[action: Action]>;
 }
 
@@ -43,7 +44,7 @@ export function NavBar(props: NavBarProps) {
           />
         </form>
         
-        <VideoFilterMenu videoFilterState={props.videoFilterState} videoTagState={props.videoTagState} dispatch={props.dispatch} />
+        <VideoFilterMenu videoFilterState={props.videoFilterState} videoTagState={props.videoTagState} creatorStates={props.creatorStates} dispatch={props.dispatch} />
 
         <PlaylistMenu videoFilterState={props.videoFilterState} dispatch={props.dispatch} />
 

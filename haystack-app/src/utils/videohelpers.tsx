@@ -1,4 +1,4 @@
-import type { CreatorState, PlaylistState, VideoFilterState, VideoTagState } from "../state/state";
+import type { CreatorState, VideoFilterState, VideoTagState } from "../state/state";
 import { AllCreators, type Video } from "../state/types";
 import { MAX_VIDEO_FILTER_TIME } from "../features/filtering/constants";
 
@@ -6,35 +6,42 @@ export function getVideoById(creatorId: string, videoId: string): Video {
   return AllCreators[creatorId]?.videos?.[videoId];
 }
 
+function getEffectiveVideoTagNames(
+  videoId: string,
+  tagState: VideoTagState,
+  creatorState?: CreatorState
+): string[] {
+  const exceptions = creatorState?.videoStates[videoId]?.creatorTagExceptions ?? [];
+  const creatorTags = (creatorState?.tags ?? []).filter(
+    (tag) => !exceptions.includes(tag)
+  );
+  return [...(tagState.allVideoTags[videoId] ?? []), ...creatorTags];
+}
+
 export function filterVideoIdsByIncludedTags(
   videoIds: string[],
   includeTagNames: string[],
-  tagState: VideoTagState
+  tagState: VideoTagState,
+  creatorState?: CreatorState
 ): string[] {
   if (includeTagNames.length === 0) return videoIds;
 
-  const includedVideoIds = new Set<string>();
-
-  for (const [videoId, tagNames] of Object.entries(
-    tagState.allVideoTags
-  )) {
-    if (includeTagNames.some((name) => tagNames.includes(name))) {
-      includedVideoIds.add(videoId);
-    }
-  }
-
-  return videoIds.filter((videoId) => includedVideoIds.has(videoId));
+  return videoIds.filter((videoId) => {
+    const videoTags = getEffectiveVideoTagNames(videoId, tagState, creatorState);
+    return includeTagNames.some((name) => videoTags.includes(name));
+  });
 }
 
 export function filterVideoIdsByExcludedTags(
   videoIds: string[],
   excludeTagNames: string[],
-  tagState: VideoTagState
+  tagState: VideoTagState,
+  creatorState?: CreatorState
 ): string[] {
   if (excludeTagNames.length === 0) return videoIds;
 
   return videoIds.filter((videoId) => {
-    const videoTags = tagState.allVideoTags[videoId] ?? [];
+    const videoTags = getEffectiveVideoTagNames(videoId, tagState, creatorState);
 
     return !excludeTagNames.some((name) => videoTags.includes(name));
   });
@@ -60,7 +67,8 @@ export function filterVideosForCreator(
   candidateVideoIds = filterVideoIdsByIncludedTags(
     candidateVideoIds,
     filters.includeTags,
-    tagState
+    tagState,
+    creatorState
   );
 
   const outputVideoIds: [creatorId: string, videoId: string][] = [];
@@ -94,7 +102,8 @@ export function filterVideosForCreator(
   const finalVideoIds = filterVideoIdsByExcludedTags(
     outputVideoIds.map(([, videoId]) => videoId),
     filters.excludeTags,
-    tagState
+    tagState,
+    creatorState
   );
 
   const finalVideoIdSet = new Set(finalVideoIds);
@@ -126,7 +135,7 @@ export function filterVideosFromPlaylist(
     const videoState = creatorStates[creatorId]?.videoStates[videoId];
 
     // INCLUDE TAGS
-    const videoTags = tagState.allVideoTags[videoId] ?? [];
+    const videoTags = getEffectiveVideoTagNames(videoId, tagState, creatorStates[creatorId]);
 
     if (
       filters.includeTags.length > 0 &&

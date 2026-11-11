@@ -1,10 +1,11 @@
 
 import { useEffect, useRef, useState } from "react";
-import { getVideoCountForTag, type VideoTagState } from "../../state/state";
+import { getVideoCountForTag, type CreatorState, type VideoTagState } from "../../state/state";
 
 interface TagFilterSelectorProps {
   selectedTagNames: string[];
   tagsState: VideoTagState;
+  creatorStates: Record<string, CreatorState>;
   onTagsChanged: (tagNames: string[]) => void;
 }
 
@@ -172,7 +173,7 @@ export function TagFilterSelector(props: TagFilterSelectorProps) {
                         />
                         <span>{tagName}</span>
                         <span className="tag-suggestion-count">
-                            ({getVideoCountForTag(tagName, props.tagsState)})
+                            ({getVideoCountForTag(tagName, props.tagsState, props.creatorStates)})
                         </span>
                         </button>
                     );

@@ -245,10 +245,27 @@ export function getTagsForCreator(state: AppState, creatorId: string): VideoTag[
   });
 }
 
-export function getVideoCountForTag(tagName: string, tagsState: VideoTagState): number {
-  return Object.values(tagsState.allVideoTags).filter((tagNames) =>
-    tagNames.includes(tagName)
-  ).length;
+export function getVideoCountForTag(
+  tagName: string,
+  tagsState: VideoTagState,
+  creatorStates: Record<string, CreatorState>
+): number {
+  const videoIds = new Set(
+    Object.entries(tagsState.allVideoTags)
+      .filter(([, tagNames]) => tagNames.includes(tagName))
+      .map(([videoId]) => videoId)
+  );
+
+  for (const [creatorId, creatorState] of Object.entries(creatorStates)) {
+    if (!creatorState.tags?.includes(tagName)) continue;
+
+    for (const videoId of Object.keys(AllCreators[creatorId]?.videos ?? {})) {
+      const exceptions = creatorState.videoStates[videoId]?.creatorTagExceptions ?? [];
+      if (!exceptions.includes(tagName)) videoIds.add(videoId);
+    }
+  }
+
+  return videoIds.size;
 }
 
 /* -----------------------------

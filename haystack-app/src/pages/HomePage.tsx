@@ -22,6 +22,9 @@ export function HomePage(props: HomePageProps) {
   const lastLoadHeight = useRef(0);
 
   const filters = getVideoFilterState(props.state);
+  const maxColumns = 4;
+  const maxRows = 3;
+  const maxVideos = maxColumns * maxRows;
 
   // TODO(sam): Refresh in place when filters change.
 
@@ -77,8 +80,35 @@ export function HomePage(props: HomePageProps) {
       );
     });
 
+    // Keep one video per creator first, then fill any remaining slots
+    // with additional matching videos from those creators, one per round.
+    if (ids.length < maxVideos) {
+      const remainingByCreator = ids.map(([creatorId]) =>
+        filterVideosForCreator(
+          creatorId,
+          getCreatorState(props.state, creatorId),
+          filters,
+          AllCreators[creatorId].videos,
+          props.state.videoTagState,
+          maxVideos
+        ).slice(1)
+      );
+
+      for (let index = 0; ids.length < maxVideos; index++) {
+        let added = false;
+        for (const remaining of remainingByCreator) {
+          if (ids.length >= maxVideos) break;
+          if (remaining[index]) {
+            ids.push(remaining[index]);
+            added = true;
+          }
+        }
+        if (!added) break;
+      }
+    }
+
     return ids;
-  }, [creatorsList, props.state.creatorStates, filters ]);
+  }, [creatorsList, props.state.creatorStates, props.state.videoTagState, filters, maxVideos]);
 
   console.log("REBUILDING HOMEPAGE");
 
@@ -99,8 +129,6 @@ export function HomePage(props: HomePageProps) {
     );
   }
 
-  const maxColumns = 4;
-  const maxRows = 3;
   // TODO(Sam): Is there a way to cut down on the load time?
   // More economical: presorting? or... recognizing when to STOP?
 

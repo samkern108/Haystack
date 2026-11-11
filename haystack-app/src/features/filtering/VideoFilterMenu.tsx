@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import "./VideoFilterMenu.scss";
 import { TimeFilterSelector } from "./TimeFilterSelector";
-import { type VideoFilterState, type VideoTagState } from "../../state/state";
+import { type CreatorState, type VideoFilterState, type VideoTagState } from "../../state/state";
 import { TagFilterSelector } from "./TagFilterSelector";
 
 export type CreatorFilter = "followed" | "unfollowed" | "all";
@@ -11,6 +11,7 @@ export type WatchedFilter = "yes" | "no" | "all";
 interface VideoFilterMenuProps {
   videoFilterState: VideoFilterState;
   videoTagState: VideoTagState;
+  creatorStates: Record<string, CreatorState>;
   dispatch: React.ActionDispatch<[
     action: { type: "SET_VIDEO_FILTERS"; filters: VideoFilterState }
   ]>;
@@ -103,6 +104,7 @@ export function VideoFilterMenu(props: VideoFilterMenuProps) {
               }
               selectedTagNames={props.videoFilterState.includeTags}
               tagsState={props.videoTagState}
+              creatorStates={props.creatorStates}
             />          
           </div>
 
@@ -111,7 +113,8 @@ export function VideoFilterMenu(props: VideoFilterMenuProps) {
             <TagFilterSelector
               onTagsChanged={(tags: string[]) => updateFilters({ excludeTags: tags })}
               selectedTagNames={props.videoFilterState.excludeTags} 
-              tagsState={props.videoTagState} />
+              tagsState={props.videoTagState}
+              creatorStates={props.creatorStates} />
           </div>
         </div>
       )}
