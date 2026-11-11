@@ -41,6 +41,7 @@ export function VideoStrip( props : VideoStripProps) {
                     videoState={videoState}
                     videoFilterState={props.state.videoFilterStates}
                     videoTags={getTagsForVideo(props.state, video.video_id)}
+                    allTags={Object.values(props.state.videoTagState.allTags)}
                     creatorTags={getTagsForCreator(props.state, creator.ucid)}
                     displayCreator={props.displayCreator}
                     dispatch={props.dispatch}

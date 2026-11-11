@@ -1,3 +1,4 @@
+import { hasTag, sameTag, resolveTagName } from "../utils/taghelpers";
 import type { VideoLabelId, VideoLabel, VideoLabelIdOrNone } from "../features/labels/labels";
 import type { CreatorFilter, WatchedFilter } from "../features/filtering/VideoFilterMenu";
 import { sameVideo } from "../utils/videohelpers";
@@ -94,6 +95,9 @@ export interface AppState {
 ------------------------------ */
 
 export type Action =
+  | { type: "REMOVE_TAG"; tagName: string }
+  | { type: "SET_TAG_EMOJI"; tagName: string; emoji: string }
+  | { type: "RENAME_TAG" | "MERGE_TAG"; source: string; target: string }
   | { type: "SAVE_FILTER_PRESET"; id: string; name: string }
   | { type: "TOGGLE_FILTER_PRESET"; id: string }
   | {
@@ -245,7 +249,7 @@ export function getVideoFilterState(state: AppState): VideoFilterState {
 }
 
 export function getTagByName(tagName: string, tagsState: VideoTagState): VideoTag | undefined {
-  return tagsState.allTags[tagName];
+  return tagsState.allTags[resolveTagName(Object.keys(tagsState.allTags), tagName)];
 }
 
 export function getTagsForVideo(state: AppState, videoId: string): VideoTag[] {
@@ -271,16 +275,16 @@ export function getVideoCountForTag(
 ): number {
   const videoIds = new Set(
     Object.entries(tagsState.allVideoTags)
-      .filter(([, tagNames]) => tagNames.includes(tagName))
+      .filter(([, tagNames]) => hasTag(tagNames, tagName))
       .map(([videoId]) => videoId)
   );
 
   for (const [creatorId, creatorState] of Object.entries(creatorStates)) {
-    if (!creatorState.tags?.includes(tagName)) continue;
+    if (!hasTag(creatorState.tags ?? [], tagName)) continue;
 
     for (const videoId of Object.keys(AllCreators[creatorId]?.videos ?? {})) {
       const exceptions = creatorState.videoStates[videoId]?.creatorTagExceptions ?? [];
-      if (!exceptions.includes(tagName)) videoIds.add(videoId);
+      if (!hasTag(exceptions, tagName)) videoIds.add(videoId);
     }
   }
 
@@ -342,10 +346,106 @@ function toggleVideoInPlaylist(
 
 export function reducer(state: AppState, action: Action): AppState {
   switch (action.type) {
+    case "REMOVE_TAG": {
+      if (!Object.hasOwn(state.videoTagState.allTags, action.tagName)) return state;
+      const remove = (names: string[]) => names.filter((name) => !sameTag(name, action.tagName));
+      const cleanFilters = <T extends FilterPresetValues>(filters: T): T => ({
+        ...filters, includeTags: remove(filters.includeTags), excludeTags: remove(filters.excludeTags),
+      });
+      const allTags = Object.fromEntries(Object.entries(state.videoTagState.allTags)
+        .filter(([name]) => !sameTag(name, action.tagName)));
+      return {
+        ...state,
+        videoTagState: {
+          ...state.videoTagState,
+          allTags,
+          allVideoTags: Object.fromEntries(Object.entries(state.videoTagState.allVideoTags)
+            .map(([id, names]) => [id, remove(names)])),
+        },
+        creatorStates: Object.fromEntries(Object.entries(state.creatorStates).map(([id, creator]) => [id, {
+          ...creator,
+          tags: remove(creator.tags ?? []),
+          videoStates: Object.fromEntries(Object.entries(creator.videoStates).map(([videoId, video]) => [videoId, {
+            ...video,
+            ...(video.creatorTagExceptions ? { creatorTagExceptions: remove(video.creatorTagExceptions) } : {}),
+          }])),
+        }])),
+        videoFilterStates: cleanFilters(getVideoFilterState(state)),
+        filterPresets: state.filterPresets?.map((preset) => ({ ...preset, filters: cleanFilters(preset.filters) })),
+      };
+    }
+    case "SET_TAG_EMOJI": {
+      if (!Object.hasOwn(state.videoTagState.allTags, action.tagName)) return state;
+      return {
+        ...state,
+        videoTagState: {
+          ...state.videoTagState,
+          allTags: {
+            ...state.videoTagState.allTags,
+            [action.tagName]: { ...state.videoTagState.allTags[action.tagName], emoji: action.emoji || undefined },
+          },
+        },
+      };
+    }
+    case "RENAME_TAG":
+    case "MERGE_TAG": {
+      const source = action.source;
+      const target = action.type === "MERGE_TAG"
+        ? resolveTagName(Object.keys(state.videoTagState.allTags).filter((name) => name !== source), action.target) : action.target.trim();
+      const allTags = state.videoTagState.allTags;
+      if (!target || source === target || !Object.hasOwn(allTags, source)) return state;
+      const targetExists = Object.keys(allTags).some((name) => name !== source && sameTag(name, target));
+      if (action.type === "RENAME_TAG" ? targetExists : !targetExists) return state;
+
+      const replace = (names: string[]) => {
+        const result: string[] = [];
+        for (const name of names) {
+          const updated = sameTag(name, source) || sameTag(name, target) ? target : name;
+          if (!hasTag(result, updated)) result.push(updated);
+        }
+        return result;
+      };
+      const replaceFilters = <T extends FilterPresetValues>(filters: T): T => ({
+        ...filters, includeTags: replace(filters.includeTags), excludeTags: replace(filters.excludeTags),
+      });
+      const updatedTags = { ...allTags };
+      delete updatedTags[source];
+      updatedTags[target] = targetExists ? allTags[target] : { ...allTags[source], name: target };
+
+      return {
+        ...state,
+        videoTagState: {
+          ...state.videoTagState,
+          allTags: updatedTags,
+          allVideoTags: Object.fromEntries(Object.entries(state.videoTagState.allVideoTags)
+            .map(([id, names]) => [id, replace(names)])),
+        },
+        creatorStates: Object.fromEntries(Object.entries(state.creatorStates).map(([id, creator]) => {
+          const tags = creator.tags ?? [];
+          return [id, {
+            ...creator,
+            tags: replace(tags),
+            videoStates: Object.fromEntries(Object.entries(creator.videoStates).map(([videoId, video]) => {
+              const exceptions = video.creatorTagExceptions;
+              if (!exceptions) return [videoId, video];
+              // Merging keeps inheritance when either original creator tag applied.
+              const inherited = [source, target].some((tag) => tags.includes(tag) && !exceptions.includes(tag));
+              const renamed = replace(exceptions);
+              return [videoId, {
+                ...video,
+                creatorTagExceptions: inherited ? renamed.filter((tag) => tag !== target) : renamed,
+              }];
+            })),
+          }];
+        })),
+        videoFilterStates: replaceFilters(getVideoFilterState(state)),
+        filterPresets: state.filterPresets?.map((preset) => ({ ...preset, filters: replaceFilters(preset.filters) })),
+      };
+    }
     case "TOGGLE_CREATOR_TAG_EXCEPTION": {
       const creator = getCreatorState(state, action.creatorId);
       const video = creator.videoStates?.[action.videoId];
-      if (!video || !creator.tags?.includes(action.tagName)) return state;
+      if (!video || !hasTag(creator.tags ?? [], action.tagName)) return state;
       const exceptions = video.creatorTagExceptions ?? [];
       return {
         ...state,
@@ -357,8 +457,8 @@ export function reducer(state: AppState, action: Action): AppState {
               ...creator.videoStates,
               [action.videoId]: {
                 ...video,
-                creatorTagExceptions: exceptions.includes(action.tagName)
-                  ? exceptions.filter((name) => name !== action.tagName)
+                creatorTagExceptions: hasTag(exceptions, action.tagName)
+                  ? exceptions.filter((name) => !sameTag(name, action.tagName))
                   : [...exceptions, action.tagName],
               },
             },
@@ -368,12 +468,12 @@ export function reducer(state: AppState, action: Action): AppState {
     }
     case "ADD_CREATOR_TAG":
     case "REMOVE_CREATOR_TAG": {
-      const tagName = action.tagName.trim();
+      const tagName = resolveTagName(Object.keys(state.videoTagState.allTags), action.tagName);
       if (!tagName) return state;
       const creator = getCreatorState(state, action.creatorId);
       const tags = creator.tags ?? [];
       const adding = action.type === "ADD_CREATOR_TAG";
-      if (adding === tags.includes(tagName)) return state;
+      if (adding === hasTag(tags, tagName)) return state;
 
       return {
         ...state,
@@ -381,7 +481,7 @@ export function reducer(state: AppState, action: Action): AppState {
           ...state.creatorStates,
           [action.creatorId]: {
             ...creator,
-            tags: adding ? [...tags, tagName] : tags.filter((tag) => tag !== tagName),
+            tags: adding ? [...tags, tagName] : tags.filter((tag) => !sameTag(tag, tagName)),
           },
         },
         videoTagState: adding ? {
@@ -436,7 +536,8 @@ export function reducer(state: AppState, action: Action): AppState {
     }
 
     case "ADD_NEW_VIDEO_TAG": {
-      const { tagName } = action;
+      const tagName = resolveTagName(Object.keys(state.videoTagState.allTags), action.tagName);
+      if (!tagName) return state;
 
       // Don't overwrite an existing tag.
       if (state.videoTagState.allTags[tagName]) {
@@ -461,11 +562,13 @@ export function reducer(state: AppState, action: Action): AppState {
     }
 
     case "UPDATE_TAGS_FOR_VIDEO": {
-      const { videoId, tagName } = action;
+      const { videoId } = action;
+      const tagName = resolveTagName(Object.keys(state.videoTagState.allTags), action.tagName);
+      if (!tagName) return state;
       const currentTags = state.videoTagState.allVideoTags[videoId] ?? [];
 
-      const updatedTags = currentTags.includes(tagName)
-        ? currentTags.filter((tag) => tag !== tagName)
+      const updatedTags = hasTag(currentTags, tagName)
+        ? currentTags.filter((tag) => !sameTag(tag, tagName))
         : [...currentTags, tagName];
 
       return {

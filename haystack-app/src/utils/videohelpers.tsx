@@ -1,3 +1,4 @@
+import { hasTag } from "./taghelpers";
 import type { CreatorState, VideoFilterState, VideoTagState } from "../state/state";
 import { AllCreators, type Video } from "../state/types";
 import { MAX_VIDEO_FILTER_TIME } from "../features/filtering/constants";
@@ -21,7 +22,7 @@ function getEffectiveVideoTagNames(
 ): string[] {
   const exceptions = creatorState?.videoStates[videoId]?.creatorTagExceptions ?? [];
   const creatorTags = (creatorState?.tags ?? []).filter(
-    (tag) => !exceptions.includes(tag)
+    (tag) => !hasTag(exceptions, tag)
   );
   return [...(tagState.allVideoTags[videoId] ?? []), ...creatorTags];
 }
@@ -36,7 +37,7 @@ export function filterVideoIdsByIncludedTags(
 
   return videoIds.filter((videoId) => {
     const videoTags = getEffectiveVideoTagNames(videoId, tagState, creatorState);
-    return includeTagNames.some((name) => videoTags.includes(name));
+    return includeTagNames.some((name) => hasTag(videoTags, name));
   });
 }
 
@@ -51,7 +52,7 @@ export function filterVideoIdsByExcludedTags(
   return videoIds.filter((videoId) => {
     const videoTags = getEffectiveVideoTagNames(videoId, tagState, creatorState);
 
-    return !excludeTagNames.some((name) => videoTags.includes(name));
+    return !excludeTagNames.some((name) => hasTag(videoTags, name));
   });
 }
 
@@ -150,12 +151,12 @@ export function filterVideosFromPlaylist(
 
     if (
       filters.includeTags.length > 0 &&
-      !filters.includeTags.some((tag) => videoTags.includes(tag))
+      !filters.includeTags.some((tag) => hasTag(videoTags, tag))
     ) continue;
 
     // EXCLUDE TAGS
     if (
-      filters.excludeTags.some((tag) => videoTags.includes(tag))
+      filters.excludeTags.some((tag) => hasTag(videoTags, tag))
     ) continue;
 
     // WATCHED

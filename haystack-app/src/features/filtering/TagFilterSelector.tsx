@@ -1,3 +1,4 @@
+import { hasTag, sameTag } from "../../utils/taghelpers";
 
 import { useEffect, useRef, useState } from "react";
 import { getVideoCountForTag, type CreatorState, type VideoTagState } from "../../state/state";
@@ -25,7 +26,7 @@ export function TagFilterSelector(props: TagFilterSelectorProps) {
   const suggestions = query.trim()
     ? Object.keys(props.tagsState.allTags).filter((tagName) =>
         tagName.toLowerCase().startsWith(query.trim().toLowerCase()) &&
-        !props.selectedTagNames.includes(tagName)
+        !hasTag(props.selectedTagNames, tagName)
       )
     : [];
 
@@ -33,7 +34,7 @@ export function TagFilterSelector(props: TagFilterSelectorProps) {
     // Only select tags that actually exist.
     if (!props.tagsState.allTags[tagName]) return;
 
-    if (!props.selectedTagNames.includes(tagName)) {
+    if (!hasTag(props.selectedTagNames, tagName)) {
       props.onTagsChanged([...props.selectedTagNames, tagName]);
     }
 
@@ -44,7 +45,7 @@ export function TagFilterSelector(props: TagFilterSelectorProps) {
 
   function removeTag(tagName: string) {
     props.onTagsChanged(
-      props.selectedTagNames.filter((name) => name !== tagName)
+      props.selectedTagNames.filter((name) => !sameTag(name, tagName))
     );
   }
 
@@ -84,7 +85,7 @@ export function TagFilterSelector(props: TagFilterSelectorProps) {
               onClick={() => removeTag(tagName)}
               title={`Remove ${tagName}`}
             >
-              {tagName} ×
+              {tag?.emoji && `${tag.emoji} `}{tagName} ×
             </button>
           );
         })}
@@ -171,7 +172,7 @@ export function TagFilterSelector(props: TagFilterSelectorProps) {
                             className="tag-suggestion-color"
                             style={{ backgroundColor: tag.color }}
                         />
-                        <span>{tagName}</span>
+                        <span>{tag.emoji && `${tag.emoji} `}{tagName}</span>
                         <span className="tag-suggestion-count">
                             ({getVideoCountForTag(tagName, props.tagsState, props.creatorStates)})
                         </span>

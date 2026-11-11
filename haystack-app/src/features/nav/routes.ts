@@ -1,4 +1,5 @@
 export const AppRoutes = {
+  TAGS: "/tags",
   HOME: "/",
   CREATORS: "/creators",
   CREATOR: "/creators/:creatorId",

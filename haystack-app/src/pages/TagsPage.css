@@ -1,0 +1,9 @@
+.tags-page { margin: 24px; text-align: left; max-width: 900px; }
+.tags-page ul { list-style: none; padding: 0; }
+.tags-page li { padding: 16px 0; border-bottom: 1px solid var(--color-border); }
+.tag-management-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.tag-management-row strong { overflow-wrap: anywhere; }
+.tag-management-color { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; }
+.tags-page form { margin-top: 12px; }
+.tags-page form button { margin: 8px 8px 0 0; }
+.tag-sort { display: inline-flex; align-items: center; gap: 8px; margin: 8px 0 8px 16px; }

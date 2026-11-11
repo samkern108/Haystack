@@ -51,6 +51,8 @@ export function NavBar(props: NavBarProps) {
         <PlaylistMenu videoFilterState={props.videoFilterState} dispatch={props.dispatch} />
 
 
+        <NavLink to="/tags" className={({ isActive }) => isActive ? "active" : ""}>Tags</NavLink>
+
         <NavLink to="/about" className={({ isActive }) => isActive ? "active" : ""}>
           About Us
         </NavLink>

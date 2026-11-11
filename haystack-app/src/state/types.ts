@@ -22,6 +22,7 @@ export interface Video {
 }
 
 export interface VideoTag {
+  emoji?: string;
   name: string,
   color: string,
 }

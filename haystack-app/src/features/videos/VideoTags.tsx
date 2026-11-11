@@ -1,16 +1,19 @@
-import { useEffect, useRef, useState } from "react";
+import { sameTag } from "../../utils/taghelpers";
+import { useEffect, useId, useRef, useState } from "react";
 import type { VideoTag } from "../../state/types";
 import type { Action } from "../../state/state";
 
 interface VideoTagsProps {
   videoId: string;
   tags: VideoTag[];
+  allTags: VideoTag[];
   dispatch: React.ActionDispatch<[action: Action]>;
 }
 
 export function VideoTags(props: VideoTagsProps) {
   const [isAdding, setIsAdding] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const suggestionsId = useId();
 
   useEffect(() => {
     if (isAdding) inputRef.current?.focus();
@@ -19,7 +22,7 @@ export function VideoTags(props: VideoTagsProps) {
   function commitTag() {
     const tagName = inputRef.current?.value.trim() ?? "";
 
-    if (tagName) {
+    if (tagName && !props.tags.some((tag) => sameTag(tag.name, tagName))) {
         props.dispatch({
             type: "ADD_NEW_VIDEO_TAG",
             tagName,
@@ -52,7 +55,7 @@ export function VideoTags(props: VideoTagsProps) {
           className="video-tag video-tag-chip"
           style={{ backgroundColor: tag.color }}
         >
-          {tag.name}
+          {tag.emoji && `${tag.emoji} `}{tag.name}
           <button
             type="button"
             className="video-tag-remove"
@@ -68,10 +71,13 @@ export function VideoTags(props: VideoTagsProps) {
       ))}
 
       {isAdding ? (
+        <>
         <input
           ref={inputRef}
-          className="video-tag-input"
+          className="video-tag-input video-tag-autocomplete"
           type="text"
+          list={suggestionsId}
+          autoComplete="off"
           placeholder="Tag name…"
           aria-label="New tag name"
           onKeyDown={(event) => {
@@ -84,6 +90,17 @@ export function VideoTags(props: VideoTagsProps) {
           }}
           onBlur={commitTag}
         />
+        <datalist id={suggestionsId}>
+          {props.allTags
+            .filter((tag) => !props.tags.some((selected) => sameTag(selected.name, tag.name)))
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .map((tag) => (
+              <option key={tag.name} value={tag.name}>
+                {tag.emoji && `${tag.emoji} `}{tag.name}
+              </option>
+            ))}
+        </datalist>
+        </>
       ) : (
         <button
           type="button"

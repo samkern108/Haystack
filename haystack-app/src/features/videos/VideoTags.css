@@ -103,3 +103,7 @@
   font-size: 0.75rem;
   outline-offset: 2px;
 }
+.video-tag-autocomplete::-webkit-calendar-picker-indicator {
+  display: none !important;
+}
+

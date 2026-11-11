@@ -1,3 +1,4 @@
+import { hasTag } from "../../utils/taghelpers";
 import { useState } from "react";
 import { Link, useNavigate, type NavigateFunction } from "react-router-dom";
 import LabelSelector from "../labels/LabelSelector";
@@ -22,6 +23,7 @@ interface VideoCardProps {
   videoState: VideoState;
   videoFilterState: VideoFilterState;
   videoTags: VideoTag[];
+  allTags: VideoTag[];
   creatorTags: VideoTag[];
   displayCreator: boolean;
   dispatch: React.ActionDispatch<[action: Action]>;
@@ -47,7 +49,7 @@ export function VideoCard( props : VideoCardProps) {
 
   const tags = props.videoTags;
   const creatorTagExceptions = props.videoState.creatorTagExceptions ?? [];
-  const appliedCreatorTags = props.creatorTags.filter((tag) => !creatorTagExceptions.includes(tag.name));
+  const appliedCreatorTags = props.creatorTags.filter((tag) => !hasTag(creatorTagExceptions, tag.name));
 
   function toggleCreatorTagException(tagName: string) {
     props.dispatch({
@@ -104,14 +106,14 @@ export function VideoCard( props : VideoCardProps) {
         <strong className="video-title clamped">{props.video.title}</strong>
         {props.displayCreator ? renderCreatorRow(props) : <></>}
 
-        <VideoTags videoId={props.video.video_id} tags={tags} dispatch={props.dispatch}/>
+        <VideoTags videoId={props.video.video_id} tags={tags} allTags={props.allTags} dispatch={props.dispatch}/>
         {appliedCreatorTags.length > 0 && (
           <div className="video-card-creator-tags" role="group" aria-label="Creator tags">
             <span className="video-card-creator-tags-label">Creator tags</span>
             <div className="video-tags">
               {appliedCreatorTags.map((tag) => (
                 <span key={tag.name} className="video-tag creator-tag-chip" style={{ backgroundColor: tag.color }}>
-                  {tag.name}
+                  {tag.emoji && `${tag.emoji} `}{tag.name}
                   <button
                     type="button"
                     className="creator-tag-exclude"
