@@ -2,6 +2,7 @@ import { Link, useParams } from "react-router-dom";
 import { getCreatorState, getVideoFilterState, type Action, type AppState } from "../state/state";
 import { AllCreators } from "../state/types";
 import { VideoGrid } from "../features/videos/VideoGrid";
+import { CreatorActions } from "../features/creators/CreatorActions";
 import { CreatorTags } from "../features/creators/CreatorTags";
 import { AppRoutes } from "../features/nav/routes";
 import { getChannelURL } from "../utils/creatorhelpers";
@@ -31,17 +32,13 @@ export function CreatorPage({ state, dispatch }: CreatorPageProps) {
 
   const filters = getVideoFilterState(state);
   const creatorState = getCreatorState(state, creator.ucid);
-  const matchesCreatorFilter = filters.creator === "all"
-    || (filters.creator === "followed" ? creatorState.followed : !creatorState.followed);
-  let videoIds = matchesCreatorFilter
-    ? filterVideosForCreator(
+  let videoIds = filterVideosForCreator(
         creator.ucid,
         creatorState,
         filters,
         creator.videos,
         state.videoTagState
-      )
-    : [];
+      );
 
   if (filters.inWatchLater || filters.inLove) {
     const selectedPlaylistIds = [
@@ -66,6 +63,7 @@ export function CreatorPage({ state, dispatch }: CreatorPageProps) {
           <a href={getChannelURL(creator.ucid)} target="_blank" rel="noopener noreferrer">
             View YouTube channel
           </a>
+          <CreatorActions creatorId={creator.ucid} creatorState={creatorState} dispatch={dispatch} />
         </div>
       </header>
       <CreatorTags key={creator.ucid} creatorId={creator.ucid} state={state} dispatch={dispatch} />

@@ -26,19 +26,9 @@ export function HomePage(props: HomePageProps) {
   const maxRows = 3;
   const maxVideos = maxColumns * maxRows;
 
-  // TODO(sam): Refresh in place when filters change.
-
-  // Remove creators based on the user's defined filters.
-  // Also, pre-shuffle the creators so we don't always show them in the same order.
+  // Keep the shuffled order stable; apply current filters when selecting videos.
   const creatorsList: Creator[] = useMemo(
-    () => shuffleCreators(Object.values(AllCreators)).filter(creator => {
-      const creatorState = props.state.creatorStates[creator.ucid];
-      if (props.state.videoFilterStates.creator === "unfollowed") return !creatorState.followed;
-      if (props.state.videoFilterStates.creator === "followed") return creatorState.followed;
-      console.log("running filter for creator " + creator.name);
-
-      return true;
-  }), []); // TODO(sam): Are there any instances on which this should recompute?
+    () => shuffleCreators(Object.values(AllCreators)), []);
 
   const videoIdsFromPlaylist = useMemo(() => {
     const selectedPlaylistIds = [

@@ -6,6 +6,14 @@ export function getVideoById(creatorId: string, videoId: string): Video {
   return AllCreators[creatorId]?.videos?.[videoId];
 }
 
+function matchesCreatorFilter(
+  creatorState: CreatorState | undefined,
+  filter: VideoFilterState["creator"]
+): boolean {
+  const followed = creatorState?.followed ?? false;
+  return filter === "all" || (filter === "followed" ? followed : !followed);
+}
+
 function getEffectiveVideoTagNames(
   videoId: string,
   tagState: VideoTagState,
@@ -57,6 +65,7 @@ export function filterVideosForCreator(
   tagState: VideoTagState,
   maxResultsPerCreator?: number
 ): [creatorId: string, videoId: string][] {
+  if (!matchesCreatorFilter(creatorState, filters.creator)) return [];
 
   // Start with this creator's video IDs.
   let candidateVideoIds = Object.values(inputVideoIds).map(
@@ -129,6 +138,8 @@ export function filterVideosFromPlaylist(
   const results: [string, string][] = [];
 
   for (const [creatorId, videoId] of playlistVideoIds) {
+    if (!matchesCreatorFilter(creatorStates[creatorId], filters.creator)) continue;
+
     const video = getVideoById(creatorId, videoId);
     if (!video) continue;
 
