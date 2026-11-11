@@ -17,6 +17,7 @@ import { SearchPage } from "../pages/SearchPage";
 import { getInnertube, getDummyInnertube } from "../services/innertube.js";
 import { CreatorsPage } from "../pages/CreatorsPage.js";
 import { UserProfilePage } from "../pages/UserProfilePage";
+import { CreatorPage } from "../pages/CreatorPage";
 import { InnertubeContext } from "../contexts/InnertubeContext.js";
 
 export default function App() {
@@ -57,6 +58,7 @@ export default function App() {
           <Routes>
             <Route path={AppRoutes.HOME} element={<HomePage state={state} dispatch={dispatch} />} />
             <Route path={AppRoutes.CREATORS} element={<CreatorsPage state={state} dispatch={dispatch} />} />
+            <Route path={AppRoutes.CREATOR} element={<CreatorPage state={state} dispatch={dispatch} />} />
             <Route path={AppRoutes.VIDEO} element={<VideoPage state={state} dispatch={dispatch} />} />
             <Route path={AppRoutes.ABOUT} element={<AboutUsPage />} />
             <Route path={AppRoutes.PLAYLISTS} element={<PlaylistsPage state={state} dispatch={dispatch} />} />

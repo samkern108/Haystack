@@ -1,4 +1,4 @@
-const MAX_TIME = 240;
+import { MAX_VIDEO_FILTER_TIME as MAX_TIME } from "./constants";
 
 function snapMaxTime(value: number) {
   if (value === 0) value = 5; // To prevent max and min from being the same, which breaks the scrollbar.

@@ -8,11 +8,6 @@ interface VideoTagsProps {
   dispatch: React.ActionDispatch<[action: Action]>;
 }
 
-// TODO(sam)
-// Add an "x" button to the tag to contest the tag?
-// Or should that need to be done on the video page?
-// Click the tag to add it to the sort filters?
-
 export function VideoTags(props: VideoTagsProps) {
   const [isAdding, setIsAdding] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -52,19 +47,24 @@ export function VideoTags(props: VideoTagsProps) {
   return (
     <div className="video-tags">
       {props.tags.map((tag) => (
-        <button
+        <span
           key={tag.name}
-          type="button"
-          className="video-tag"
+          className="video-tag video-tag-chip"
           style={{ backgroundColor: tag.color }}
-          onClick={() => props.dispatch({
-            type: "UPDATE_TAGS_FOR_VIDEO",
-            videoId: props.videoId,
-            tagName: tag.name,
-        })}
         >
           {tag.name}
-        </button>
+          <button
+            type="button"
+            className="video-tag-remove"
+            aria-label={`Remove video tag ${tag.name}`}
+            title="Remove from this video"
+            onClick={() => props.dispatch({
+              type: "UPDATE_TAGS_FOR_VIDEO",
+              videoId: props.videoId,
+              tagName: tag.name,
+            })}
+          >×</button>
+        </span>
       ))}
 
       {isAdding ? (

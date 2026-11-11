@@ -1,6 +1,7 @@
 export const AppRoutes = {
   HOME: "/",
   CREATORS: "/creators",
+  CREATOR: "/creators/:creatorId",
   ABOUT: "/about",
   VIDEO: "/v/:videoId/c/:creatorId",
   PLAYLISTS: "/playlists",
@@ -9,4 +10,5 @@ export const AppRoutes = {
   SEARCH: "/search",
 
   video: (videoId: string, creatorId: string) => `/v/${videoId}/c/${creatorId}`,
+  creator: (creatorId: string) => `/creators/${encodeURIComponent(creatorId)}`,
 } as const;

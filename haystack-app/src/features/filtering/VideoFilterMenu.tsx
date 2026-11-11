@@ -8,11 +8,6 @@ import { TagFilterSelector } from "./TagFilterSelector";
 export type CreatorFilter = "followed" | "unfollowed" | "all";
 export type WatchedFilter = "yes" | "no" | "all";
 
-// TODO(Sam):
-// there's a bug here I don't wanna fix right now :(
-// videos longer than 4h will NEVER DISPLAY because of the way filter
-// logic is coded.
-
 interface VideoFilterMenuProps {
   videoFilterState: VideoFilterState;
   videoTagState: VideoTagState;

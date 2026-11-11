@@ -1,5 +1,5 @@
 import { VideoCard } from "../videos/VideoCard";
-import { type AppState, type Action, type PlaylistState, getTagsForVideo } from "../../state/state";
+import { type AppState, type Action, type PlaylistState, getTagsForVideo, getTagsForCreator } from "../../state/state";
 import { getCreatorById } from "../../utils/creatorhelpers";
 import { SYSTEM_VIDEO_LABELS } from "../labels/labels";
 import './PlaylistRow.css'
@@ -46,6 +46,7 @@ export function PlaylistRow( props : PlaylistRowProps) {
               videoState={videoState}
               videoFilterState={props.state.videoFilterStates}
               videoTags={getTagsForVideo(props.state, video.video_id)}
+              creatorTags={getTagsForCreator(props.state, creator.ucid)}
               displayCreator={true}
               dispatch={props.dispatch}
             />

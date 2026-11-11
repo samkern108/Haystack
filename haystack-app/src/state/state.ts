@@ -2,12 +2,14 @@ import type { VideoLabelId, VideoLabel, VideoLabelIdOrNone } from "../features/l
 import type { CreatorFilter, WatchedFilter } from "../features/filtering/VideoFilterMenu";
 import { sameVideo } from "../utils/videohelpers";
 import { AllCreators, type VideoTag } from "./types";
+import { MAX_VIDEO_FILTER_TIME } from "../features/filtering/constants";
 
 /* -----------------------------
    STATE
 ------------------------------ */
 
 export interface VideoState {
+  creatorTagExceptions?: string[];
   currentWatchPercentage: number;
   historicalMaxWatchPercentage: number;
   // TODO(samkern) – add the ability for users to manually mark a video as "watched"
@@ -17,6 +19,7 @@ export interface VideoState {
 }
 
 export interface CreatorState {
+  tags?: string[];
   followed: boolean;
   favorite: boolean;
   doNotShow?: boolean;
@@ -70,6 +73,17 @@ export interface AppState {
 
 export type Action =
   | {
+      type: "TOGGLE_CREATOR_TAG_EXCEPTION";
+      creatorId: string;
+      videoId: string;
+      tagName: string;
+    }
+  | {
+      type: "ADD_CREATOR_TAG" | "REMOVE_CREATOR_TAG";
+      creatorId: string;
+      tagName: string;
+    }
+  | {
       type: "SET_VIDEO_FILTERS";
       filters: VideoFilterState;
     }
@@ -120,7 +134,7 @@ export const DEFAULT_VIDEO_FILTERS: VideoFilterState = {
   creator: "all",
   watched: "all",
   minTime: 0,
-  maxTime: 240,
+  maxTime: MAX_VIDEO_FILTER_TIME,
   includeTags: [],
   excludeTags: [],
   inWatchLater: false,
@@ -224,6 +238,13 @@ export function getTagsForVideo(state: AppState, videoId: string): VideoTag[] {
   return videoTags;
 }
 
+export function getTagsForCreator(state: AppState, creatorId: string): VideoTag[] {
+  return (state.creatorStates[creatorId]?.tags ?? []).flatMap((name) => {
+    const tag = state.videoTagState.allTags[name];
+    return tag ? [tag] : [];
+  });
+}
+
 export function getVideoCountForTag(tagName: string, tagsState: VideoTagState): number {
   return Object.values(tagsState.allVideoTags).filter((tagNames) =>
     tagNames.includes(tagName)
@@ -285,6 +306,59 @@ function toggleVideoInPlaylist(
 
 export function reducer(state: AppState, action: Action): AppState {
   switch (action.type) {
+    case "TOGGLE_CREATOR_TAG_EXCEPTION": {
+      const creator = getCreatorState(state, action.creatorId);
+      const video = creator.videoStates?.[action.videoId];
+      if (!video || !creator.tags?.includes(action.tagName)) return state;
+      const exceptions = video.creatorTagExceptions ?? [];
+      return {
+        ...state,
+        creatorStates: {
+          ...state.creatorStates,
+          [action.creatorId]: {
+            ...creator,
+            videoStates: {
+              ...creator.videoStates,
+              [action.videoId]: {
+                ...video,
+                creatorTagExceptions: exceptions.includes(action.tagName)
+                  ? exceptions.filter((name) => name !== action.tagName)
+                  : [...exceptions, action.tagName],
+              },
+            },
+          },
+        },
+      };
+    }
+    case "ADD_CREATOR_TAG":
+    case "REMOVE_CREATOR_TAG": {
+      const tagName = action.tagName.trim();
+      if (!tagName) return state;
+      const creator = getCreatorState(state, action.creatorId);
+      const tags = creator.tags ?? [];
+      const adding = action.type === "ADD_CREATOR_TAG";
+      if (adding === tags.includes(tagName)) return state;
+
+      return {
+        ...state,
+        creatorStates: {
+          ...state.creatorStates,
+          [action.creatorId]: {
+            ...creator,
+            tags: adding ? [...tags, tagName] : tags.filter((tag) => tag !== tagName),
+          },
+        },
+        videoTagState: adding ? {
+          ...state.videoTagState,
+          allTags: {
+            ...state.videoTagState.allTags,
+            [tagName]: Object.hasOwn(state.videoTagState.allTags, tagName)
+              ? state.videoTagState.allTags[tagName]
+              : { name: tagName, color: `hsl(${Math.floor(Math.random() * 360)}, 70%, 75%)` },
+          },
+        } : state.videoTagState,
+      };
+    }
     
     case "SET_VIDEO_FILTERS": {
       return {

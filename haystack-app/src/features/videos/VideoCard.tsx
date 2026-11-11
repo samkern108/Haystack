@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, type NavigateFunction } from "react-router-dom";
+import { Link, useNavigate, type NavigateFunction } from "react-router-dom";
 import LabelSelector from "../labels/LabelSelector";
 import type { Creator, Video, VideoTag } from "../../state/types";
 import { type VideoState, type Action, type VideoFilterState } from "../../state/state";
@@ -8,7 +8,7 @@ import { SYSTEM_VIDEO_LABELS, type VideoLabel } from "../labels/labels";
 import { CommentIcon, getVideoLabelIcon } from "../labels/icons";
 import { CommentCard } from '../comments/CommentCard';
 import { TooltipTrigger } from "../ui/Tooltip";
-import { getChannelURL } from "../../utils/creatorhelpers";
+import { AppRoutes } from "../nav/routes";
 import '../creators/CreatorRow.css'
 import "./VideoCard.css"
 import './VideoTags.css'
@@ -22,6 +22,7 @@ interface VideoCardProps {
   videoState: VideoState;
   videoFilterState: VideoFilterState;
   videoTags: VideoTag[];
+  creatorTags: VideoTag[];
   displayCreator: boolean;
   dispatch: React.ActionDispatch<[action: Action]>;
 }
@@ -45,19 +46,28 @@ export function VideoCard( props : VideoCardProps) {
   }
 
   const tags = props.videoTags;
+  const creatorTagExceptions = props.videoState.creatorTagExceptions ?? [];
+  const appliedCreatorTags = props.creatorTags.filter((tag) => !creatorTagExceptions.includes(tag.name));
+
+  function toggleCreatorTagException(tagName: string) {
+    props.dispatch({
+      type: "TOGGLE_CREATOR_TAG_EXCEPTION",
+      creatorId: props.creator.ucid,
+      videoId: props.video.video_id,
+      tagName,
+    });
+  }
 
   function renderCreatorRow(props: VideoCardProps) {
     return (
-      <a
+      <Link
         className="video-creator"
-        href={getChannelURL(props.creator.ucid)}
-        target="_blank"
-        rel="noopener noreferrer"
+        to={AppRoutes.creator(props.creator.ucid)}
       >
           <p>{'by'}</p>
           <CreatorAvatar url={props.creator.avatar.url} name={props.creator.name} />
           <p>{props.creator.name}</p>
-      </a>
+      </Link>
     );
   }
 
@@ -95,6 +105,25 @@ export function VideoCard( props : VideoCardProps) {
         {props.displayCreator ? renderCreatorRow(props) : <></>}
 
         <VideoTags videoId={props.video.video_id} tags={tags} dispatch={props.dispatch}/>
+        {appliedCreatorTags.length > 0 && (
+          <div className="video-card-creator-tags" role="group" aria-label="Creator tags">
+            <span className="video-card-creator-tags-label">Creator tags</span>
+            <div className="video-tags">
+              {appliedCreatorTags.map((tag) => (
+                <span key={tag.name} className="video-tag creator-tag-chip" style={{ backgroundColor: tag.color }}>
+                  {tag.name}
+                  <button
+                    type="button"
+                    className="creator-tag-exclude"
+                    aria-label={`Exclude creator tag ${tag.name} from this video`}
+                    title="Exclude from this video"
+                    onClick={() => toggleCreatorTagException(tag.name)}
+                  >×</button>
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     );
   }

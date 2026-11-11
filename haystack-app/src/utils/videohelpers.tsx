@@ -1,5 +1,6 @@
 import type { CreatorState, PlaylistState, VideoFilterState, VideoTagState } from "../state/state";
 import { AllCreators, type Video } from "../state/types";
+import { MAX_VIDEO_FILTER_TIME } from "../features/filtering/constants";
 
 export function getVideoById(creatorId: string, videoId: string): Video {
   return AllCreators[creatorId]?.videos?.[videoId];
@@ -85,7 +86,7 @@ export function filterVideosForCreator(
 
     if (
       duration >= filters.minTime * 60 &&
-      duration <= filters.maxTime * 60
+      (filters.maxTime === MAX_VIDEO_FILTER_TIME || duration <= filters.maxTime * 60)
     ) { outputVideoIds.push([creatorId, videoId]); }
   }
 
@@ -151,7 +152,7 @@ export function filterVideosFromPlaylist(
 
     if (
       duration < filters.minTime * 60 ||
-      duration > filters.maxTime * 60
+      (filters.maxTime !== MAX_VIDEO_FILTER_TIME && duration > filters.maxTime * 60)
     ) continue;
 
     results.push([creatorId, videoId]);
