@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { EmojiPicker } from "../tags/EmojiPicker";
+import { useState, type CSSProperties } from "react";
 
 import "./VideoFilterMenu.scss";
 import { TimeFilterSelector } from "./TimeFilterSelector";
-import { type Action, type FilterPreset, type CreatorState, type VideoFilterState, type VideoTagState } from "../../state/state";
+import { matchesFilterPreset, type Action, type FilterPreset, type CreatorState, type VideoFilterState, type VideoTagState } from "../../state/state";
 import { TagFilterSelector } from "./TagFilterSelector";
 
 export type CreatorFilter = "followed" | "unfollowed" | "all";
@@ -20,6 +21,10 @@ interface VideoFilterMenuProps {
 export function VideoFilterMenu(props: VideoFilterMenuProps) {
   const [isSaving, setIsSaving] = useState(false);
   const [presetName, setPresetName] = useState("");
+  const [presetColor, setPresetColor] = useState("#8bbde0");
+  const [presetEmoji, setPresetEmoji] = useState("");
+
+  const matchesExistingPreset = props.filterPresets.some((preset) => matchesFilterPreset(props.videoFilterState, preset.filters));
 
   function updateFilters(update: Partial<VideoFilterState>) {
     props.dispatch({
@@ -116,24 +121,36 @@ export function VideoFilterMenu(props: VideoFilterMenuProps) {
               tagsState={props.videoTagState}
               creatorStates={props.creatorStates} />
           </div>
-          <div className="filter-presets">
-            {props.filterPresets.map((preset) => (
+        </div>
+          <div className="filter-presets" role="group" aria-label="Saved filters">
+            {props.filterPresets.map((preset, index) => (
+              <div key={preset.id} className="filter-tab">
               <button
-                key={preset.id}
                 type="button"
                 className="filter-preset"
+                style={{ "--preset-color": preset.color ?? ["#8bbde0", "#e8a5b4", "#b5c98b", "#eac278", "#bba5dc"][index % 5] } as CSSProperties}
                 aria-pressed={props.activeFilterPresetId === preset.id}
                 onClick={() => props.dispatch({ type: "TOGGLE_FILTER_PRESET", id: preset.id })}
               >
-                {preset.name}
+                {preset.emoji && <span aria-hidden="true">{preset.emoji} </span>}{preset.name}
               </button>
+              {props.activeFilterPresetId === preset.id && (
+                <>
+                  <OverwriteFilterButton key={JSON.stringify(props.videoFilterState)} name={preset.name}
+                    hasChanges={!matchesFilterPreset(props.videoFilterState, preset.filters)}
+                    onSave={() => props.dispatch({ type: "OVERWRITE_FILTER_PRESET", id: preset.id })} />
+                  <DeleteFilterButton name={preset.name} onDelete={() => props.dispatch({ type: "DELETE_FILTER_PRESET", id: preset.id })} />
+                </>
+              )}
+              </div>
             ))}
-            {isSaving ? (
-              <form onSubmit={(event) => {
+            {!matchesExistingPreset && (isSaving ? (
+              <form className="filter-tab-editor" aria-label="Save filter preset" onSubmit={(event) => {
                 event.preventDefault();
                 if (!presetName.trim()) return;
-                props.dispatch({ type: "SAVE_FILTER_PRESET", id: crypto.randomUUID(), name: presetName });
+                props.dispatch({ type: "SAVE_FILTER_PRESET", id: crypto.randomUUID(), name: presetName, color: presetColor, emoji: presetEmoji });
                 setPresetName("");
+                setPresetEmoji("");
                 setIsSaving(false);
               }}>
                 <input
@@ -144,23 +161,58 @@ export function VideoFilterMenu(props: VideoFilterMenuProps) {
                   onChange={(event) => setPresetName(event.target.value)}
                   required
                 />
+                <input type="color" className="filter-tab-color" aria-label="Filter tab color" title="Tab color" value={presetColor} onChange={(event) => setPresetColor(event.target.value)} />
+                <EmojiPicker tagName="filter tab" value={presetEmoji} onChange={setPresetEmoji} />
                 <button type="submit" className="filter-save-icon" aria-label="Save filter" title="Save filter" disabled={!presetName.trim()}>
                   <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" aria-hidden="true">
                     <path d="M4 3h13l4 4v14H3V3Z" />
                     <path d="M7 3v6h9V3M7 21v-8h10v8M13 4v3" />
                   </svg>
                 </button>
-                <button type="button" className="filter-save-icon" aria-label="Cancel saving filter" title="Cancel" onClick={() => { setIsSaving(false); setPresetName(""); }}>
+                <button type="button" className="filter-save-icon" aria-label="Cancel saving filter" title="Cancel" onClick={() => { setIsSaving(false); setPresetName(""); setPresetEmoji(""); }}>
                   <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
                     <path d="m6 6 12 12M18 6 6 18" />
                   </svg>
                 </button>
               </form>
             ) : (
-              <button type="button" onClick={() => setIsSaving(true)}>Save current filters</button>
-            )}
+              <button type="button" className="filter-tab-add" onClick={() => setIsSaving(true)}>＋ New filter preset</button>
+            ))}
           </div>
-        </div>
     </section>
+  );
+}
+
+function DeleteFilterButton({ name, onDelete }: { name: string; onDelete: () => void }) {
+  const [confirming, setConfirming] = useState(false);
+  return (
+    <button type="button" className={`filter-tab-delete${confirming ? " confirming" : ""}`}
+      aria-label={confirming ? `Confirm deletion of ${name}` : `Delete saved filter ${name}`}
+      title={confirming ? "Click again to delete saved filter" : "Delete saved filter"}
+      onBlur={() => setConfirming(false)}
+      onKeyDown={(event) => { if (event.key === "Escape") setConfirming(false); }}
+      onClick={() => { if (confirming) onDelete(); else setConfirming(true); }}>
+      ×
+    </button>
+  );
+}
+
+function OverwriteFilterButton({ name, hasChanges, onSave }: { name: string; hasChanges: boolean; onSave: () => void }) {
+  const [confirming, setConfirming] = useState(false);
+  return (
+    <button type="button" className={`filter-tab-overwrite${hasChanges ? " unsaved" : ""}${confirming ? " confirming" : ""}`}
+      aria-label={confirming ? `Confirm overwrite of ${name}` : `Overwrite saved filter ${name}`}
+      title={confirming ? "Click again to overwrite saved filter" : hasChanges ? "Unsaved changes — click to save" : "Overwrite with current filters"}
+      onBlur={() => setConfirming(false)}
+      onKeyDown={(event) => { if (event.key === "Escape") setConfirming(false); }}
+      onClick={() => {
+        if (confirming) { onSave(); setConfirming(false); }
+        else setConfirming(true);
+      }}>
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" aria-hidden="true">
+        <path d="M4 3h13l4 4v14H3V3Z" />
+        <path d="M7 3v6h9V3M7 21v-8h10v8M13 4v3" />
+      </svg>
+    </button>
   );
 }

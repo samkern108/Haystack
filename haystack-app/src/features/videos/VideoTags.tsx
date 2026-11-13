@@ -138,6 +138,7 @@ export function VideoTags(props: VideoTagsProps) {
                 role="option"
                 aria-selected={index === activeSuggestion}
                 className="video-tag-suggestion"
+                style={tag.isCollection ? { ...tagStyle(tag), backgroundColor: undefined } : undefined}
                 onPointerDown={(event) => event.preventDefault()}
                 onClick={() => commitTag(tag.name)}
                 tabIndex={-1}

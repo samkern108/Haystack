@@ -42,6 +42,8 @@ export type FilterPresetValues = Pick<VideoFilterState,
   "creator" | "watched" | "minTime" | "maxTime" | "includeTags" | "excludeTags">;
 
 export interface FilterPreset {
+  color?: string;
+  emoji?: string;
   id: string;
   name: string;
   filters: FilterPresetValues;
@@ -56,6 +58,16 @@ function presetValues(filters: VideoFilterState): FilterPresetValues {
     includeTags: [...filters.includeTags],
     excludeTags: [...filters.excludeTags],
   };
+}
+
+export function matchesFilterPreset(filters: FilterPresetValues, preset: FilterPresetValues): boolean {
+  const sameTags = (a: string[], b: string[]) => {
+    const normalize = (names: string[]) => [...new Set(names.map((name) => name.trim().toLowerCase()))].sort();
+    return JSON.stringify(normalize(a)) === JSON.stringify(normalize(b));
+  };
+  return filters.creator === preset.creator && filters.watched === preset.watched
+    && filters.minTime === preset.minTime && filters.maxTime === preset.maxTime
+    && sameTags(filters.includeTags, preset.includeTags) && sameTags(filters.excludeTags, preset.excludeTags);
 }
 
 // TODO(Sam): Should creator tags be different from video tags?
@@ -99,8 +111,10 @@ export type Action =
   | { type: "SET_TAG_COLLECTION"; tagName: string; isCollection: boolean }
   | { type: "SET_TAG_EMOJI"; tagName: string; emoji: string }
   | { type: "RENAME_TAG" | "MERGE_TAG"; source: string; target: string }
-  | { type: "SAVE_FILTER_PRESET"; id: string; name: string }
+  | { type: "SAVE_FILTER_PRESET"; id: string; name: string; color?: string; emoji?: string }
   | { type: "TOGGLE_FILTER_PRESET"; id: string }
+  | { type: "DELETE_FILTER_PRESET"; id: string }
+  | { type: "OVERWRITE_FILTER_PRESET"; id: string }
   | {
       type: "TOGGLE_CREATOR_TAG_EXCEPTION";
       creatorId: string;
@@ -517,9 +531,26 @@ export function reducer(state: AppState, action: Action): AppState {
       return {
         ...state,
         filterPresets: [...(state.filterPresets ?? []), {
-          id: action.id, name, filters: presetValues(getVideoFilterState(state)),
+          id: action.id, name, color: action.color ?? "#8bbde0", emoji: action.emoji?.trim() || undefined, filters: presetValues(getVideoFilterState(state)),
         }],
         activeFilterPresetId: action.id,
+      };
+    }
+
+    case "OVERWRITE_FILTER_PRESET": {
+      if (!state.filterPresets?.some((preset) => preset.id === action.id)) return state;
+      return {
+        ...state,
+        filterPresets: state.filterPresets.map((preset) => preset.id === action.id
+          ? { ...preset, filters: presetValues(getVideoFilterState(state)) } : preset),
+      };
+    }
+
+    case "DELETE_FILTER_PRESET": {
+      return {
+        ...state,
+        filterPresets: (state.filterPresets ?? []).filter((preset) => preset.id !== action.id),
+        activeFilterPresetId: state.activeFilterPresetId === action.id ? undefined : state.activeFilterPresetId,
       };
     }
 
@@ -540,12 +571,8 @@ export function reducer(state: AppState, action: Action): AppState {
     }
 
     case "SET_VIDEO_FILTERS": {
-      const activePreset = state.filterPresets?.find((item) => item.id === state.activeFilterPresetId);
       return {
         ...state,
-        activeFilterPresetId: activePreset
-          && JSON.stringify(presetValues(action.filters)) === JSON.stringify(activePreset.filters)
-          ? activePreset.id : undefined,
         videoFilterStates: action.filters
       };
     }

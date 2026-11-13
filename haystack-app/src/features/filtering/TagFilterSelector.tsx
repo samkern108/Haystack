@@ -1,4 +1,4 @@
-import { hasTag, sameTag } from "../../utils/taghelpers";
+import { hasTag, sameTag, tagStyle } from "../../utils/taghelpers";
 
 import { useEffect, useRef, useState } from "react";
 import { getVideoCountForTag, type CreatorState, type VideoTagState } from "../../state/state";
@@ -79,9 +79,7 @@ export function TagFilterSelector(props: TagFilterSelectorProps) {
               key={tagName}
               type="button"
               className="video-tag"
-              style={{
-                backgroundColor: tag?.color ?? "#cccccc",
-              }}
+              style={{ ...tagStyle(tag), backgroundColor: tag?.color ?? "#cccccc" }}
               onClick={() => removeTag(tagName)}
               title={`Remove ${tagName}`}
             >
@@ -165,6 +163,7 @@ export function TagFilterSelector(props: TagFilterSelectorProps) {
                             ? "tag-suggestion active"
                             : "tag-suggestion"
                         }
+                        style={tag.isCollection ? { ...tagStyle(tag), backgroundColor: undefined } : undefined}
                         onMouseDown={(event) => event.preventDefault()}
                         onClick={() => selectTag(tagName)}
                         >

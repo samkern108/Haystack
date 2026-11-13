@@ -18,6 +18,7 @@ export function tagStyle(tag?: VideoTag): CSSProperties {
   return {
     backgroundColor: tag?.color,
     ...(tag?.isCollection ? {
+      fontWeight: 700,
       border: `2px solid color-mix(in srgb, ${tag.color} 65%, var(--color-input-text))`,
     } : {}),
   };
