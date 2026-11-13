@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { getTagsForVideo, getVideoState, type Action, type AppState } from "../state/state";
+import { getTagsForVideo, getVideoState, getVideoLabels, type Action, type AppState } from "../state/state";
 import LabelSelector from "../features/labels/LabelSelector";
 import { getVideoById } from "../utils/videohelpers";
 import { getCreatorById } from "../utils/creatorhelpers";
@@ -169,6 +169,7 @@ export function VideoPage(props: VideoPageProps) {
             video={video}
             creator={creator}
             videoState={videoState}
+            videoLabels={getVideoLabels(props.state, creator.ucid, video.video_id)}
             layout="horizontal"
             dispatch={props.dispatch}
           />

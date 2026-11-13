@@ -1,5 +1,5 @@
 import { hasTag, sameTag, resolveTagName } from "../utils/taghelpers";
-import type { VideoLabelId, VideoLabel, VideoLabelIdOrNone } from "../features/labels/labels";
+import { SYSTEM_VIDEO_LABELS, type VideoLabelId, type VideoLabel, type VideoLabelIdOrNone } from "../features/labels/labels";
 import type { CreatorFilter, WatchedFilter } from "../features/filtering/VideoFilterMenu";
 import { sameVideo } from "../utils/videohelpers";
 import { AllCreators, type VideoTag } from "./types";
@@ -700,4 +700,13 @@ export function reducer(state: AppState, action: Action): AppState {
     default:
       return state;
   }
+}
+
+// Playlist membership retains every applied label.
+export function getVideoLabels(state: AppState, creatorId: string, videoId: string): VideoLabel[] {
+  return SYSTEM_VIDEO_LABELS.filter((label) =>
+    label.associatedPlaylistId && state.playlistStates[label.associatedPlaylistId]?.videoIds.some(
+      (id) => sameVideo(id, [creatorId, videoId])
+    )
+  );
 }

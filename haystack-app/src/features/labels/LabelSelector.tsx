@@ -10,12 +10,12 @@ interface LabelSelectorProps {
   creator: Creator;
   video: Video;
   videoState: VideoState;
+  videoLabels: VideoLabel[];
   layout: "horizontal" | "vertical";
   dispatch: React.ActionDispatch<[action: Action]>;
 }
 
 export default function LabelSelector(props: LabelSelectorProps) {
-  const activeVideoLabelId = props.videoState.videoLabelId ?? null;
   function handleVideoLabelClick(videoLabel: VideoLabel) {
     props.dispatch({
       type: "SET_VIDEO_LABEL",
@@ -31,8 +31,9 @@ export default function LabelSelector(props: LabelSelectorProps) {
         key={videoLabel.id}
         type="button"
         className={`label-selector-button ${videoLabel.id} ${
-          activeVideoLabelId === videoLabel.id ? "active" : ""
+          props.videoLabels.some((label) => label.id === videoLabel.id) ? "active" : ""
         }`}
+        aria-pressed={props.videoLabels.some((label) => label.id === videoLabel.id)}
         onClick={() => handleVideoLabelClick(videoLabel)}
       >
         <TooltipTrigger text={videoLabel.description}>

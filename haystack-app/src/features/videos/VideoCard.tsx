@@ -5,7 +5,7 @@ import LabelSelector from "../labels/LabelSelector";
 import type { Creator, Video, VideoTag } from "../../state/types";
 import { type VideoState, type Action, type VideoFilterState } from "../../state/state";
 import { useDelayedHover } from "../../utils/hoverlogic";
-import { SYSTEM_VIDEO_LABELS, type VideoLabel } from "../labels/labels";
+import { type VideoLabel } from "../labels/labels";
 import { CommentIcon, getVideoLabelIcon } from "../labels/icons";
 import { CommentCard } from '../comments/CommentCard';
 import { TooltipTrigger } from "../ui/Tooltip";
@@ -21,6 +21,7 @@ interface VideoCardProps {
   creator: Creator;
   video: Video;
   videoState: VideoState;
+  videoLabels: VideoLabel[];
   videoFilterState: VideoFilterState;
   videoTags: VideoTag[];
   allTags: VideoTag[];
@@ -33,8 +34,16 @@ export function VideoCard( props : VideoCardProps) {
   const hover = useDelayedHover(60, 160);
   const navigate = useNavigate();
 
-  const videoLabelId = props.videoState.videoLabelId ?? null;
-  const videoLabel = SYSTEM_VIDEO_LABELS.find((b) => b.id === videoLabelId);
+  const videoLabel = props.videoLabels.find((label) => label.id === props.videoState.videoLabelId) ?? props.videoLabels[0];
+  const cardBackground = videoLabel
+    ? `color-mix(in srgb, ${videoLabel.color} 5%, var(--color-video-card-background))`
+    : "var(--color-video-card-background)";
+  const backgroundColors = props.videoLabels.map((label) =>
+    `color-mix(in srgb, ${label.color} 5%, var(--color-video-card-background))`
+  );
+  const borderColors = props.videoLabels.map((label) =>
+    `color-mix(in srgb, ${label.color} 40%, var(--color-video-card-background))`
+  );
   const hasComment = (props.videoState.comment && props.videoState.comment?.length > 0) as boolean;
 
   const [commentCardOpen, setCommentCardOpen] = useState(false);
@@ -73,13 +82,15 @@ export function VideoCard( props : VideoCardProps) {
     );
   }
 
-  function renderVideoLabel(videoLabel: VideoLabel, hasComment: boolean) {
+  function renderVideoLabels(videoLabels: VideoLabel[], hasComment: boolean) {
     return (
       <div className="video-labels-display">
-          <div className={`label-button`}
-          style={{ backgroundColor: videoLabel.color }}>
-              { getVideoLabelIcon(videoLabel.id) }
-          </div>
+          {videoLabels.map((label) => (
+            <div key={label.id} className="label-button" title={label.label}
+              aria-label={label.label} style={{ backgroundColor: label.color }}>
+              {getVideoLabelIcon(label.id)}
+            </div>
+          ))}
           { hasComment && <div className="comment-button">{ <CommentIcon/> }</div>}
       </div>
     );
@@ -90,7 +101,7 @@ export function VideoCard( props : VideoCardProps) {
       <div className="video-card-popover">
 
         <div className="video-popover-controls">
-          <LabelSelector creator={props.creator} video={props.video} videoState={props.videoState} dispatch={props.dispatch} layout={"horizontal"} />
+          <LabelSelector creator={props.creator} video={props.video} videoState={props.videoState} videoLabels={props.videoLabels} dispatch={props.dispatch} layout={"horizontal"} />
         </div>
 
         <button className="comment-button" onClick={openCommentCard}> { <TooltipTrigger text="Leave a comment"><CommentIcon/></TooltipTrigger> } </button>
@@ -133,9 +144,14 @@ export function VideoCard( props : VideoCardProps) {
   return (
     <div
       className="video-card"
-      style={{backgroundColor: `color-mix(in srgb, ${videoLabel?.color} 5%, var(--color-video-card-background))`,
-    
-      borderColor: `color-mix(in srgb, ${videoLabel?.color} 40%, transparent)`}}
+      style={{
+        background: props.videoLabels.length > 1
+          ? `linear-gradient(135deg, ${backgroundColors.join(", ")}) padding-box, linear-gradient(135deg, ${borderColors.join(", ")}) border-box`
+          : cardBackground,
+        borderColor: props.videoLabels.length > 1 || !videoLabel
+          ? "transparent"
+          : `color-mix(in srgb, ${videoLabel.color} 40%, transparent)`,
+      }}
       onPointerEnter={hover.onPointerEnter}
       onPointerLeave={hover.onPointerLeave}
     >
@@ -154,7 +170,7 @@ export function VideoCard( props : VideoCardProps) {
       {props.displayCreator ? renderCreatorRow(props) : <></>}
     </div>
 
-    { videoLabel && renderVideoLabel(videoLabel, hasComment) }
+    { (props.videoLabels.length > 0 || hasComment) && renderVideoLabels(props.videoLabels, hasComment) }
     { hover.hovered && renderVideoCardPopover(props, navigate) }
 
     {commentCardOpen && (
