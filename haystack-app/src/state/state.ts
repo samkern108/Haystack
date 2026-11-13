@@ -1,3 +1,4 @@
+import { includedTagSignature, remapTagOperators, remapTagOrder, type TagOperator } from "../utils/tagfilterlogic";
 import { hasTag, sameTag, resolveTagName } from "../utils/taghelpers";
 import { SYSTEM_VIDEO_LABELS, type VideoLabelId, type VideoLabel, type VideoLabelIdOrNone } from "../features/labels/labels";
 import type { CreatorFilter, WatchedFilter } from "../features/filtering/VideoFilterMenu";
@@ -33,13 +34,15 @@ export interface VideoFilterState {
   minTime: number;
   maxTime: number;
   includeTags: string[];
+  includeTagOperators?: TagOperator[];
+  includeTagOrder?: number[];
   excludeTags: string[];
   inWatchLater: boolean;
   inLove: boolean;
 }
 
 export type FilterPresetValues = Pick<VideoFilterState,
-  "creator" | "watched" | "minTime" | "maxTime" | "includeTags" | "excludeTags">;
+  "creator" | "watched" | "minTime" | "maxTime" | "includeTags" | "includeTagOperators" | "includeTagOrder" | "excludeTags">;
 
 export interface FilterPreset {
   color?: string;
@@ -56,6 +59,8 @@ function presetValues(filters: VideoFilterState): FilterPresetValues {
     minTime: filters.minTime,
     maxTime: filters.maxTime,
     includeTags: [...filters.includeTags],
+    includeTagOperators: remapTagOperators(filters.includeTags, filters.includeTags, filters.includeTagOperators),
+    includeTagOrder: [...(filters.includeTagOrder ?? [])],
     excludeTags: [...filters.excludeTags],
   };
 }
@@ -67,7 +72,8 @@ export function matchesFilterPreset(filters: FilterPresetValues, preset: FilterP
   };
   return filters.creator === preset.creator && filters.watched === preset.watched
     && filters.minTime === preset.minTime && filters.maxTime === preset.maxTime
-    && sameTags(filters.includeTags, preset.includeTags) && sameTags(filters.excludeTags, preset.excludeTags);
+    && includedTagSignature(filters.includeTags, filters.includeTagOperators, filters.includeTagOrder) === includedTagSignature(preset.includeTags, preset.includeTagOperators, preset.includeTagOrder)
+    && sameTags(filters.excludeTags, preset.excludeTags);
 }
 
 // TODO(Sam): Should creator tags be different from video tags?
@@ -366,6 +372,8 @@ export function reducer(state: AppState, action: Action): AppState {
       const remove = (names: string[]) => names.filter((name) => !sameTag(name, action.tagName));
       const cleanFilters = <T extends FilterPresetValues>(filters: T): T => ({
         ...filters, includeTags: remove(filters.includeTags), excludeTags: remove(filters.excludeTags),
+        includeTagOperators: remapTagOperators(filters.includeTags, remove(filters.includeTags), filters.includeTagOperators),
+        includeTagOrder: remapTagOrder(filters.includeTags, remove(filters.includeTags), filters.includeTagOrder),
       });
       const allTags = Object.fromEntries(Object.entries(state.videoTagState.allTags)
         .filter(([name]) => !sameTag(name, action.tagName)));
@@ -436,6 +444,11 @@ export function reducer(state: AppState, action: Action): AppState {
       };
       const replaceFilters = <T extends FilterPresetValues>(filters: T): T => ({
         ...filters, includeTags: replace(filters.includeTags), excludeTags: replace(filters.excludeTags),
+        includeTagOrder: remapTagOrder(filters.includeTags.map((name) => sameTag(name, source) ? target : name), replace(filters.includeTags), filters.includeTagOrder),
+        includeTagOperators: remapTagOperators(
+          filters.includeTags.map((name) => sameTag(name, source) ? target : name),
+          replace(filters.includeTags), filters.includeTagOperators
+        ),
       });
       const updatedTags = { ...allTags };
       delete updatedTags[source];
@@ -573,7 +586,15 @@ export function reducer(state: AppState, action: Action): AppState {
     case "SET_VIDEO_FILTERS": {
       return {
         ...state,
-        videoFilterStates: action.filters
+        videoFilterStates: {
+          ...action.filters,
+          includeTagOrder: action.filters.includeTagOrder === getVideoFilterState(state).includeTagOrder
+            ? remapTagOrder(getVideoFilterState(state).includeTags, action.filters.includeTags, action.filters.includeTagOrder)
+            : remapTagOrder(action.filters.includeTags, action.filters.includeTags, action.filters.includeTagOrder),
+          includeTagOperators: action.filters.includeTagOperators === getVideoFilterState(state).includeTagOperators
+            ? remapTagOperators(getVideoFilterState(state).includeTags, action.filters.includeTags, action.filters.includeTagOperators)
+            : remapTagOperators(action.filters.includeTags, action.filters.includeTags, action.filters.includeTagOperators),
+        }
       };
     }
 

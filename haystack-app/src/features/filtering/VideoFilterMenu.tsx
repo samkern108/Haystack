@@ -1,5 +1,6 @@
+import { describeTagFilters } from "../../utils/tagfilterlogic";
 import { EmojiPicker } from "../tags/EmojiPicker";
-import { useState, type CSSProperties } from "react";
+import { useId, useState, type CSSProperties } from "react";
 
 import "./VideoFilterMenu.scss";
 import { TimeFilterSelector } from "./TimeFilterSelector";
@@ -101,6 +102,9 @@ export function VideoFilterMenu(props: VideoFilterMenuProps) {
               onTagsChanged={(tags: string[]) =>
                 updateFilters({ includeTags: tags })
               }
+              operators={props.videoFilterState.includeTagOperators}
+              operatorOrder={props.videoFilterState.includeTagOrder}
+              onOperatorsChanged={(includeTagOperators, includeTagOrder) => updateFilters({ includeTagOperators, includeTagOrder })}
               selectedTagNames={props.videoFilterState.includeTags}
               tagsState={props.videoTagState}
               creatorStates={props.creatorStates}
@@ -121,6 +125,10 @@ export function VideoFilterMenu(props: VideoFilterMenuProps) {
               tagsState={props.videoTagState}
               creatorStates={props.creatorStates} />
           </div>
+          <TagFilterExplanation text={describeTagFilters(
+            props.videoFilterState.includeTags, props.videoFilterState.excludeTags,
+            props.videoFilterState.includeTagOperators, props.videoFilterState.includeTagOrder
+          )} />
         </div>
           <div className="filter-presets" role="group" aria-label="Saved filters">
             {props.filterPresets.map((preset, index) => (
@@ -214,5 +222,15 @@ function OverwriteFilterButton({ name, hasChanges, onSave }: { name: string; has
         <path d="M7 3v6h9V3M7 21v-8h10v8M13 4v3" />
       </svg>
     </button>
+  );
+}
+
+function TagFilterExplanation({ text }: { text: string }) {
+  const id = useId();
+  return (
+    <div className="tag-filter-help">
+      <button type="button" aria-label="Explain tag filters" aria-describedby={id}>?</button>
+      <div id={id} role="tooltip" className="tag-filter-help-text">{text}</div>
+    </div>
   );
 }

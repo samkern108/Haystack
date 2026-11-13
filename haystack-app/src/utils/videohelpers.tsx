@@ -1,3 +1,4 @@
+import { matchesIncludedTags, type TagOperator } from "./tagfilterlogic";
 import { hasTag } from "./taghelpers";
 import type { CreatorState, VideoFilterState, VideoTagState } from "../state/state";
 import { AllCreators, type Video } from "../state/types";
@@ -31,13 +32,15 @@ export function filterVideoIdsByIncludedTags(
   videoIds: string[],
   includeTagNames: string[],
   tagState: VideoTagState,
-  creatorState?: CreatorState
+  creatorState?: CreatorState,
+  operators?: TagOperator[],
+  order?: number[]
 ): string[] {
   if (includeTagNames.length === 0) return videoIds;
 
   return videoIds.filter((videoId) => {
     const videoTags = getEffectiveVideoTagNames(videoId, tagState, creatorState);
-    return includeTagNames.some((name) => hasTag(videoTags, name));
+    return matchesIncludedTags(videoTags, includeTagNames, operators, order);
   });
 }
 
@@ -73,12 +76,14 @@ export function filterVideosForCreator(
     (video) => video.video_id
   );
 
-  // INCLUDE TAGS: match at least one included tag.
+  // INCLUDE TAGS: AND groups joined by OR.
   candidateVideoIds = filterVideoIdsByIncludedTags(
     candidateVideoIds,
     filters.includeTags,
     tagState,
-    creatorState
+    creatorState,
+    filters.includeTagOperators,
+    filters.includeTagOrder
   );
 
   const outputVideoIds: [creatorId: string, videoId: string][] = [];
@@ -150,8 +155,7 @@ export function filterVideosFromPlaylist(
     const videoTags = getEffectiveVideoTagNames(videoId, tagState, creatorStates[creatorId]);
 
     if (
-      filters.includeTags.length > 0 &&
-      !filters.includeTags.some((tag) => hasTag(videoTags, tag))
+      !matchesIncludedTags(videoTags, filters.includeTags, filters.includeTagOperators, filters.includeTagOrder)
     ) continue;
 
     // EXCLUDE TAGS

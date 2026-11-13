@@ -1,10 +1,14 @@
+import { tagGroupingRanges, tagOperator, type TagOperator } from "../../utils/tagfilterlogic";
 import { hasTag, sameTag, tagStyle } from "../../utils/taghelpers";
 
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { getVideoCountForTag, type CreatorState, type VideoTagState } from "../../state/state";
 
 interface TagFilterSelectorProps {
   selectedTagNames: string[];
+  operators?: TagOperator[];
+  operatorOrder?: number[];
+  onOperatorsChanged?: (operators: TagOperator[], order: number[]) => void;
   tagsState: VideoTagState;
   creatorStates: Record<string, CreatorState>;
   onTagsChanged: (tagNames: string[]) => void;
@@ -55,6 +59,9 @@ export function TagFilterSelector(props: TagFilterSelectorProps) {
     setActiveSuggestion(0);
   }
 
+  const ranges = props.onOperatorsChanged
+    ? tagGroupingRanges(props.selectedTagNames, props.operators, props.operatorOrder) : [];
+
   return (
     <div
       className="tag-filter-selector"
@@ -71,12 +78,25 @@ export function TagFilterSelector(props: TagFilterSelectorProps) {
       }}
     >
       <div className="video-tags">
-        {props.selectedTagNames.map((tagName) => {
+        {props.selectedTagNames.map((tagName, index) => {
           const tag = props.tagsState.allTags[tagName];
 
+          const before = tagOperator(props.operators, index - 1);
           return (
+            <Fragment key={tagName}>
+            {index > 0 && props.onOperatorsChanged && (
+              <button type="button" className="tag-filter-operator"
+                aria-label={`${before.toUpperCase()} between ${props.selectedTagNames[index - 1]} and ${tagName}; click to use ${before === "and" ? "OR" : "AND"}`}
+                onClick={() => {
+                  const operators = props.selectedTagNames.slice(1).map((_, i) => tagOperator(props.operators, i));
+                  operators[index - 1] = before === "and" ? "or" : "and";
+                  props.onOperatorsChanged?.(operators, [index - 1, ...(props.operatorOrder ?? []).filter((i) => i !== index - 1)]);
+                }}>{before.toUpperCase()}</button>
+            )}
+            {ranges.filter(([start]) => start === index).map((_, i) => (
+              <span key={i} className="tag-filter-parenthesis">(</span>
+            ))}
             <button
-              key={tagName}
               type="button"
               className="video-tag"
               style={{ ...tagStyle(tag), backgroundColor: tag?.color ?? "#cccccc" }}
@@ -85,6 +105,10 @@ export function TagFilterSelector(props: TagFilterSelectorProps) {
             >
               {tag?.emoji && `${tag.emoji} `}{tagName} ×
             </button>
+            {ranges.filter(([, end]) => end === index).map((_, i) => (
+              <span key={i} className="tag-filter-parenthesis">)</span>
+            ))}
+            </Fragment>
           );
         })}
 
