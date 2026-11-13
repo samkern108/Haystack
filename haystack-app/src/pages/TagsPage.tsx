@@ -1,5 +1,7 @@
 import { EmojiPicker } from "../features/tags/EmojiPicker";
-import { sameTag } from "../utils/taghelpers";
+import { Link } from "react-router-dom";
+import { AppRoutes } from "../features/nav/routes";
+import { sameTag, tagStyle } from "../utils/taghelpers";
 import { useState } from "react";
 import { getVideoCountForTag, type Action, type AppState } from "../state/state";
 import "./TagsPage.css";
@@ -62,7 +64,7 @@ export function TagsPage({ state, dispatch }: TagsPageProps) {
         {names.filter((name) => name.toLowerCase().includes(query.toLowerCase())).map((name) => (
           <li key={name}>
             <div className="tag-management-row">
-              <span className="tag-management-color" style={{ backgroundColor: state.videoTagState.allTags[name].color }} />
+              <span className="tag-management-color" style={tagStyle(state.videoTagState.allTags[name])} />
               {editing?.source === name && editing.mode === "rename" ? (
                 <input
                   autoFocus
@@ -79,6 +81,14 @@ export function TagsPage({ state, dispatch }: TagsPageProps) {
                 <strong>{state.videoTagState.allTags[name].emoji && `${state.videoTagState.allTags[name].emoji} `}{name}</strong>
               )}
               <span>{counts[name]} videos</span>
+              <label>
+                <input type="checkbox" checked={Boolean(state.videoTagState.allTags[name].isCollection)}
+                  onChange={(event) => dispatch({ type: "SET_TAG_COLLECTION", tagName: name, isCollection: event.target.checked })} />
+                Collection
+              </label>
+              {state.videoTagState.allTags[name].isCollection && (
+                <Link to={`${AppRoutes.COLLECTIONS}?tag=${encodeURIComponent(name)}`}>View collection</Link>
+              )}
               <EmojiPicker
                 tagName={name}
                 value={state.videoTagState.allTags[name].emoji}

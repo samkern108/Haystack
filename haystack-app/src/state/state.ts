@@ -96,6 +96,7 @@ export interface AppState {
 
 export type Action =
   | { type: "REMOVE_TAG"; tagName: string }
+  | { type: "SET_TAG_COLLECTION"; tagName: string; isCollection: boolean }
   | { type: "SET_TAG_EMOJI"; tagName: string; emoji: string }
   | { type: "RENAME_TAG" | "MERGE_TAG"; source: string; target: string }
   | { type: "SAVE_FILTER_PRESET"; id: string; name: string }
@@ -372,6 +373,20 @@ export function reducer(state: AppState, action: Action): AppState {
         }])),
         videoFilterStates: cleanFilters(getVideoFilterState(state)),
         filterPresets: state.filterPresets?.map((preset) => ({ ...preset, filters: cleanFilters(preset.filters) })),
+      };
+    }
+    case "SET_TAG_COLLECTION": {
+      const tag = state.videoTagState.allTags[action.tagName];
+      if (!tag) return state;
+      return {
+        ...state,
+        videoTagState: {
+          ...state.videoTagState,
+          allTags: {
+            ...state.videoTagState.allTags,
+            [action.tagName]: { ...tag, isCollection: action.isCollection },
+          },
+        },
       };
     }
     case "SET_TAG_EMOJI": {

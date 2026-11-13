@@ -1,4 +1,5 @@
-import { hasTag } from "../../utils/taghelpers";
+import { tagStyle } from "../../utils/taghelpers";
+import { hasTag, sameTag } from "../../utils/taghelpers";
 import { useState } from "react";
 import { Link, useNavigate, type NavigateFunction } from "react-router-dom";
 import LabelSelector from "../labels/LabelSelector";
@@ -33,6 +34,7 @@ interface VideoCardProps {
 export function VideoCard( props : VideoCardProps) {
   const hover = useDelayedHover(60, 160);
   const navigate = useNavigate();
+  const isOpen = hover.hovered;
 
   const videoLabel = props.videoLabels.find((label) => label.id === props.videoState.videoLabelId) ?? props.videoLabels[0];
   const cardBackground = videoLabel
@@ -59,6 +61,21 @@ export function VideoCard( props : VideoCardProps) {
   const tags = props.videoTags;
   const creatorTagExceptions = props.videoState.creatorTagExceptions ?? [];
   const appliedCreatorTags = props.creatorTags.filter((tag) => !hasTag(creatorTagExceptions, tag.name));
+
+  function toggleTagFilter(tagName: string) {
+    const filters = props.videoFilterState;
+    const active = hasTag(filters.includeTags, tagName);
+    props.dispatch({
+      type: "SET_VIDEO_FILTERS",
+      filters: {
+        ...filters,
+        includeTags: active
+          ? filters.includeTags.filter((name) => !sameTag(name, tagName))
+          : [...filters.includeTags, tagName],
+        excludeTags: active ? filters.excludeTags : filters.excludeTags.filter((name) => !sameTag(name, tagName)),
+      },
+    });
+  }
 
   function toggleCreatorTagException(tagName: string) {
     props.dispatch({
@@ -117,14 +134,22 @@ export function VideoCard( props : VideoCardProps) {
         <strong className="video-title clamped">{props.video.title}</strong>
         {props.displayCreator ? renderCreatorRow(props) : <></>}
 
-        <VideoTags videoId={props.video.video_id} tags={tags} allTags={props.allTags} dispatch={props.dispatch}/>
+        <VideoTags videoId={props.video.video_id} tags={tags} allTags={props.allTags} activeFilterTags={props.videoFilterState.includeTags} onToggleTagFilter={toggleTagFilter} dispatch={props.dispatch}/>
         {appliedCreatorTags.length > 0 && (
           <div className="video-card-creator-tags" role="group" aria-label="Creator tags">
             <span className="video-card-creator-tags-label">Creator tags</span>
             <div className="video-tags">
               {appliedCreatorTags.map((tag) => (
-                <span key={tag.name} className="video-tag creator-tag-chip" style={{ backgroundColor: tag.color }}>
-                  {tag.emoji && `${tag.emoji} `}{tag.name}
+                <span key={tag.name} className="video-tag creator-tag-chip" style={tagStyle(tag)}>
+                  <button
+                    type="button"
+                    className="video-tag-filter"
+                    aria-pressed={hasTag(props.videoFilterState.includeTags, tag.name)}
+                    title={`${hasTag(props.videoFilterState.includeTags, tag.name) ? "Remove" : "Apply"} ${tag.name} filter`}
+                    onClick={() => toggleTagFilter(tag.name)}
+                  >
+                    {tag.emoji && `${tag.emoji} `}{tag.name}
+                  </button>
                   <button
                     type="button"
                     className="creator-tag-exclude"
@@ -156,7 +181,7 @@ export function VideoCard( props : VideoCardProps) {
       onPointerLeave={hover.onPointerLeave}
     >
 
-    <div className={hover.hovered ? "hidden" : ""}>
+    <div className={isOpen ? "hidden" : ""}>
       
       <div className="thumbnail-container">
         <img className="thumbnail" 
@@ -171,7 +196,7 @@ export function VideoCard( props : VideoCardProps) {
     </div>
 
     { (props.videoLabels.length > 0 || hasComment) && renderVideoLabels(props.videoLabels, hasComment) }
-    { hover.hovered && renderVideoCardPopover(props, navigate) }
+    { isOpen && renderVideoCardPopover(props, navigate) }
 
     {commentCardOpen && (
       <CommentCard creatorId={props.creator.ucid} video={props.video} dispatch={props.dispatch} onClose={closeCommentCard} comment={props.videoState.comment}/>

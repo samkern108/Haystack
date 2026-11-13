@@ -1,3 +1,4 @@
+import { tagStyle } from "../../utils/taghelpers";
 import { hasTag } from "../../utils/taghelpers";
 import { useId, useState } from "react";
 import type { Action, AppState } from "../../state/state";
@@ -22,7 +23,7 @@ export function CreatorTags({ creatorId, state, dispatch }: CreatorTagsProps) {
             key={name}
             type="button"
             className="video-tag"
-            style={{ backgroundColor: state.videoTagState.allTags[name]?.color }}
+            style={tagStyle(state.videoTagState.allTags[name])}
             aria-label={`Remove creator tag ${name}`}
             title={`Remove ${name}`}
             onClick={() => dispatch({ type: "REMOVE_CREATOR_TAG", creatorId, tagName: name })}

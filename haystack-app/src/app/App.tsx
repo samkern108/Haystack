@@ -4,6 +4,7 @@ import "../pages/styles/colors.css";
 import { useState, useEffect, useReducer, useLayoutEffect } from 'react';
 import { Routes, Route, useLocation } from "react-router-dom";
 
+import { CollectionsPage } from "../pages/CollectionsPage";
 import { TagsPage } from "../pages/TagsPage";
 import { VideoPage } from '../pages/VideoPage';
 import { SubmitACreatorPage } from '../pages/SubmitACreatorPage'
@@ -56,6 +57,7 @@ export default function App() {
       <InnertubeContext value={innertube}>
         <NavBar filterPresets={state.filterPresets ?? []} activeFilterPresetId={state.activeFilterPresetId} videoFilterState={getVideoFilterState(state)} videoTagState={state.videoTagState} creatorStates={state.creatorStates} dispatch={dispatch} />
           <Routes>
+            <Route path={AppRoutes.COLLECTIONS} element={<CollectionsPage state={state} dispatch={dispatch} />} />
             <Route path={AppRoutes.TAGS} element={<TagsPage state={state} dispatch={dispatch} />} />
             <Route path={AppRoutes.HOME} element={<HomePage state={state} dispatch={dispatch} />} />
             <Route path={AppRoutes.CREATORS} element={<CreatorsPage state={state} dispatch={dispatch} />} />
