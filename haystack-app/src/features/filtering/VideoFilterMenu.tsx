@@ -18,7 +18,6 @@ interface VideoFilterMenuProps {
 }
 
 export function VideoFilterMenu(props: VideoFilterMenuProps) {
-  const [isOpen, setIsOpen] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [presetName, setPresetName] = useState("");
 
@@ -55,41 +54,29 @@ export function VideoFilterMenu(props: VideoFilterMenuProps) {
   }
 
   return (
-    <div className="video-filter">
-      <button
-        className="video-filter-button"
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        {isOpen ? "▲ Filters" : "▼ Filters"}
-      </button>
-
-      {isOpen && (
-        <div className="video-filter-menu">
+    <section className="persistent-video-filters" aria-label="Video filters">
+        <div className="video-filter-menu persistent-filter-menu">
           <div className="video-filter-row inline">
-            <span className="video-filter-label">Creator</span>
-
             <button
               className="video-filter-toggle"
               onClick={cycleCreatorFilter}
             >
-              {props.videoFilterState.creator}
+              {props.videoFilterState.creator === "all" ? "All Creators"
+                : props.videoFilterState.creator === "followed" ? "Followed Creators" : "Unfollowed Creators"}
             </button>
           </div>
 
           <div className="video-filter-row inline">
-            <span className="video-filter-label">Watched</span>
-
             <button
               className="video-filter-toggle"
               onClick={cycleWatchedFilter}
             >
-              {props.videoFilterState.watched}
+              {props.videoFilterState.watched === "all" ? "All Videos"
+                : props.videoFilterState.watched === "yes" ? "Watched Videos" : "Unwatched Videos"}
             </button>
           </div>
 
-          <div className="video-filter-row">
-            <span className="video-filter-label">Duration</span>
-
+          <div className="video-filter-row" role="group" aria-label="Video duration">
             <TimeFilterSelector
               minTime={props.videoFilterState.minTime}
               maxTime={props.videoFilterState.maxTime}
@@ -157,15 +144,23 @@ export function VideoFilterMenu(props: VideoFilterMenuProps) {
                   onChange={(event) => setPresetName(event.target.value)}
                   required
                 />
-                <button type="submit" disabled={!presetName.trim()}>Save</button>
-                <button type="button" onClick={() => { setIsSaving(false); setPresetName(""); }}>Cancel</button>
+                <button type="submit" className="filter-save-icon" aria-label="Save filter" title="Save filter" disabled={!presetName.trim()}>
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M4 3h13l4 4v14H3V3Z" />
+                    <path d="M7 3v6h9V3M7 21v-8h10v8M13 4v3" />
+                  </svg>
+                </button>
+                <button type="button" className="filter-save-icon" aria-label="Cancel saving filter" title="Cancel" onClick={() => { setIsSaving(false); setPresetName(""); }}>
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+                    <path d="m6 6 12 12M18 6 6 18" />
+                  </svg>
+                </button>
               </form>
             ) : (
               <button type="button" onClick={() => setIsSaving(true)}>Save current filters</button>
             )}
           </div>
         </div>
-      )}
-    </div>
+    </section>
   );
 }

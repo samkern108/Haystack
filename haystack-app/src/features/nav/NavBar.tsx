@@ -31,6 +31,7 @@ export function NavBar(props: NavBarProps) {
   }
 
   return (
+    <>
     <div className="nav-bar">
       <NavLink to="/" end className={({ isActive }) => isActive ? "active" : ""}>
         <h1>Haystack</h1>
@@ -46,7 +47,6 @@ export function NavBar(props: NavBarProps) {
           />
         </form>
         
-        <VideoFilterMenu filterPresets={props.filterPresets} activeFilterPresetId={props.activeFilterPresetId} videoFilterState={props.videoFilterState} videoTagState={props.videoTagState} creatorStates={props.creatorStates} dispatch={props.dispatch} />
 
         <PlaylistMenu videoFilterState={props.videoFilterState} dispatch={props.dispatch} />
 
@@ -86,5 +86,7 @@ export function NavBar(props: NavBarProps) {
         </NavLink>
       </div>
     </div>
+        <VideoFilterMenu filterPresets={props.filterPresets} activeFilterPresetId={props.activeFilterPresetId} videoFilterState={props.videoFilterState} videoTagState={props.videoTagState} creatorStates={props.creatorStates} dispatch={props.dispatch} />
+    </>
   );
 }

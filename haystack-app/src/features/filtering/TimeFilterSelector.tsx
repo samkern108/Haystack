@@ -1,3 +1,4 @@
+import { formatDuration } from "./formatDuration";
 import { MAX_VIDEO_FILTER_TIME as MAX_TIME } from "./constants";
 
 function snapMaxTime(value: number) {
@@ -14,25 +15,6 @@ function snapMinTime(value: number) {
     return Math.round(value / 5) * 5;
   }
   return Math.round(value / 10) * 10;
-}
-
-function formatTime(minutes: number, isMax = false) {
-  if (minutes === MAX_TIME && isMax) {
-    return "4h+";
-  }
-
-  if (minutes < 60) {
-    return `${minutes}m`;
-  }
-
-  const hours = Math.floor(minutes / 60);
-  const remainingMinutes = minutes % 60;
-
-  if (remainingMinutes === 0) {
-    return `${hours}h`;
-  }
-
-  return `${hours}h ${remainingMinutes}m`;
 }
 
 interface TimeFilterSelectorProps {
@@ -61,6 +43,18 @@ export function TimeFilterSelector({
   return (
     <div className="time-filter">
       <div className="time-filter-range">
+        <span className="time-handle-label time-handle-label-min"
+          style={{
+            left: `min(calc(${minTime / MAX_TIME * 100}% + ${8 - minTime / MAX_TIME * 16}px), calc(${(minTime + maxTime) / (2 * MAX_TIME) * 100}% + ${8 - (minTime + maxTime) / (2 * MAX_TIME) * 16 - 30}px))`,
+          }}>
+          {formatDuration(minTime)}
+        </span>
+        <span className="time-handle-label time-handle-label-max"
+          style={{
+            left: `max(calc(${maxTime / MAX_TIME * 100}% + ${8 - maxTime / MAX_TIME * 16}px), calc(${(minTime + maxTime) / (2 * MAX_TIME) * 100}% + ${8 - (minTime + maxTime) / (2 * MAX_TIME) * 16 + 30}px))`,
+          }}>
+          {formatDuration(maxTime, true)}
+        </span>
         <input
           type="range"
           min="0"
@@ -69,6 +63,7 @@ export function TimeFilterSelector({
           value={minTime}
           onChange={(e) => handleMinChange(Number(e.target.value))}
           className="time-slider time-slider-min"
+          aria-label="Minimum video duration"
         />
 
         <input
@@ -79,12 +74,10 @@ export function TimeFilterSelector({
           value={maxTime}
           onChange={(e) => handleMaxChange(Number(e.target.value))}
           className="time-slider time-slider-max"
+          aria-label="Maximum video duration"
         />
       </div>
 
-      <div className="time-filter-selection">
-        {formatTime(minTime)} – {formatTime(maxTime, true)}
-      </div>
     </div>
   );
 }

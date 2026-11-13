@@ -6,8 +6,8 @@
   display: flex;
   align-items: center;
 
-  padding: 18px 28px;
-  margin-bottom: 24px;
+  padding: 13px 28px;
+  margin-bottom: 12px;
 
   background: var(--color-background-navbar);
   border-bottom: 1px solid var(--color-shadow);
@@ -36,7 +36,7 @@
 .nav-bar a {
   background: var(--color-button-background);
   border-radius: 6px;
-  padding: .6rem 1rem;
+  padding: .4rem .8rem;
   transition: .15s;
   text-decoration: none;
   border: none;
@@ -83,3 +83,4 @@
 .profile:hover {
   transform: scale(1.08);
 }
+.nav-bar h1 { margin: 0; }
